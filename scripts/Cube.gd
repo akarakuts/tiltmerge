@@ -1,6 +1,7 @@
 extends RigidBody2D
 ## Cube — физический кубик с tier.
 ## Сталкивается с другими Cube; при совпадении tier-ов они сливаются (через MergeLogic).
+## Фаза 5: добавлены squash-and-stretch при появлении и glow-shader на Visual.
 
 signal merged(self_node: Node)
 
@@ -10,6 +11,7 @@ var _radius: float = 28.0
 var _color: Color = Color.WHITE
 var _merge_pending: bool = false  # защита от двойного слияния
 var _lifetime: float = 0.0  # для приземления (защита от мгновенного слияния в воздухе)
+var _visual: Polygon2D = null
 
 
 func setup(p_tier: int) -> void:
@@ -22,14 +24,35 @@ func setup(p_tier: int) -> void:
 
 func _refresh_visual() -> void:
 	$CollisionShape2D.shape.radius = _radius
-	var sprite: Polygon2D = $Visual
+	_visual = $Visual
 	# рисуем квадрат по радиусу
 	var s := _radius
-	sprite.polygon = PackedVector2Array([
+	_visual.polygon = PackedVector2Array([
 		Vector2(-s, -s), Vector2(s, -s), Vector2(s, s), Vector2(-s, s)
 	])
-	sprite.color = _color
-	# лёгкая обводка через второй полигон не делаем — MVP
+	_visual.color = _color
+	# glow shader (если reduce_motion — пропускаем для производительности)
+	if not SaveSystem.data.settings.reduce_motion:
+		var glow := ShaderMaterial.new()
+		glow.shader = preload("res://shaders/Glow.gdshader")
+		glow.set_shader_parameter("glow_color", _color)
+		glow.set_shader_parameter("glow_intensity", 0.6)
+		_visual.material = glow
+	# pop-in анимация (squash-and-stretch)
+	if not SaveSystem.data.settings.reduce_motion:
+		_visual.scale = Vector2(0.3, 0.3)
+		var tw := create_tween().set_parallel(true)
+		tw.tween_property(_visual, "scale", Vector2(1.15, 0.85), 0.08).set_trans(Tween.TRANS_SINE)
+		tw.chain().tween_property(_visual, "scale", Vector2(1.0, 1.0), 0.12).set_trans(Tween.TRANS_ELASTIC)
+
+
+func spawn_merge_burst() -> void:
+	# вспышка при появлении нового кубика (вызывается MergeLogic)
+	if SaveSystem.data.settings.reduce_motion or _visual == null:
+		return
+	var tw := create_tween().set_parallel(true)
+	tw.tween_property(_visual, "scale", Vector2(1.3, 1.3), 0.1).set_trans(Tween.TRANS_SINE)
+	tw.chain().tween_property(_visual, "scale", Vector2(1.0, 1.0), 0.18).set_trans(Tween.TRANS_ELASTIC)
 
 
 func _refresh_physics() -> void:

@@ -7,6 +7,7 @@ extends Node
 ##
 ## Очки = base_score[new_tier] * combo_multiplier.
 ## Комбо: растёт за слияния в течение combo_window; иначе сбрасывается.
+## Фаза 5: burst-анимация + floating score text.
 
 const CubeScenePath := "res://scenes/Cube.tscn"
 
@@ -65,15 +66,38 @@ func _on_merge_requested(a: Node, b: Node) -> void:
 		# супер-эффект: лопается, большой бонус, новый кубик не создаётся
 		var super_mult: float = float(GameConfig.cfg.merge.super_bonus_multiplier)
 		delta_score = int(GameConfig.tier_data(old_tier).score) * int(super_mult)
-		# (эффект частиц добавляется в Фазе 5)
+		_spawn_floating_text(pos, "+%d SUPER!" % delta_score, Color.GOLD)
 	else:
 		# спавним новый кубик
 		var new_cube = _spawn_cube(new_tier, pos)
+		if new_cube.has_method("spawn_merge_burst"):
+			new_cube.spawn_merge_burst()
 		MergeBus.merge_completed.emit(new_cube, old_tier, new_tier, pos)
 		delta_score = int(GameConfig.tier_data(new_tier).score) * int(mult)
+		var txt: String = "+%d" % delta_score if mult <= 1.0 else "+%d x%.1f" % [delta_score, mult]
+		_spawn_floating_text(pos, txt, GameConfig.color_for_tier(new_tier) if mult <= 1.0 else Color.GOLD)
 
 	score += delta_score
 	score_changed.emit(score, delta_score)
+
+
+func _spawn_floating_text(pos: Vector2, text: String, color: Color) -> void:
+	if _scene_root == null:
+		return
+	var lbl := Label.new()
+	lbl.text = text
+	lbl.add_theme_font_size_override("font_size", 28 + min(20, text.length()))
+	lbl.add_theme_color_override("font_color", color)
+	lbl.add_theme_color_override("font_outline_color", Color.BLACK)
+	lbl.add_theme_constant_override("outline_size", 6)
+	lbl.position = pos
+	lbl.z_index = 50
+	_scene_root.add_child(lbl)
+	var tw := lbl.create_tween()
+	tw.set_parallel(true)
+	tw.tween_property(lbl, "position:y", pos.y - 80, 0.7).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	tw.tween_property(lbl, "modulate:a", 0.0, 0.7).set_trans(Tween.TRANS_QUAD)
+	tw.chain().tween_callback(lbl.queue_free)
 
 
 func _spawn_cube(tier: int, pos: Vector2) -> Node:

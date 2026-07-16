@@ -7,6 +7,7 @@ extends Node2D
 @onready var _tilt: Node = $TiltController
 @onready var _spawner: Node = $Spawner
 @onready var _merge: Node = $MergeLogic
+@onready var _camera_shake: Camera2D = $Camera2D
 
 @onready var _score_label: Label = $HUD/ScoreLabel
 @onready var _combo_label: Label = $HUD/ComboLabel
@@ -88,6 +89,8 @@ func _on_score_changed(new_score: int, delta: int) -> void:
 		Haptics.light()
 	else:
 		Haptics.medium()
+	# camera shake пропорционально очкам слияния
+	_camera_shake.shake(clampf(float(delta) / 300.0, 0.1, 0.8), 0.25)
 
 
 func _on_combo_changed(_combo_count: int, mult: float) -> void:
@@ -144,6 +147,7 @@ func _trigger_game_over() -> void:
 	_game_over_panel.visible = true
 	AudioManager.play_sfx("game_over")
 	Haptics.custom(150)
+	_camera_shake.shake(0.7, 0.6)
 	print("[Game] game over score=%d max_tier=%d" % [score, _max_tier_this_run])
 
 

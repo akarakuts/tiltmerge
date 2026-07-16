@@ -1,9 +1,10 @@
-[gd_scene load_steps=7 format=3 uid="uid://game01tiltmerge"]
+[gd_scene load_steps=8 format=3 uid="uid://game01tiltmerge"]
 
 [ext_resource type="Script" path="res://scripts/Game.gd" id="1_game"]
-[ext_resource type="Script" path="res://scripts/TiltController.gd" id="2_tilt"]
-[ext_resource type="Script" path="res://scripts/Spawner.gd" id="3_spawn"]
-[ext_resource type="Script" path="res://scripts/MergeLogic.gd" id="4_merge"]
+[ext_resource type="Script" path="res://scripts/CameraShake.gd" id="2_cam"]
+[ext_resource type="Script" path="res://scripts/TiltController.gd" id="3_tilt"]
+[ext_resource type="Script" path="res://scripts/Spawner.gd" id="4_spawn"]
+[ext_resource type="Script" path="res://scripts/MergeLogic.gd" id="5_merge"]
 
 [sub_resource type="RectangleShape2D" id="RectWall"]
 size = Vector2(40, 1200)
@@ -16,6 +17,7 @@ script = ExtResource("1_game")
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(360, 640)
+script = ExtResource("2_cam")
 
 [node name="Walls" type="Node2D" parent="."]
 
@@ -40,13 +42,13 @@ shape = SubResource("RectBottom")
 [node name="Cubes" type="Node2D" parent="."]
 
 [node name="TiltController" type="Node" parent="."]
-script = ExtResource("2_tilt")
+script = ExtResource("3_tilt")
 
 [node name="Spawner" type="Node" parent="."]
-script = ExtResource("3_spawn")
+script = ExtResource("4_spawn")
 
 [node name="MergeLogic" type="Node" parent="."]
-script = ExtResource("4_merge")
+script = ExtResource("5_merge")
 
 [node name="HUD" type="CanvasLayer" parent="."]
 
