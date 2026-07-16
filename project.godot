@@ -18,6 +18,8 @@ config/version="0.1.0"
 
 GameConfig="*res://scripts/GameConfig.gd"
 MergeBus="*res://scripts/MergeBus.gd"
+SaveSystem="*res://scripts/SaveSystem.gd"
+GameManager="*res://scripts/GameManager.gd"
 
 [display]
 

@@ -1,0 +1,170 @@
+[gd_scene load_steps=7 format=3 uid="uid://game01tiltmerge"]
+
+[ext_resource type="Script" path="res://scripts/Game.gd" id="1_game"]
+[ext_resource type="Script" path="res://scripts/TiltController.gd" id="2_tilt"]
+[ext_resource type="Script" path="res://scripts/Spawner.gd" id="3_spawn"]
+[ext_resource type="Script" path="res://scripts/MergeLogic.gd" id="4_merge"]
+
+[sub_resource type="RectangleShape2D" id="RectWall"]
+size = Vector2(40, 1200)
+
+[sub_resource type="RectangleShape2D" id="RectBottom"]
+size = Vector2(720, 40)
+
+[node name="Game" type="Node2D"]
+script = ExtResource("1_game")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(360, 640)
+
+[node name="Walls" type="Node2D" parent="."]
+
+[node name="LeftWall" type="StaticBody2D" parent="Walls"]
+position = Vector2(0, 640)
+
+[node name="Col" type="CollisionShape2D" parent="Walls/LeftWall"]
+shape = SubResource("RectWall")
+
+[node name="RightWall" type="StaticBody2D" parent="Walls"]
+position = Vector2(720, 640)
+
+[node name="Col" type="CollisionShape2D" parent="Walls/RightWall"]
+shape = SubResource("RectWall")
+
+[node name="Bottom" type="StaticBody2D" parent="Walls"]
+position = Vector2(360, 1240)
+
+[node name="Col" type="CollisionShape2D" parent="Walls/Bottom"]
+shape = SubResource("RectBottom")
+
+[node name="Cubes" type="Node2D" parent="."]
+
+[node name="TiltController" type="Node" parent="."]
+script = ExtResource("2_tilt")
+
+[node name="Spawner" type="Node" parent="."]
+script = ExtResource("3_spawn")
+
+[node name="MergeLogic" type="Node" parent="."]
+script = ExtResource("4_merge")
+
+[node name="HUD" type="CanvasLayer" parent="."]
+
+[node name="ScoreLabel" type="Label" parent="HUD"]
+offset_left = 20.0
+offset_top = 40.0
+offset_right = 400.0
+offset_bottom = 100.0
+theme_override_font_sizes/font_size = 36
+text = "Score: 0"
+
+[node name="ComboLabel" type="Label" parent="HUD"]
+offset_left = 20.0
+offset_top = 100.0
+offset_right = 400.0
+offset_bottom = 150.0
+theme_override_font_sizes/font_size = 24
+text = "Combo: x1.0"
+
+[node name="TimerLabel" type="Label" parent="HUD"]
+offset_left = 540.0
+offset_top = 40.0
+offset_right = 700.0
+offset_bottom = 100.0
+theme_override_font_sizes/font_size = 36
+text = "60.0"
+horizontal_alignment = 2
+visible = false
+
+[node name="PauseButton" type="Button" parent="HUD"]
+offset_left = 640.0
+offset_top = 40.0
+offset_right = 710.0
+offset_bottom = 100.0
+text = "II"
+
+[node name="PausePanel" type="Control" parent="HUD"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 0.0
+offset_bottom = 0.0
+mouse_filter = 0
+color = Color(0, 0, 0, 0.6)
+
+[node name="PausedLabel" type="Label" parent="HUD/PausePanel"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -100.0
+offset_top = -50.0
+offset_right = 100.0
+offset_bottom = 0.0
+theme_override_font_sizes/font_size = 48
+text = "PAUSED"
+horizontal_alignment = 1
+
+[node name="ResumeHint" type="Label" parent="HUD/PausePanel"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = 20.0
+offset_right = 200.0
+offset_bottom = 70.0
+text = "Tap pause / Esc to resume"
+horizontal_alignment = 1
+
+[node name="GameOverPanel" type="Control" parent="HUD"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 0
+
+[node name="Bg" type="ColorRect" parent="HUD/GameOverPanel"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0, 0, 0, 0.7)
+
+[node name="VBox" type="VBoxContainer" parent="HUD/GameOverPanel"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -250.0
+offset_top = -300.0
+offset_right = 250.0
+offset_bottom = 300.0
+
+[node name="Title" type="Label" parent="HUD/GameOverPanel/VBox"]
+theme_override_font_sizes/font_size = 56
+text = "GAME OVER"
+horizontal_alignment = 1
+
+[node name="GoScore" type="Label" parent="HUD/GameOverPanel/VBox"]
+theme_override_font_sizes/font_size = 36
+text = "Score: 0"
+horizontal_alignment = 1
+
+[node name="GoBest" type="Label" parent="HUD/GameOverPanel/VBox"]
+theme_override_font_sizes/font_size = 28
+text = "Best: 0"
+horizontal_alignment = 1
+
+[node name="RestartButton" type="Button" parent="HUD/GameOverPanel/VBox"]
+custom_minimum_size = Vector2(0, 80)
+theme_override_font_sizes/font_size = 32
+text = "Restart"
+
+[node name="MenuButton" type="Button" parent="HUD/GameOverPanel/VBox"]
+custom_minimum_size = Vector2(0, 80)
+theme_override_font_sizes/font_size = 32
+text = "Main Menu"
