@@ -24,6 +24,8 @@ AudioManager="*res://scripts/AudioManager.gd"
 Haptics="*res://scripts/Haptics.gd"
 Achievements="*res://scripts/Achievements.gd"
 SkinsManager="*res://scripts/SkinsManager.gd"
+Analytics="*res://scripts/Analytics.gd"
+ABTest="*res://scripts/ABTest.gd"
 
 [display]
 

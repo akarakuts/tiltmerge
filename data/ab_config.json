@@ -1,0 +1,28 @@
+{
+  "_comment": "A/B-флаги для soft launch. Когорта назначается детерминированно (см. ABTest.gd). Калибруется по метрикам Retention/Session.",
+  "_version": 1,
+  "flags": {
+    "spawn_speed": {
+      "salt": 1.0,
+      "variants": [
+        { "value": "normal", "weight": 50 },
+        { "value": "fast",   "weight": 50 }
+      ]
+    },
+    "revive_offer": {
+      "salt": 2.0,
+      "variants": [
+        { "value": "always",     "weight": 33 },
+        { "value": "every_other", "weight": 34 },
+        { "value": "never",      "weight": 33 }
+      ]
+    },
+    "onboarding_style": {
+      "salt": 3.0,
+      "variants": [
+        { "value": "3slides",    "weight": 50 },
+        { "value": "interactive", "weight": 50 }
+      ]
+    }
+  }
+}
