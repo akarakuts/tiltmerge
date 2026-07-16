@@ -9,7 +9,7 @@ const MODES := ["classic", "blitz", "zen", "daily"]
 
 
 func _ready() -> void:
-	if not GameConfig.ready:
+	if not GameConfig.is_ready:
 		await GameConfig.config_loaded
 	_build()
 	_back.text = tr("settings.back")

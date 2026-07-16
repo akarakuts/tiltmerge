@@ -1,3 +1,4 @@
+class_name Cube
 extends RigidBody2D
 ## Cube — физический кубик с tier.
 ## Сталкивается с другими Cube; при совпадении tier-ов они сливаются (через MergeLogic).
@@ -26,7 +27,7 @@ func _refresh_visual() -> void:
 	$CollisionShape2D.shape.radius = _radius
 	_visual = $Visual
 	# рисуем квадрат по радиусу
-	var s := _radius
+	var s: float = _radius
 	_visual.polygon = PackedVector2Array([
 		Vector2(-s, -s), Vector2(s, -s), Vector2(s, s), Vector2(-s, s)
 	])
@@ -57,9 +58,11 @@ func spawn_merge_burst() -> void:
 
 func _refresh_physics() -> void:
 	var p: Dictionary = GameConfig.cfg.cube.physics
-	physics_material = PhysicsMaterial.new()
-	physics_material.bounce = float(p.bounce)
-	physics_material.friction = float(p.friction)
+	# PhysicsMaterial применяется к RigidBody2D напрямую (physics_material_override)
+	var mat := PhysicsMaterial.new()
+	mat.bounce = float(p.bounce)
+	mat.friction = float(p.friction)
+	physics_material_override = mat
 	mass = float(p.mass_base) * (1.0 + 0.1 * (tier - 1))
 
 
@@ -87,9 +90,8 @@ func _on_body_entered(other: Node) -> void:
 		_merge_pending = true
 		other_cube._merge_pending = true
 		merged.emit(self)
-		# MergeLogic подписан на merged и выполнит фактический спавн нового кубика
-		# удаление — тоже в MergeLogic, чтобы избежать гонок
-		_MergeBus.request_merge(self, other_cube)
+		# MergeLogic подписан на merge_requested через шину и выполнит работу
+		MergeBus.request_merge(self, other_cube)
 
 
 func _physics_process(delta: float) -> void:

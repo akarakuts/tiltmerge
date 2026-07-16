@@ -34,7 +34,7 @@ const SPAWN_POS := Vector2(360, 120)
 
 
 func _ready() -> void:
-	if not GameConfig.ready:
+	if not GameConfig.is_ready:
 		await GameConfig.config_loaded
 	_mode = GameManager.current_mode
 	_mode_cfg = GameConfig.cfg.modes.get(_mode, GameConfig.cfg.modes.classic)
@@ -132,7 +132,7 @@ func _trigger_game_over() -> void:
 	var score: int = _merge.score
 	GameManager.end_game(score, _merges_this_run, _max_tier_this_run)
 	# оценки достижений по итогам забега
-	var control_is_swipe := SaveSystem.data.settings.control_mode == "swipe"
+	var control_is_swipe: bool = str(SaveSystem.data.settings.control_mode) == "swipe"
 	Achievements.evaluate_run({
 		"score": score,
 		"max_tier": _max_tier_this_run,

@@ -29,14 +29,14 @@ func _ready() -> void:
 
 
 func _preload() -> void:
-	#期待的 файлы (могут отсутствовать на раннем этапе):
-	var names := ["merge", "spawn", "combo", "game_over", "button", "music_menu", "music_game"]
+	# ожидаемые файлы (могут отсутствовать на раннем этапе):
+	var names: Array = ["merge", "spawn", "combo", "game_over", "button", "music_menu", "music_game"]
 	for n in names:
-		var path := AUDIO_DIR + n + ".wav"
+		var path: String = AUDIO_DIR + String(n) + ".wav"
 		if ResourceLoader.exists(path):
 			_sounds[n] = load(path)
 		else:
-			var ogg := AUDIO_DIR + n + ".ogg"
+			var ogg: String = AUDIO_DIR + String(n) + ".ogg"
 			if ResourceLoader.exists(ogg):
 				_sounds[n] = load(ogg)
 

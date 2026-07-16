@@ -12,7 +12,7 @@ var data: Dictionary = _default()
 
 
 func _ready() -> void:
-	load()
+	load_data()
 
 
 func _default() -> Dictionary:
@@ -37,7 +37,7 @@ func _default() -> Dictionary:
 	}
 
 
-func load() -> void:
+func load_data() -> void:
 	if not FileAccess.file_exists(SAVE_PATH):
 		data = _default()
 		return

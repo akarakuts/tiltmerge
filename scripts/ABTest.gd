@@ -12,7 +12,7 @@ var _config: Dictionary = {}
 
 
 func _ready() -> void:
-	if not GameConfig.ready:
+	if not GameConfig.is_ready:
 		await GameConfig.config_loaded
 	_load_config()
 	_assign_all()
@@ -56,7 +56,7 @@ func _pick_variant(flag: String, variants: Array, salt: float) -> String:
 	return str(variants[0].get("value", ""))
 
 
-func get(flag: String) -> String:
+func get_flag(flag: String) -> String:
 	return _flags.get(flag, "")
 
 

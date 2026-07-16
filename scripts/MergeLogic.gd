@@ -45,6 +45,12 @@ func _physics_process(delta: float) -> void:
 
 
 func _on_merge_requested(a: Node, b: Node) -> void:
+	# Откладываем на конец кадра: добавление/удаление физических тел внутри
+	# body_entered (flush queries) вызывает ошибку движка.
+	_do_merge.call_deferred(a, b)
+
+
+func _do_merge(a: Node, b: Node) -> void:
 	if not (is_instance_valid(a) and is_instance_valid(b)):
 		return
 	var old_tier: int = a.tier

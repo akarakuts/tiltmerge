@@ -12,7 +12,7 @@ extends Control
 
 
 func _ready() -> void:
-	if not GameConfig.ready:
+	if not GameConfig.is_ready:
 		await GameConfig.config_loaded
 	var s: Dictionary = SaveSystem.data.settings
 	_control.selected = 0 if s.control_mode == "tilt" else 1
@@ -68,16 +68,14 @@ func _on_music(v: float) -> void:
 
 
 func _on_lang(idx: int) -> void:
-	var lang := ["auto", "en", "ru"][idx]
+	var langs: Array = ["auto", "en", "ru"]
+	var lang: String = langs[idx]
 	SaveSystem.set_setting("language", lang)
 	_apply_language_setting(lang)
 
 
 func _apply_language_setting(lang: String) -> void:
-	if lang == "auto":
-		TranslationServer.set_locale(OS.get_locale())
-	else:
-		TranslationServer.set_locale(lang)
+	I18n.apply_saved_language(lang)
 
 
 func _on_back() -> void:

@@ -12,7 +12,7 @@ var _steps: Array = ["onboarding.step1", "onboarding.step2", "onboarding.step3"]
 
 
 func _ready() -> void:
-	if not GameConfig.ready:
+	if not GameConfig.is_ready:
 		await GameConfig.config_loaded
 	_title.text = tr("onboarding.title")
 	_next.pressed.connect(_on_next)
@@ -21,7 +21,10 @@ func _ready() -> void:
 
 func _show_step() -> void:
 	_body.text = tr(_steps[_step])
-	_dots.text = "  ".join(["●" if i == _step else "○" for i in range(_steps.size())])
+	var dots_arr: Array = []
+	for i in range(_steps.size()):
+		dots_arr.append("●" if i == _step else "○")
+	_dots.text = "  ".join(dots_arr)
 	_next.text = tr("onboarding.start") if _step == _steps.size() - 1 else "→"
 
 

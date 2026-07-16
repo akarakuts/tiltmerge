@@ -22,7 +22,7 @@ const SPAWN_POS := Vector2(360, 120)
 
 func _ready() -> void:
 	# ждём, пока GameConfig загрузится (autoload выполняется до _ready сцены, но подстрахуемся)
-	if not GameConfig.ready:
+	if not GameConfig.is_ready:
 		await GameConfig.config_loaded
 	_tilt.setup()
 	_merge.setup(_cubes)

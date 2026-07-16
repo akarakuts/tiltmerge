@@ -11,7 +11,7 @@ var _unlock_queue: Array = []
 
 
 func _ready() -> void:
-	if not GameConfig.ready:
+	if not GameConfig.is_ready:
 		await GameConfig.config_loaded
 	for a in GameConfig.cfg.achievements:
 		_defs[str(a.id)] = a

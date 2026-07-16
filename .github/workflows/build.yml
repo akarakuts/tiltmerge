@@ -36,11 +36,8 @@ jobs:
           echo "=== gdlint ==="
           find scripts -name '*.gd' -print0 | xargs -0 gdlint || true
 
-      - name: Run unit tests
-        run: godot --headless --script tests/test_config.gd
-
-      - name: Run smoke test
-        run: godot --headless --script tests/smoke_test.gd
+      - name: Run unit + smoke tests (scene-based)
+        run: godot --headless tests/TestRunner.tscn
 
       - name: Verify translations (CSV well-formed, key parity)
         run: |

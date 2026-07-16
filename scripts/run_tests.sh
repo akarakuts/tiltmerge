@@ -1,7 +1,10 @@
 #!/usr/bin/env bash
 # Локальный runner тестов TiltMerge.
 # Запуск: ./scripts/run_tests.sh
-# Требует Godot 4.3 в PATH (или GODOT env var).
+# Требует Godot 4.3+ в PATH (или GODOT env var).
+#
+# Тесты используют сцену tests/TestRunner.tscn (autoload-синглтоны инициализируются
+# при загрузке сцены, в отличие от режима --script).
 set -euo pipefail
 
 GODOT="${GODOT:-godot}"
@@ -13,20 +16,19 @@ if ! command -v "$GODOT" >/dev/null 2>&1; then
   exit 1
 fi
 
-echo "### 1. Unit-тесты (test_config.gd)"
-"$GODOT" --headless --script tests/test_config.gd
-unit_rc=$?
+echo "### Импорт проекта..."
+"$GODOT" --headless --import 2>&1 | grep -iE "error|failed" || true
 
 echo ""
-echo "### 2. Smoke-тест (smoke_test.gd)"
-"$GODOT" --headless --script tests/smoke_test.gd
-smoke_rc=$?
+echo "### Тесты (unit + smoke) через TestRunner.tscn..."
+"$GODOT" --headless tests/TestRunner.tscn 2>&1 | grep -E "✓|✗|TOTAL:|FAILED|SCRIPT ERROR|ERROR:"
+rc=${PIPESTATUS[0]}
 
 echo ""
-if [ "$unit_rc" -eq 0 ] && [ "$smoke_rc" -eq 0 ]; then
+if [ "$rc" -eq 0 ]; then
   echo "✅ Все тесты прошли"
   exit 0
 else
-  echo "❌ Тесты провалились (unit=$unit_rc smoke=$smoke_rc)"
-  exit 1
+  echo "❌ Тесты провалились (exit=$rc)"
+  exit "$rc"
 fi

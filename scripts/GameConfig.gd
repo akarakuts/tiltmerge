@@ -7,7 +7,7 @@ signal config_loaded
 
 var cfg: Dictionary = {}
 var skins: Dictionary = {}
-var ready: bool = false
+var is_ready: bool = false
 
 const CONFIG_PATH := "res://data/config.json"
 const SKINS_PATH := "res://data/skins.json"
@@ -16,7 +16,7 @@ const SKINS_PATH := "res://data/skins.json"
 func _ready() -> void:
 	_load_config()
 	_load_skins()
-	ready = true
+	is_ready = true
 	config_loaded.emit()
 	print("[GameConfig] loaded: %d tiers, %d skins" % [cfg.cube.tiers.size(), skins.size()])
 

@@ -11,11 +11,11 @@ config/name="TiltMerge"
 config/description="Быстрая головоломка: наклоняй телефон, чтобы одинаковые кубики слипались."
 run/main_scene="res://scenes/MainMenu.tscn"
 config/features=PackedStringArray("4.3", "Forward Plus")
-config/icon="res://assets/graphics/icon.png"
 config/version="0.1.0"
 
 [autoload]
 
+I18n="*res://scripts/I18n.gd"
 GameConfig="*res://scripts/GameConfig.gd"
 MergeBus="*res://scripts/MergeBus.gd"
 SaveSystem="*res://scripts/SaveSystem.gd"
@@ -59,7 +59,7 @@ sensors/enabled=true
 
 [internationalization]
 
-locale/translations=PackedStringArray("res://translations/en.csv", "res://translations/ru.csv")
+locale/translations=PackedStringArray()
 locale/translation_remaps={}
 
 [rendering]

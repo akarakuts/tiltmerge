@@ -7,7 +7,7 @@ var _active_palette: Dictionary = {}
 
 
 func _ready() -> void:
-	if not GameConfig.ready:
+	if not GameConfig.is_ready:
 		await GameConfig.config_loaded
 	_apply_selected()
 
