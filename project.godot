@@ -22,6 +22,8 @@ SaveSystem="*res://scripts/SaveSystem.gd"
 GameManager="*res://scripts/GameManager.gd"
 AudioManager="*res://scripts/AudioManager.gd"
 Haptics="*res://scripts/Haptics.gd"
+Achievements="*res://scripts/Achievements.gd"
+SkinsManager="*res://scripts/SkinsManager.gd"
 
 [display]
 

@@ -1,0 +1,40 @@
+[gd_scene load_steps=2 format=3 uid="uid://lb01tiltmerge"]
+
+[ext_resource type="Script" path="res://scripts/Leaderboard.gd" id="1_lb"]
+
+[node name="Leaderboard" type="Control"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 0
+script = ExtResource("1_lb")
+
+[node name="Bg" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.07, 0.08, 0.12, 1)
+
+[node name="Scroll" type="ScrollContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 40.0
+offset_top = 60.0
+offset_right = -40.0
+offset_bottom = -120.0
+
+[node name="VBox" type="VBoxContainer" parent="Scroll"]
+custom_minimum_size = Vector2(620, 0)
+theme_override_constants/separation = 16
+
+[node name="Back" type="Button" parent="."]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -120.0
+offset_top = -110.0
+offset_right = 120.0
+offset_bottom = -40.0
+theme_override_font_sizes/font_size = 28
+text = "Back"

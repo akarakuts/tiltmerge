@@ -128,6 +128,16 @@ func _trigger_game_over() -> void:
 	_spawner.stop()
 	var score: int = _merge.score
 	GameManager.end_game(score, _merges_this_run, _max_tier_this_run)
+	# оценки достижений по итогам забега
+	var control_is_swipe := SaveSystem.data.settings.control_mode == "swipe"
+	Achievements.evaluate_run({
+		"score": score,
+		"max_tier": _max_tier_this_run,
+		"combo": _merge.combo_count,
+		"merges": _merges_this_run,
+		"revives": 0,
+		"score_swipe": score if control_is_swipe else 0
+	})
 	# показываем панель
 	_go_score.text = "Score: %d" % score
 	_go_best.text = "Best: %d" % SaveSystem.best_score(_mode)

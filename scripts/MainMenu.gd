@@ -70,5 +70,4 @@ func _on_settings() -> void:
 
 func _on_leaderboard() -> void:
 	AudioManager.play_sfx("button")
-	# заглушка — leaderboard реализуется в Фазе 4
-	OS.alert("Leaderboard coming in Phase 4", "TiltMerge")
+	get_tree().change_scene_to_file("res://scenes/Leaderboard.tscn")
