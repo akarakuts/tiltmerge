@@ -39,6 +39,9 @@ jobs:
       - name: Run unit + smoke tests (scene-based)
         run: godot --headless tests/TestRunner.tscn
 
+      - name: Run onboarding interactive test
+        run: godot --headless tests/OnboardingTest.tscn
+
       - name: Run gameplay test (full loop simulation)
         run: godot --headless tests/GameplayTest.tscn
 

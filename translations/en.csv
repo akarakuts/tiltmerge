@@ -22,6 +22,12 @@ onboarding.step1,Tilt your phone to roll the cubes
 onboarding.step2,Two same cubes merge into a bigger one
 onboarding.step3,Dont let them reach the top
 onboarding.start,GOT IT
+ob.hint1,Tilt your phone or drag your finger to roll the cube into the target
+ob.hint2,Push two cubes of the same color together to MERGE them
+ob.hint3,Dont let the cubes reach the top line — or its game over
+ob.done,Nice
+ob.next,Next
+ob.lets_go,Lets go
 game.score,Score
 game.combo,Combo
 game.best,Best
