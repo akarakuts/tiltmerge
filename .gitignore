@@ -3,6 +3,11 @@
 .godot/
 *.import
 
+# Export: коммитим export_presets.cfg (без секретов!), но игнорируем локальный override
+# с keystore passwords — используйте export_presets.local.cfg для секретов.
+export_presets.local.cfg
+export_credentials.txt
+
 # Export output
 export_presets.cfg.bak
 

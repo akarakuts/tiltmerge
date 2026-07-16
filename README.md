@@ -58,6 +58,27 @@ brew install --cask godot
 
 ---
 
+## 📱 Сборка APK/AAB (Phase 6)
+
+### Локально (из Godot Editor)
+1. **Editor → Export…** → Android Debug/Release пресеты уже настроены в `export_presets.cfg`
+2. Для **release** нужен keystore (🧑 HUMAN):
+   ```bash
+   keytool -keyalg RSA -genkeypair -alias tiltmerge -keyalg RSA -keysize 2048 -validity 10000 -keystore tiltmerge.keystore
+   ```
+3. Указать keystore в `export_presets.cfg` (секция `keystore/release`) ИЛИ через локальный `export_presets.local.cfg`
+
+### CI (GitHub Actions)
+- Каждый push в `main`/`dev` → автосборка debug-APK (`.github/workflows/build.yml`)
+- Тег `v*` → GitHub Release с APK
+
+### Требования к окружению сборки
+- Godot 4.3 (с Android export templates)
+- Android SDK (Godot скачает автоматически через gradle build)
+- JDK 17+
+
+---
+
 ## 🤖 Роль ZCode в проекте
 
 | Делает ZCode (AI-агент) | Делает человек (🧑‍💼 HUMAN) |
