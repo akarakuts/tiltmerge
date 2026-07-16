@@ -1,0 +1,33 @@
+key,en
+app.title,TiltMerge
+menu.play,PLAY
+menu.settings,Settings
+menu.leaderboard,Leaderboard
+menu.daily,Daily Challenge
+menu.classic,Classic
+menu.blitz,Blitz
+menu.zen,Zen
+settings.title,Settings
+settings.control,Control
+settings.control.tilt,Tilt
+settings.control.swipe,Swipe
+settings.haptics,Haptics
+settings.reduce_motion,Reduce Motion
+settings.sound,Sound
+settings.music,Music
+settings.language,Language
+settings.back,Back
+onboarding.title,How to play
+onboarding.step1,Tilt your phone to roll the cubes
+onboarding.step2,Two same cubes merge into a bigger one
+onboarding.step3,Dont let them reach the top
+onboarding.start,GOT IT
+game.score,Score
+game.combo,Combo
+game.best,Best
+game.paused,PAUSED
+game.resume_hint,Tap pause or Esc to resume
+game.game_over,GAME OVER
+game.restart,Restart
+game.menu,Main Menu
+game.revive,Continue (Ad)

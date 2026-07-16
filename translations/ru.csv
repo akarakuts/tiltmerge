@@ -1,0 +1,33 @@
+key,ru
+app.title,TiltMerge
+menu.play,ИГРАТЬ
+menu.settings,Настройки
+menu.leaderboard,Таблица лидеров
+menu.daily,Ежедневный вызов
+menu.classic,Классика
+menu.blitz,Блиц
+menu.zen,Дзен
+settings.title,Настройки
+settings.control,Управление
+settings.control.tilt,Наклон
+settings.control.swipe,Свайп
+settings.haptics,Вибрация
+settings.reduce_motion,Меньше движения
+settings.sound,Звук
+settings.music,Музыка
+settings.language,Язык
+settings.back,Назад
+onboarding.title,Как играть
+onboarding.step1,Наклоняй телефон, чтобы катить кубики
+onboarding.step2,Два одинаковых кубика слипаются в больший
+onboarding.step3,Не дай им достичь верха
+onboarding.start,ПОНЯТНО
+game.score,Очки
+game.combo,Комбо
+game.best,Рекорд
+game.paused,ПАУЗА
+game.resume_hint,Нажми паузу или Esc, чтобы продолжить
+game.game_over,ИГРА ОКОНЧЕНА
+game.restart,Заново
+game.menu,В меню
+game.revive,Продолжить (реклама)

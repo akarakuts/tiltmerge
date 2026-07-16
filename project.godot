@@ -20,6 +20,8 @@ GameConfig="*res://scripts/GameConfig.gd"
 MergeBus="*res://scripts/MergeBus.gd"
 SaveSystem="*res://scripts/SaveSystem.gd"
 GameManager="*res://scripts/GameManager.gd"
+AudioManager="*res://scripts/AudioManager.gd"
+Haptics="*res://scripts/Haptics.gd"
 
 [display]
 
@@ -50,6 +52,11 @@ ui_pause={
 [input_devices]
 
 sensors/enabled=true
+
+[internationalization]
+
+locale/translations=PackedStringArray("res://translations/en.csv", "res://translations/ru.csv")
+locale/translation_remaps={}
 
 [rendering]
 

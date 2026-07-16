@@ -68,16 +68,26 @@ func _ready() -> void:
 	GameManager.go(GameManager.State.PLAYING)
 	_spawner.start()
 	_merge.score = 0
+	AudioManager.play_music("music_game")
+	# тап по пауз-панели возобновляет игру
+	_pause_panel.gui_input.connect(_on_pause_panel_input)
 	print("[Game] started mode=%s" % _mode)
+
+
+func _on_pause_panel_input(event: InputEvent) -> void:
+	if event is InputEventScreenTouch and event.pressed:
+		_on_resume()
 
 
 func _on_score_changed(new_score: int, delta: int) -> void:
 	_score_label.text = "Score: %d" % new_score
 	_spawner.set_score(new_score)
 	_merges_this_run += 1
-	# haptic на merge (Фаза 3 усилит)
-	if SaveSystem.data.settings.haptics:
-		_vibrate(20 if delta < 100 else 40)
+	AudioManager.play_sfx("merge", 1.0 + min(0.3, _merges_this_run * 0.01))
+	if delta < 100:
+		Haptics.light()
+	else:
+		Haptics.medium()
 
 
 func _on_combo_changed(_combo_count: int, mult: float) -> void:
@@ -122,8 +132,8 @@ func _trigger_game_over() -> void:
 	_go_score.text = "Score: %d" % score
 	_go_best.text = "Best: %d" % SaveSystem.best_score(_mode)
 	_game_over_panel.visible = true
-	if SaveSystem.data.settings.haptics:
-		_vibrate(150)
+	AudioManager.play_sfx("game_over")
+	Haptics.custom(150)
 	print("[Game] game over score=%d max_tier=%d" % [score, _max_tier_this_run])
 
 
@@ -157,10 +167,3 @@ func _unhandled_input(event: InputEvent) -> void:
 		elif GameManager.state == GameManager.State.PAUSED:
 			_on_resume()
 		get_viewport().set_input_as_handled()
-
-
-# обёртка над haptics (полная реализация — в Фазе 3, Haptics.gd)
-func _vibrate(ms: int) -> void:
-	if Engine.has_singleton("GodotHaptics"):
-		# плагин будет добавлен в Фазе 3/6
-		Engine.get_singleton("GodotHaptics").vibrate(ms)
