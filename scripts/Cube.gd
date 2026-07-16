@@ -26,11 +26,9 @@ func setup(p_tier: int) -> void:
 func _refresh_visual() -> void:
 	$CollisionShape2D.shape.radius = _radius
 	_visual = $Visual
-	# рисуем квадрат по радиусу
+	# рисуем скруглённый квадрат (многоугольник с округлёнными углами)
 	var s: float = _radius
-	_visual.polygon = PackedVector2Array([
-		Vector2(-s, -s), Vector2(s, -s), Vector2(s, s), Vector2(-s, s)
-	])
+	_visual.polygon = _rounded_square_points(s, s * 0.28)
 	_visual.color = _color
 	# glow shader (если reduce_motion — пропускаем для производительности)
 	if not SaveSystem.data.settings.reduce_motion:
@@ -45,6 +43,26 @@ func _refresh_visual() -> void:
 		var tw := create_tween().set_parallel(true)
 		tw.tween_property(_visual, "scale", Vector2(1.15, 0.85), 0.08).set_trans(Tween.TRANS_SINE)
 		tw.chain().tween_property(_visual, "scale", Vector2(1.0, 1.0), 0.12).set_trans(Tween.TRANS_ELASTIC)
+
+
+# Генерирует вершины скруглённого квадрата (для красивого вида кубика).
+func _rounded_square_points(half: float, radius: float) -> PackedVector2Array:
+	var pts := PackedVector2Array()
+	var steps_per_corner := 5
+	var corners := [
+		Vector2(half - radius, half - radius),   # нижний-правый
+		Vector2(-half + radius, half - radius),  # нижний-левый
+		Vector2(-half + radius, -half + radius), # верхний-левый
+		Vector2(half - radius, -half + radius),  # верхний-правый
+	]
+	var angles := [-PI / 2.0, PI, PI / 2.0, 0.0]  # стартовый угол для каждого угла
+	for i in range(4):
+		var center: Vector2 = corners[i]
+		var start: float = angles[i]
+		for j in range(steps_per_corner + 1):
+			var t: float = start + (PI / 2.0) * (float(j) / float(steps_per_corner))
+			pts.append(center + Vector2(cos(t), sin(t)) * radius)
+	return pts
 
 
 func spawn_merge_burst() -> void:

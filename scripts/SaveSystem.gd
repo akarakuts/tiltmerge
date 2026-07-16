@@ -26,7 +26,7 @@ func _default() -> Dictionary:
 		"unlocked_skins": ["default"],
 		"selected_skin": "default",
 		"settings": {
-			"control_mode": "tilt",
+			"control_mode": "swipe",
 			"haptics": true,
 			"reduce_motion": false,
 			"language": "auto",

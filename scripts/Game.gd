@@ -38,8 +38,8 @@ func _ready() -> void:
 		await GameConfig.config_loaded
 	_mode = GameManager.current_mode
 	_mode_cfg = GameConfig.cfg.modes.get(_mode, GameConfig.cfg.modes.classic)
-	_tilt.setup()
-	_tilt.set_control_mode(SaveSystem.data.settings.control_mode)
+	_tilt.setup(_cubes)
+	_tilt.set_control_mode(str(SaveSystem.data.settings.control_mode))
 	_merge.setup(_cubes)
 	_merge.reset()
 	var seeded: bool = bool(_mode_cfg.get("seeded", false))

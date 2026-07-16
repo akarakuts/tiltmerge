@@ -2,9 +2,6 @@
 # Локальный runner тестов TiltMerge.
 # Запуск: ./scripts/run_tests.sh
 # Требует Godot 4.3+ в PATH (или GODOT env var).
-#
-# Тесты используют сцену tests/TestRunner.tscn (autoload-синглтоны инициализируются
-# при загрузке сцены, в отличие от режима --script).
 set -euo pipefail
 
 GODOT="${GODOT:-godot}"
@@ -20,15 +17,20 @@ echo "### Импорт проекта..."
 "$GODOT" --headless --import 2>&1 | grep -iE "error|failed" || true
 
 echo ""
-echo "### Тесты (unit + smoke) через TestRunner.tscn..."
-"$GODOT" --headless tests/TestRunner.tscn 2>&1 | grep -E "✓|✗|TOTAL:|FAILED|SCRIPT ERROR|ERROR:"
-rc=${PIPESTATUS[0]}
+echo "### 1. Unit + smoke тесты (TestRunner.tscn)..."
+"$GODOT" --headless tests/TestRunner.tscn 2>&1 | grep -E "✓|✗|TOTAL:|FAILED|SCRIPT ERROR|ERROR:" || true
+rc1=$?
 
 echo ""
-if [ "$rc" -eq 0 ]; then
+echo "### 2. Gameplay тест (полная симуляция, ~45s)..."
+"$GODOT" --headless tests/GameplayTest.tscn 2>&1 | grep -E "\[test\]|PASS|FAIL|RESULTS|GAMEPLAY" || true
+rc2=$?
+
+echo ""
+if [ "$rc1" -eq 0 ] && [ "$rc2" -eq 0 ]; then
   echo "✅ Все тесты прошли"
   exit 0
 else
-  echo "❌ Тесты провалились (exit=$rc)"
-  exit "$rc"
+  echo "❌ Тесты провалились (test_runner=$rc1 gameplay=$rc2)"
+  exit 1
 fi

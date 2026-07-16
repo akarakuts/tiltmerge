@@ -24,7 +24,7 @@ func _ready() -> void:
 	# ждём, пока GameConfig загрузится (autoload выполняется до _ready сцены, но подстрахуемся)
 	if not GameConfig.is_ready:
 		await GameConfig.config_loaded
-	_tilt.setup()
+	_tilt.setup(_cubes)
 	_merge.setup(_cubes)
 	_spawner.setup(_cubes, SPAWN_POS, 1.0, false)
 	_merge.score_changed.connect(_on_score_changed)
