@@ -36,6 +36,36 @@ jobs:
           echo "=== gdlint ==="
           find scripts -name '*.gd' -print0 | xargs -0 gdlint || true
 
+      - name: Run unit tests
+        run: godot --headless --script tests/test_config.gd
+
+      - name: Run smoke test
+        run: godot --headless --script tests/smoke_test.gd
+
+      - name: Verify translations (CSV well-formed, key parity)
+        run: |
+          python3 - <<'PY'
+          import csv, sys
+          files = ["translations/en.csv", "translations/ru.csv"]
+          keys = {}
+          for f in files:
+            with open(f) as fh:
+              rows = list(csv.reader(fh))
+            if not rows or rows[0][0] != "key":
+              print(f"❌ {f}: first cell must be 'key'"); sys.exit(1)
+              continue
+            ks = [r[0] for r in rows[1:]]
+            keys[f] = set(ks)
+            print(f"✓ {f}: {len(ks)} keys")
+          if keys[files[0]] != keys[files[1]]:
+            only_en = keys[files[0]] - keys[files[1]]
+            only_ru = keys[files[1]] - keys[files[0]]
+            if only_en: print(f"❌ Missing in ru: {only_en}")
+            if only_ru: print(f"❌ Missing in en: {only_ru}")
+            sys.exit(1)
+          print("✓ Translation key parity OK")
+          PY
+
       - name: Export Android Debug APK
         run: |
           mkdir -p build
