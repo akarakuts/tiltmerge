@@ -1,0 +1,37 @@
+# === Godot 4 ===
+# Imported assets (auto-generated from .png/.wav/.ttf etc.)
+.godot/
+*.import
+
+# Export output
+export_presets.cfg.bak
+
+# === Android ===
+*.apk
+*.aab
+*.keystore
+*.jks
+keystore.properties
+android/
+build/android/
+
+# === OS ===
+.DS_Store
+Thumbs.db
+ehthumbs.db
+desktop.ini
+
+# === Editors ===
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# === Secrets / keys ===
+*.p12
+*.pem
+google-services.json
+GoogleService-Info.plist
+agp-services.json
+secrets.env

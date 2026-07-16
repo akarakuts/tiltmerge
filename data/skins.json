@@ -1,0 +1,49 @@
+{
+  "_comment": "Скины кубиков (косметика). Поле palette переопределяет цвета из config.json для выбранного скина.",
+  "_version": 1,
+
+  "default": {
+    "name": "Classic Neon",
+    "unlock_condition": "default",
+    "unlock_cost_score": 0,
+    "palette": {
+      "1": "#E63946", "2": "#F4A261", "3": "#E9C46A", "4": "#2A9D8F",
+      "5": "#264653", "6": "#8338EC", "7": "#6A4C2A", "8": "#F1FAEE",
+      "9": "#1D2225", "10": "#FF00FF", "11": "#00E5FF", "12": "#FFD700"
+    }
+  },
+
+  "pastel": {
+    "name": "Pastel Dream",
+    "unlock_condition": "score",
+    "unlock_cost_score": 5000,
+    "palette": {
+      "1": "#FFB3BA", "2": "#FFDFBA", "3": "#FFFFBA", "4": "#BAFFC9",
+      "5": "#BAE1FF", "6": "#D4BAFF", "7": "#E0BBE4", "8": "#FFC9DE",
+      "9": "#957DAD", "10": "#FEC8D8", "11": "#CDF0EA", "12": "#FFFFD1"
+    }
+  },
+
+  "monochrome": {
+    "name": "Monochrome",
+    "unlock_condition": "score",
+    "unlock_cost_score": 15000,
+    "palette": {
+      "1": "#E0E0E0", "2": "#C0C0C0", "3": "#A0A0A0", "4": "#808080",
+      "5": "#606060", "6": "#505050", "7": "#404040", "8": "#303030",
+      "9": "#202020", "10": "#101010", "11": "#000000", "12": "#FFFFFF"
+    }
+  },
+
+  "retro": {
+    "name": "Retro 8-bit",
+    "unlock_condition": "achievement",
+    "unlock_cost_score": 0,
+    "unlock_required_achievement": "ach_score_10k",
+    "palette": {
+      "1": "#FF0000", "2": "#FF8000", "3": "#FFFF00", "4": "#00FF00",
+      "5": "#00FFFF", "6": "#0000FF", "7": "#8000FF", "8": "#FF00FF",
+      "9": "#FFFFFF", "10": "#808080", "11": "#C0C0C0", "12": "#000000"
+    }
+  }
+}

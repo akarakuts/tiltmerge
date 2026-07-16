@@ -1,0 +1,53 @@
+name: Build Android (Debug APK)
+
+# Автосборка debug-APK на каждый push/PR в main.
+# Требует Godot + Android export templates. См. docs/GDD.md §10.
+
+on:
+  push:
+    branches: [main, dev]
+  pull_request:
+    branches: [main]
+  workflow_dispatch: {}
+
+jobs:
+  build-android:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Godot
+        uses: chickensoft-games/setup-godot@v1
+        with:
+          version: 4.3.0
+          use-dotnet: false
+
+      - name: Verify project imports
+        run: godot --headless --import
+
+      # TODO (Phase 6): добавить export_presets.cfg + скачать Android templates
+      # - name: Download Android export templates
+      #   run: ...
+      # - name: Export APK (debug)
+      #   run: godot --headless --export-release "Android Debug" build/tiltmerge-debug.apk
+
+      - name: Lint GDScript
+        run: |
+          echo "gdlint placeholder — установить godot-gdscript-toolkit"
+          # pip install gdtoolkit
+          # gdlint scripts/**/*.gd
+
+      - name: Run unit tests
+        run: |
+          echo "tests placeholder — запустить tests/*.gd через GUT"
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: tiltmerge-build
+          path: |
+            build/
+            .godot/
+          retention-days: 14
