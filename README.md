@@ -62,7 +62,7 @@ brew install --cask godot
 
 ### Локально (из Godot Editor)
 1. **Editor → Export…** → Android Debug/Release пресеты уже настроены в `export_presets.cfg`
-2. Для **release** нужен keystore (🧑 HUMAN):
+2. Для **release** нужен keystore:
    ```bash
    keytool -keyalg RSA -genkeypair -alias tiltmerge -keyalg RSA -keysize 2048 -validity 10000 -keystore tiltmerge.keystore
    ```
@@ -79,20 +79,6 @@ brew install --cask godot
 
 ---
 
-## 🤖 Роль ZCode в проекте
-
-| Делает ZCode (AI-агент) | Делает человек (🧑‍💼 HUMAN) |
-|---|---|
-| Код на GDScript | Иконки, арт, музыка |
-| Сцены `.tscn`, конфиги | Аккаунт Google Play ($25) |
-| GDD, баланс, docs | Тест на реальных устройствах |
-| Сборка/CI/тесты | Публикация и маркетинг |
-| Локализация | Keystore и подпись релиза |
-
-Подробный roadmap по фазам — в [`docs/GDD.md`](docs/GDD.md).
-
----
-
 ## 📋 Roadmap релиза
 
 - [x] **Фаза 0** — Pre-production: структура, GDD, баланс
@@ -103,8 +89,8 @@ brew install --cask godot
 - [x] **Фаза 5** — Juice & Полировка
 - [x] **Фаза 6** — Сборка & CI
 - [x] **Фаза 7** — QA (тесты + переводы)
-- [x] **Фаза 8** — Soft Launch (код аналитики/A-B готов; 🧑 публикация)
-- [x] **Фаза 9** — Global Release (ASO-материалы готовы; 🧑 публикация)
+- [x] **Фаза 8** — Soft Launch (код аналитики/A-B готов; публикация вручную)
+- [x] **Фаза 9** — Global Release (ASO-материалы готовы; публикация вручную)
 
 ---
 
