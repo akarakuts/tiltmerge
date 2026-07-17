@@ -12,7 +12,7 @@ config/description="Быстрая головоломка: наклоняй те
 run/main_scene="res://scenes/MainMenu.tscn"
 config/features=PackedStringArray("4.3", "Forward Plus")
 config/icon="res://assets/graphics/icon.png"
-config/version="0.1.0"
+config/version="1.0.1"
 
 [autoload]
 
@@ -60,8 +60,9 @@ sensors/enabled=true
 
 [internationalization]
 
-locale/translations=PackedStringArray()
+locale/translations=PackedStringArray("res://translations/en.en.translation", "res://translations/ru.ru.translation")
 locale/translation_remaps={}
+locale/fallback="en"
 
 [rendering]
 

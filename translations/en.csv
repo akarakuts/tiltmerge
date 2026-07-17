@@ -19,13 +19,13 @@ settings.music,Music
 settings.language,Language
 settings.back,Back
 onboarding.title,How to play
-onboarding.step1,Tilt your phone to roll the cubes
-onboarding.step2,Two same cubes merge into a bigger one
-onboarding.step3,Dont let them reach the top
+onboarding.step1,"Tilt your phone to roll the cubes"
+onboarding.step2,"Two same cubes merge into a bigger one"
+onboarding.step3,"Dont let them reach the top"
 onboarding.start,GOT IT
-ob.hint1,Tilt your phone (or drag on emulator) to roll the cube into the target
-ob.hint2,Push two cubes of the same color together to MERGE them
-ob.hint3,Dont let the cubes reach the top line — or its game over
+ob.hint1,"Tilt your phone (or drag on emulator) to roll the cube into the target"
+ob.hint2,"Push two same-tier cubes together to MERGE them"
+ob.hint3,"Dont let the cubes reach the top line — or its game over"
 ob.done,Nice
 ob.next,Next
 ob.lets_go,Lets go
@@ -39,7 +39,7 @@ game.restart,Restart
 game.menu,Main Menu
 game.next,Next
 game.reroll,Reroll
-game.daily_goal,Daily: merge tier %d
+game.daily_goal,"Daily: merge tier %d"
 game.daily_complete,DAILY COMPLETE
 game.daily_done,Daily complete
 skins.title,Skins

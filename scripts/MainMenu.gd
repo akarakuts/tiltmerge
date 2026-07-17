@@ -39,6 +39,7 @@ func _ready() -> void:
 
 
 func _apply_language() -> void:
+	I18n.apply_saved_language(str(SaveSystem.data.settings.get("language", "auto")))
 	_title.text = tr("app.title")
 	_play.text = tr("menu.play")
 	_classic.text = tr("menu.classic")
