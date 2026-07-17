@@ -1,7 +1,7 @@
 extends Node
 ## Analytics (autoload singleton) — Фаза 8 (Soft Launch).
 ## Обёртка над Firebase Analytics + GA4. Если плагин не подключён — no-op (логирование в stdout).
-## События: game_start, game_over, merge, revive, ad_shown, daily_played, skin_selected.
+## События: game_start, game_over, merge, daily_played, reroll_used, daily_completed, skin_selected.
 ##
 ## 🧑 HUMAN: подключить Firebase SDK и google-services.json (Phase 8) до soft launch.
 
@@ -49,16 +49,16 @@ func merge_event(new_tier: int, combo: int) -> void:
 	event("merge", {"new_tier": new_tier, "combo": combo})
 
 
-func ad_shown(placement: String, watched: bool) -> void:
-	event("ad_shown", {"placement": placement, "watched": watched})
-
-
-func revive_used() -> void:
-	event("revive", {})
-
-
 func daily_played(streak: int) -> void:
 	event("daily_played", {"streak": streak})
+
+
+func reroll_used(charges_left: int) -> void:
+	event("reroll_used", {"charges_left": charges_left})
+
+
+func daily_completed(target_tier: int, bonus: int) -> void:
+	event("daily_completed", {"target_tier": target_tier, "bonus": bonus})
 
 
 func skin_selected(skin_id: String) -> void:

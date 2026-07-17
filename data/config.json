@@ -11,7 +11,7 @@
 
   "cube": {
     "base_radius": 28,
-    "size_multiplier": 1.3,
+    "size_multiplier": 1.25,
     "physics": {
       "bounce": 0.3,
       "friction": 0.6,
@@ -77,21 +77,17 @@
     "multipliers": [1.0, 1.0, 1.5, 2.0, 3.0, 5.0]
   },
 
+  "tactics": {
+    "reroll_starting_charges": 1,
+    "reroll_max_charges": 3,
+    "reroll_combo_interval": 3
+  },
+
   "modes": {
     "classic": { "spawn_interval_mult": 1.0, "game_over": true,  "duration_sec": null },
     "blitz":   { "spawn_interval_mult": 0.8, "game_over": true,  "duration_sec": 60 },
     "zen":     { "spawn_interval_mult": 1.3, "game_over": false, "duration_sec": null },
     "daily":   { "spawn_interval_mult": 1.0, "game_over": true,  "duration_sec": null, "seeded": true }
-  },
-
-  "ads": {
-    "interstitial": { "every_n_restarts": 3, "min_interval_sec": 120 },
-    "revive_per_run": 1
-  },
-
-  "iap": {
-    "remove_ads_price_usd": 1.99,
-    "skin_price_usd_range": [0.99, 1.99]
   },
 
   "achievements": [
@@ -102,12 +98,15 @@
     { "id": "ach_score_1k",    "name": "1K Club",         "condition": "score >= 1000" },
     { "id": "ach_score_10k",   "name": "10K Club",        "condition": "score >= 10000" },
     { "id": "ach_10_games",    "name": "Regular",         "condition": "games >= 10" },
-    { "id": "ach_revive_5",    "name": "Second Chance",   "condition": "revives >= 5" },
+    { "id": "ach_daily_7",     "name": "Weekly",          "condition": "daily_streak >= 7" },
     { "id": "ach_no_tilt",     "name": "Purist",          "condition": "score_swipe >= 5000" }
   ],
 
   "daily": {
     "leaderboard_id": "daily_challenge",
-    "seed_formula": "hash(YYYY-MM-DD)"
+    "seed_formula": "hash(YYYY-MM-DD)",
+    "target_min_tier": 4,
+    "target_tier_span": 3,
+    "target_bonus": 250
   }
 }

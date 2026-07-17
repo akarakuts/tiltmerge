@@ -111,7 +111,7 @@ var _touch_active: bool = false
 
 func _unhandled_input(event: InputEvent) -> void:
 	if _control_mode != "swipe" and not (_control_mode == "tilt" and Input.get_accelerometer() == Vector3.ZERO):
-		pass  # в tilt-режиме на телефоне свайп не нужен
+		return  # в tilt-режиме на телефоне свайп не нужен
 	if event is InputEventScreenTouch:
 		if event.pressed:
 			_touch_active = true

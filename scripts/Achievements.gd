@@ -19,15 +19,15 @@ func _ready() -> void:
 
 # Вызывается после каждой игры с итоговой статистикой забега
 func evaluate_run(stats: Dictionary) -> void:
-	# stats: {score, max_tier, combo, merges, revives, games, score_swipe}
+	# stats: {score, max_tier, combo, merges, games, score_swipe}
 	var ctx := {
 		"score": int(stats.get("score", 0)),
 		"max_tier": int(stats.get("max_tier", 1)),
 		"combo": int(stats.get("combo", 0)),
 		"merges": int(stats.get("merges", 0)),
-		"revives": int(stats.get("revives", 0)),
 		"games": int(SaveSystem.data.total_games),
-		"score_swipe": int(stats.get("score_swipe", 0))
+		"score_swipe": int(stats.get("score_swipe", 0)),
+		"daily_streak": int(SaveSystem.data.daily.get("streak", 0))
 	}
 	for id in _defs:
 		if SaveSystem.data.achievements.has(id):

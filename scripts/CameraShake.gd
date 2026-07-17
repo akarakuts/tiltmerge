@@ -16,7 +16,7 @@ func _ready() -> void:
 	_seed = randi()
 
 
-func shake(intensity: float, duration: float = 0.3) -> void:
+func shake(intensity: float, _duration: float = 0.3) -> void:
 	if SaveSystem.data.settings.reduce_motion:
 		return
 	_trauma = clampf(_trauma + intensity, 0.0, 1.0)

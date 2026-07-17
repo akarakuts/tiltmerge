@@ -14,22 +14,41 @@ if ! command -v "$GODOT" >/dev/null 2>&1; then
 fi
 
 echo "### Импорт проекта..."
-"$GODOT" --headless --import 2>&1 | grep -iE "error|failed" || true
+"$GODOT" --headless --import
+
+run_scene_test() {
+  local scene="$1"
+  local filter="$2"
+  local output rc save_path
+  output="$(mktemp)"
+  save_path="user://tiltmerge-test-$$-${RANDOM}.json"
+  if "$GODOT" --headless "$scene" -- --save-path="$save_path" --cleanup-save >"$output" 2>&1; then
+    rc=0
+  else
+    rc=$?
+  fi
+  grep -E "$filter" "$output" || true
+  if [ "$rc" -ne 0 ]; then
+    cat "$output" >&2
+  fi
+  rm -f "$output"
+  return "$rc"
+}
 
 echo ""
 echo "### 1. Unit + smoke тесты (TestRunner.tscn)..."
-"$GODOT" --headless tests/TestRunner.tscn 2>&1 | grep -E "✓|✗|TOTAL:|FAILED|SCRIPT ERROR|ERROR:" || true
-rc1=$?
+rc1=0
+run_scene_test tests/TestRunner.tscn "✓|✗|TOTAL:|FAILED|SCRIPT ERROR|ERROR:" || rc1=$?
 
 echo ""
 echo "### 2. Onboarding интерактивный тест..."
-"$GODOT" --headless tests/OnboardingTest.tscn 2>&1 | grep -E "✓|✗|PASS|FAIL" || true
-rc2=$?
+rc2=0
+run_scene_test tests/OnboardingTest.tscn "✓|✗|PASS|FAIL" || rc2=$?
 
 echo ""
-echo "### 3. Gameplay тест (полная симуляция, ~45s)..."
-"$GODOT" --headless tests/GameplayTest.tscn 2>&1 | grep -E "\[test\]|PASS|FAIL|RESULTS|GAMEPLAY" || true
-rc3=$?
+echo "### 3. Gameplay тест (полная симуляция, ~20s)..."
+rc3=0
+run_scene_test tests/GameplayTest.tscn "\[test\]|PASS|FAIL|RESULTS|GAMEPLAY" || rc3=$?
 
 echo ""
 if [ "$rc1" -eq 0 ] && [ "$rc2" -eq 0 ] && [ "$rc3" -eq 0 ]; then

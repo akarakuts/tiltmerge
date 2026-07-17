@@ -70,6 +70,11 @@ custom_minimum_size = Vector2(0, 70)
 theme_override_font_sizes/font_size = 26
 text = "Settings"
 
+[node name="Skins" type="Button" parent="VBox"]
+custom_minimum_size = Vector2(0, 70)
+theme_override_font_sizes/font_size = 26
+text = "Skins"
+
 [node name="Leaderboard" type="Button" parent="VBox"]
 custom_minimum_size = Vector2(0, 70)
 theme_override_font_sizes/font_size = 26

@@ -15,7 +15,6 @@ TiltMerge is designed to collect **the minimum data necessary**:
 | Game progress (best score, settings) | Stored **locally** on your device | Yes (local) |
 | Anonymous usage analytics (events, sessions, crashes) | Improve the game | Optional |
 | Crash reports | Fix bugs | Optional |
-| Advertising identifier (if ads shown) | Serve relevant ads by ad networks | Optional |
 
 We do **NOT** collect: name, email, phone, location, contacts, photos, or any personally identifiable information unless you voluntarily provide it (e.g., contacting support).
 
@@ -30,43 +29,34 @@ The App may use the following third-party services, each with its own privacy po
 - **Google Play Services** (leaderboards, achievements) — https://policies.google.com/privacy
 - **Google Analytics for Firebase** (analytics) — https://firebase.google.com/support/privacy
 - **Firebase Crashlytics** (crash reporting) — https://firebase.google.com/support/privacy
-- **AdMob / [Ad networks]** (advertising) — https://support.google.com/admob/answer/6128543
 
-> 🔧 **Build-time toggle:** analytics and ads SDKs are included **only** if the corresponding build flag is enabled. The template project includes no SDKs by default.
+> 🔧 **Build-time toggle:** optional analytics SDKs are included only if the corresponding build flag is enabled. The template project includes no SDKs by default and never includes advertising SDKs.
 
-## 4. Advertising
-
-If ads are enabled, the App may display:
-- **Rewarded video** (you choose to watch)
-- **Interstitial** (between sessions, frequency-capped)
-
-Ad networks may use an advertising ID to measure ad performance. See their policies (links above).
-
-## 5. Children's privacy
+## 4. Children's privacy
 
 The App is targeted at a general audience and is **not directed at children under 13**. We do not knowingly collect data from children. If you believe a child has provided personal data, contact us to delete it.
 
-## 6. Your rights
+## 5. Your rights
 
 You can:
 - **Access** your local save data (it's in the App's storage on your device)
 - **Delete** all App data by uninstalling the App
-- **Opt out** of analytics/ads by disabling them in App Settings (if available) or using your device's "Opt out of Ads Personalization" setting
+- **Opt out** of optional analytics by using a build without analytics SDKs
 
-## 7. Data retention
+## 6. Data retention
 
 - Local data: retained until you uninstall the App
 - Anonymous analytics: retained per Google's policies (typically 14 months)
 
-## 8. Security
+## 7. Security
 
 We use reasonable measures to protect data. No method of transmission/storage is 100% secure.
 
-## 9. Changes to this policy
+## 8. Changes to this policy
 
 We may update this policy. The "Last updated" date above reflects the latest version. Continued use after changes = acceptance.
 
-## 10. Contact
+## 9. Contact
 
 Questions? Contact: **[CONTACT_EMAIL]**
 Developer: **[DEVELOPER_NAME]**

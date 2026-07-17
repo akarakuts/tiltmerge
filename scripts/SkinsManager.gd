@@ -74,6 +74,7 @@ func select(skin_id: String) -> bool:
 		return false
 	SaveSystem.select_skin(skin_id)
 	_apply_selected()
+	Analytics.skin_selected(skin_id)
 	return true
 
 

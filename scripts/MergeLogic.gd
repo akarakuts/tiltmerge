@@ -9,15 +9,16 @@ extends Node
 ## Комбо: растёт за слияния в течение combo_window; иначе сбрасывается.
 ## Фаза 5: burst-анимация + floating score text.
 
-const CubeScenePath := "res://scenes/Cube.tscn"
+const CUBE_SCENE: PackedScene = preload("res://scenes/Cube.tscn")
 
 var score: int = 0
 var combo_count: int = 0
 var _combo_timer: float = 0.0
 var _combo_window: float = 2.0
 var _combo_multipliers: Array = [1.0, 1.0, 1.5, 2.0, 3.0, 5.0]
+var _active: bool = true
 
-signal score_changed(new_score: int, delta: int)
+signal score_changed(new_score: int, delta: int, is_merge: bool)
 signal combo_changed(combo_count: int, multiplier: float)
 
 var _scene_root: Node2D = null  # куда добавлять новые кубики
@@ -34,6 +35,11 @@ func reset() -> void:
 	score = 0
 	combo_count = 0
 	_combo_timer = 0.0
+	_active = true
+
+
+func stop() -> void:
+	_active = false
 
 
 func _physics_process(delta: float) -> void:
@@ -45,13 +51,15 @@ func _physics_process(delta: float) -> void:
 
 
 func _on_merge_requested(a: Node, b: Node) -> void:
+	if not _active:
+		return
 	# Откладываем на конец кадра: добавление/удаление физических тел внутри
 	# body_entered (flush queries) вызывает ошибку движка.
 	_do_merge.call_deferred(a, b)
 
 
 func _do_merge(a: Node, b: Node) -> void:
-	if not (is_instance_valid(a) and is_instance_valid(b)):
+	if not _active or not (is_instance_valid(a) and is_instance_valid(b)):
 		return
 	var old_tier: int = a.tier
 	var new_tier: int = old_tier + 1
@@ -84,7 +92,15 @@ func _do_merge(a: Node, b: Node) -> void:
 		_spawn_floating_text(pos, txt, GameConfig.color_for_tier(new_tier) if mult <= 1.0 else Color.GOLD)
 
 	score += delta_score
-	score_changed.emit(score, delta_score)
+	score_changed.emit(score, delta_score, true)
+
+
+func award_bonus(points: int, label: String = "BONUS") -> void:
+	if points <= 0:
+		return
+	score += points
+	score_changed.emit(score, points, false)
+	_spawn_floating_text(Vector2(360, 300), "+%d %s" % [points, label], Color.GOLD)
 
 
 func _spawn_floating_text(pos: Vector2, text: String, color: Color) -> void:
@@ -107,8 +123,7 @@ func _spawn_floating_text(pos: Vector2, text: String, color: Color) -> void:
 
 
 func _spawn_cube(tier: int, pos: Vector2) -> Node:
-	var scene := load(CubeScenePath) as PackedScene
-	var cube = scene.instantiate()
+	var cube = CUBE_SCENE.instantiate()
 	_scene_root.add_child(cube)
 	cube.global_position = pos
 	cube.setup(tier)

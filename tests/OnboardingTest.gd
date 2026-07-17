@@ -23,6 +23,8 @@ func _ready() -> void:
 	print("========================================")
 	await get_tree().create_timer(0.4).timeout
 	await get_tree().process_frame
+	# This scenario intentionally covers the interactive A/B variant.
+	ABTest._flags["onboarding_style"] = "interactive"
 
 	ob = load(OnboardingScene).instantiate()
 	add_child(ob)
@@ -61,6 +63,24 @@ func _ready() -> void:
 	await get_tree().create_timer(0.3).timeout
 	_check("advanced to step 2", ob._step == 2)
 	_check("step 2 shows Lets Go button", ob._next_btn.visible)
+	SaveSystem.complete_onboarding()
+	_check("completing onboarding is persisted", SaveSystem.data.onboarding_completed)
+	ob.queue_free()
+	await get_tree().process_frame
+
+	# The alternate onboarding A/B path is deterministic when explicitly selected.
+	var slide_ob: Node = load(OnboardingScene).instantiate()
+	slide_ob.style_override = "3slides"
+	add_child(slide_ob)
+	await get_tree().process_frame
+	_check("slide variant starts on first slide", slide_ob._slide_mode and slide_ob._step == 0)
+	_check("slide variant keeps arena hidden", not slide_ob._arena.visible)
+	_check("slide variant exposes Next button", slide_ob._next_btn.visible)
+	slide_ob._on_next()
+	_check("slide variant advances to second slide", slide_ob._step == 1)
+	slide_ob.queue_free()
+	AudioManager.release_resources()
+	await get_tree().process_frame
 
 	print("\n========================================")
 	print("  ONBOARDING TEST: %s (%d passed, %d failed)" % [

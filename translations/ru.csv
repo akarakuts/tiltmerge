@@ -2,6 +2,7 @@ key,ru
 app.title,TiltMerge
 menu.play,ИГРАТЬ
 menu.settings,Настройки
+menu.skins,Скины
 menu.leaderboard,Таблица лидеров
 menu.daily,Ежедневный вызов
 menu.classic,Классика
@@ -22,7 +23,7 @@ onboarding.step1,Наклоняй телефон, чтобы катить куб
 onboarding.step2,Два одинаковых кубика слипаются в больший
 onboarding.step3,Не дай им достичь верха
 onboarding.start,ПОНЯТНО
-ob.hint1,Наклоняй телефон или веди пальцем, чтобы докатить кубик до мишени
+ob.hint1,Наклоняй телефон (или веди пальцем на эмуляторе), чтобы докатить кубик до мишени
 ob.hint2,Столкни два одинаковых кубика — они СЛИВаются в один побольше
 ob.hint3,Не дай кубикам достичь верхней линии — иначе игра окончена
 ob.done,Отлично
@@ -32,8 +33,18 @@ game.score,Очки
 game.combo,Комбо
 game.best,Рекорд
 game.paused,ПАУЗА
-game.resume_hint,Нажми паузу или Esc, чтобы продолжить
+game.resume_hint,Нажми, чтобы продолжить
 game.game_over,ИГРА ОКОНЧЕНА
 game.restart,Заново
 game.menu,В меню
-game.revive,Продолжить (реклама)
+game.next,Следующий
+game.reroll,Смена
+game.daily_goal,Задание дня: создать tier %d
+game.daily_complete,ЗАДАНИЕ ВЫПОЛНЕНО
+game.daily_done,Задание дня выполнено
+skins.title,Скины
+skins.selected,Выбрано
+skins.choose,Нажми чтобы выбрать
+skins.locked,Закрыто
+skins.select,Выбрать
+leaderboard.local_note,Локальные рекорды

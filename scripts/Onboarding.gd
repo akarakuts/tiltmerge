@@ -8,9 +8,12 @@ extends Node2D
 ##
 ## Запуск: автоматически при первом запуске (total_games == 0), либо из меню.
 
-const CubeScenePath := "res://scenes/Cube.tscn"
+const CUBE_SCENE: PackedScene = preload("res://scenes/Cube.tscn")
+
+@export var style_override: String = ""
 
 @onready var _cubes: Node2D = $Arena/Cubes
+@onready var _arena: Node2D = $Arena
 @onready var _tilt: Node = $TiltController
 @onready var _merge: Node = $MergeLogic
 @onready var _title: Label = $UI/Title
@@ -27,6 +30,7 @@ var _step_cube: Cube = null
 var _step_cube2: Cube = null
 var _goal_reached: bool = false
 var _merge_happened: bool = false
+var _slide_mode: bool = false
 
 const STEP_COUNT := 3
 
@@ -35,8 +39,8 @@ func _ready() -> void:
 	if not GameConfig.is_ready:
 		await GameConfig.config_loaded
 	_tilt.setup(_cubes)
-	# онбординг всегда свайп-управление для предсказуемости (наклон ещё не пробовали)
-	_tilt.set_control_mode("swipe")
+	# USP: tilt из настроек; без акселерометра TiltController сам падает на свайп
+	_tilt.set_control_mode(str(SaveSystem.data.settings.control_mode))
 	_merge.setup(_cubes)
 	_merge.reset()
 	MergeBus.merge_completed.connect(_on_merge_completed)
@@ -47,7 +51,11 @@ func _ready() -> void:
 	_next_btn.hide()
 	_arrow.hide()
 	_goal.hide()
-	_start_step(0)
+	_slide_mode = style_override == "3slides" if not style_override.is_empty() else ABTest.is_variant("onboarding_style", "3slides")
+	if _slide_mode:
+		_start_slide(0)
+	else:
+		_start_step(0)
 
 
 # --- Шаги --------------------------------------------------------------------
@@ -72,6 +80,16 @@ func _start_step(idx: int) -> void:
 		0: _step_one_tilt()
 		1: _step_two_merge()
 		2: _step_three_rule()
+
+
+func _start_slide(idx: int) -> void:
+	_step = idx
+	_arena.hide()
+	_title.text = tr("onboarding.title")
+	_hint.text = tr("onboarding.step%d" % (idx + 1))
+	_next_btn.text = tr("ob.lets_go") if idx == STEP_COUNT - 1 else tr("ob.next")
+	_next_btn.show()
+	_update_progress()
 
 
 # Шаг 1: один кубик, доведи до цели (наклоном/свайпом)
@@ -105,7 +123,7 @@ func _step_three_rule() -> void:
 
 
 func _spawn_cube(tier: int, pos: Vector2) -> Cube:
-	var cube = load(CubeScenePath).instantiate()
+	var cube = CUBE_SCENE.instantiate()
 	_cubes.add_child(cube)
 	cube.global_position = pos
 	cube.setup(tier)
@@ -138,11 +156,21 @@ func _complete_step() -> void:
 
 func _on_next() -> void:
 	AudioManager.play_sfx("button")
+	if _slide_mode:
+		if _step < STEP_COUNT - 1:
+			_start_slide(_step + 1)
+		else:
+			_finish_onboarding()
+		return
 	if _step < STEP_COUNT - 1:
 		_start_step(_step + 1)
 	else:
-		# финал → в меню
-		get_tree().change_scene_to_file("res://scenes/MainMenu.tscn")
+		_finish_onboarding()
+
+
+func _finish_onboarding() -> void:
+	SaveSystem.complete_onboarding()
+	get_tree().change_scene_to_file("res://scenes/MainMenu.tscn")
 
 
 # --- События арены -----------------------------------------------------------

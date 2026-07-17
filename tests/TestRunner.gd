@@ -52,6 +52,11 @@ func _run_unit_tests() -> void:
 	_ut("color_for_tier valid", func(): _true(GameConfig.color_for_tier(1).a > 0.0, "alpha>0"))
 	_ut("SkinsManager.color_for_tier valid", func():
 		_true(SkinsManager.color_for_tier(1).a > 0.0, "alpha>0"))
+	_ut("daily target is deterministic", func():
+		_eq(GameConfig.daily_target_tier("2099-01-01"), GameConfig.daily_target_tier("2099-01-01")))
+	_ut("daily target stays in configured range", func():
+		var target := GameConfig.daily_target_tier("2099-01-01")
+		_true(target >= 4 and target <= 6, "target=%d" % target))
 
 
 # ---------------------------------------------------------------------------
@@ -60,11 +65,21 @@ func _run_unit_tests() -> void:
 func _run_smoke_tests() -> void:
 	print("\n--- SMOKE TESTS ---")
 	# autoloads живы
-	for name_ in ["I18n", "GameConfig", "MergeBus", "SaveSystem", "GameManager", "AudioManager", "Haptics", "Achievements", "SkinsManager", "Analytics", "ABTest"]:
+	var autoloads := [
+		"I18n", "GameConfig", "MergeBus", "SaveSystem", "GameManager", "AudioManager",
+		"Haptics", "Achievements", "SkinsManager", "Analytics", "ABTest"
+	]
+	for name_ in autoloads:
 		var node := get_node_or_null("/root/" + name_)
 		_smoke("autoload %s exists" % name_, node != null)
 	# все сцены грузятся
-	for scene_path in ["res://scenes/MainMenu.tscn", "res://scenes/Onboarding.tscn", "res://scenes/Settings.tscn", "res://scenes/Leaderboard.tscn", "res://scenes/Skins.tscn", "res://scenes/Prototype.tscn", "res://scenes/Cube.tscn", "res://scenes/Game.tscn"]:
+	var scene_paths := [
+		"res://scenes/MainMenu.tscn", "res://scenes/Onboarding.tscn",
+		"res://scenes/Settings.tscn", "res://scenes/Leaderboard.tscn",
+		"res://scenes/Skins.tscn", "res://scenes/Prototype.tscn",
+		"res://scenes/Cube.tscn", "res://scenes/Game.tscn"
+	]
+	for scene_path in scene_paths:
 		var loaded := load(scene_path) if ResourceLoader.exists(scene_path) else null
 		_smoke("scene %s loads" % scene_path.get_file(), loaded != null and loaded is PackedScene)
 	# save round-trip
@@ -72,11 +87,20 @@ func _run_smoke_tests() -> void:
 	SaveSystem.record_game_result("classic", 1234, 50, 4)
 	_smoke("save total_games increments", SaveSystem.data.total_games == before + 1)
 	_smoke("save best_score records", SaveSystem.best_score("classic") >= 1234)
+	_smoke("save install_id exists", not str(SaveSystem.data.get("install_id", "")).is_empty())
+	SaveSystem.load_data()
+	_smoke("save round-trip reloads persisted data", SaveSystem.data.total_games == before + 1)
+	var streak := SaveSystem.record_daily_play("2099-01-01")
+	_smoke("daily streak starts at one", streak == 1)
+	_smoke("daily play is idempotent", SaveSystem.record_daily_play("2099-01-01") == 1)
+	_smoke("daily challenge completion persists", SaveSystem.complete_daily_challenge("2099-01-01"))
+	_smoke("daily challenge completion is one-time", not SaveSystem.complete_daily_challenge("2099-01-01"))
+	_smoke("A/B spawn cohort assigned", ABTest.get_flag("spawn_speed") in ["normal", "fast"])
 	# achievements не падают
 	Achievements.evaluate_run({"score": 1000, "max_tier": 3, "combo": 1, "merges": 10, "revives": 0, "score_swipe": 0})
 	_smoke("achievements evaluate_run no crash", true)
 	# переводы зарегистрированы
-	_smoke("translation 'menu.play' resolves", tr("menu.play") != "menu.play" or true)  # может быть ключом если локаль неизвестна
+	_smoke("translation 'menu.play' resolves", tr("menu.play") != "menu.play")
 
 
 # --- фреймворк ---

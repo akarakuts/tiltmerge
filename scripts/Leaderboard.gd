@@ -39,9 +39,9 @@ func _build() -> void:
 		row.add_child(name)
 		row.add_child(val)
 		_vbox.add_child(row)
-	# заглушка под онлайн
+	# Явно обозначаем локальный источник данных, пока онлайн-сервис не подключён.
 	var note := Label.new()
-	note.text = "Google Play leaderboard — Phase 8"
+	note.text = tr("leaderboard.local_note")
 	note.add_theme_font_size_override("font_size", 20)
 	note.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_vbox.add_child(note)

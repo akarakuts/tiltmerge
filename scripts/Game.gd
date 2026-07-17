@@ -9,8 +9,13 @@ extends Node2D
 @onready var _merge: Node = $MergeLogic
 @onready var _camera_shake: Camera2D = $Camera2D
 
+@onready var _hud: CanvasLayer = $HUD
+
 @onready var _score_label: Label = $HUD/ScoreLabel
 @onready var _combo_label: Label = $HUD/ComboLabel
+@onready var _next_label: Label = $HUD/NextLabel
+@onready var _reroll_btn: Button = $HUD/RerollButton
+@onready var _objective_label: Label = $HUD/ObjectiveLabel
 @onready var _timer_label: Label = $HUD/TimerLabel
 @onready var _pause_btn: Button = $HUD/PauseButton
 @onready var _game_over_panel: Control = $HUD/GameOverPanel
@@ -19,6 +24,9 @@ extends Node2D
 @onready var _restart_btn: Button = $HUD/GameOverPanel/VBox/RestartButton
 @onready var _menu_btn: Button = $HUD/GameOverPanel/VBox/MenuButton
 @onready var _pause_panel: Control = $HUD/PausePanel
+@onready var _paused_label: Label = $HUD/PausePanel/PausedLabel
+@onready var _resume_hint: Label = $HUD/PausePanel/ResumeHint
+@onready var _go_title: Label = $HUD/GameOverPanel/VBox/Title
 
 var _game_over_line_y: float = 80.0
 var _game_over_grace: float = 1.5
@@ -29,6 +37,12 @@ var _merges_this_run: int = 0
 var _mode: String = "classic"
 var _mode_cfg: Dictionary = {}
 var _blitz_time_left: float = 0.0
+var _reroll_charges: int = 0
+var _reroll_max_charges: int = 0
+var _reroll_combo_interval: int = 3
+var _daily_date_key: String = ""
+var _daily_target_tier: int = 0
+var _daily_complete: bool = false
 
 const SPAWN_POS := Vector2(360, 120)
 
@@ -44,11 +58,14 @@ func _ready() -> void:
 	_merge.reset()
 	var seeded: bool = bool(_mode_cfg.get("seeded", false))
 	var spawn_mult: float = float(_mode_cfg.get("spawn_interval_mult", 1.0))
+	if ABTest.is_variant("spawn_speed", "fast"):
+		spawn_mult *= 0.85
 	_spawner.setup(_cubes, SPAWN_POS, spawn_mult, seeded)
 
 	_merge.score_changed.connect(_on_score_changed)
 	_merge.combo_changed.connect(_on_combo_changed)
 	MergeBus.merge_completed.connect(_on_merge_completed)
+	_spawner.next_tier_changed.connect(_on_next_tier_changed)
 
 	_game_over_line_y = float(GameConfig.cfg.game.game_over_line_y)
 	_game_over_grace = float(GameConfig.cfg.game.game_over_grace_sec)
@@ -65,40 +82,110 @@ func _ready() -> void:
 	_menu_btn.pressed.connect(_on_to_menu)
 	_game_over_panel.visible = false
 	_pause_panel.visible = false
+	# HUD must keep receiving touch and mouse events while the game tree is paused.
+	_hud.process_mode = Node.PROCESS_MODE_ALWAYS
+	_apply_localized_text()
+	_setup_tactics()
+	_reroll_btn.pressed.connect(_on_reroll_pressed)
 
 	GameManager.go(GameManager.State.PLAYING)
 	_spawner.start()
 	_merge.score = 0
 	AudioManager.play_music("music_game")
+	if _mode == "daily":
+		var date := Time.get_date_dict_from_system()
+		_daily_date_key = "%04d-%02d-%02d" % [date.year, date.month, date.day]
+		_daily_target_tier = GameConfig.daily_target_tier(_daily_date_key)
+		_daily_complete = str(SaveSystem.data.daily.get("completed_date", "")) == _daily_date_key
+		_update_daily_objective()
+		Analytics.daily_played(SaveSystem.record_daily_play(_daily_date_key))
+	else:
+		_objective_label.hide()
 	# тап по пауз-панели возобновляет игру
 	_pause_panel.gui_input.connect(_on_pause_panel_input)
 	print("[Game] started mode=%s" % _mode)
 
 
 func _on_pause_panel_input(event: InputEvent) -> void:
-	if event is InputEventScreenTouch and event.pressed:
+	if (event is InputEventScreenTouch or event is InputEventMouseButton) and event.pressed:
 		_on_resume()
+		get_viewport().set_input_as_handled()
 
 
-func _on_score_changed(new_score: int, delta: int) -> void:
-	_score_label.text = "Score: %d" % new_score
+func _on_score_changed(new_score: int, delta: int, is_merge: bool) -> void:
+	_score_label.text = "%s: %d" % [tr("game.score"), new_score]
 	_spawner.set_score(new_score)
-	_merges_this_run += 1
-	AudioManager.play_sfx("merge", 1.0 + min(0.3, _merges_this_run * 0.01))
-	if delta < 100:
-		Haptics.light()
+	_update_tactics_ui()
+	if is_merge:
+		_merges_this_run += 1
+		AudioManager.play_sfx("merge", 1.0 + min(0.3, _merges_this_run * 0.01))
+		if delta < 100:
+			Haptics.light()
+		else:
+			Haptics.medium()
+		# camera shake пропорционально очкам слияния
+		_camera_shake.shake(clampf(float(delta) / 300.0, 0.1, 0.8), 0.25)
 	else:
+		AudioManager.play_sfx("combo", 1.15)
 		Haptics.medium()
-	# camera shake пропорционально очкам слияния
-	_camera_shake.shake(clampf(float(delta) / 300.0, 0.1, 0.8), 0.25)
+		_camera_shake.shake(0.45, 0.35)
 
 
-func _on_combo_changed(_combo_count: int, mult: float) -> void:
-	_combo_label.text = "Combo: x%.1f" % mult
+func _on_combo_changed(combo_count: int, mult: float) -> void:
+	_combo_label.text = "%s: x%.1f" % [tr("game.combo"), mult]
+	if combo_count > 0 and combo_count % _reroll_combo_interval == 0:
+		_reroll_charges = mini(_reroll_charges + 1, _reroll_max_charges)
+		_update_tactics_ui()
 
 
-func _on_merge_completed(new_cube: Node, _old_tier: int, new_tier: int, _pos: Vector2) -> void:
+func _on_merge_completed(_new_cube: Node, _old_tier: int, new_tier: int, _pos: Vector2) -> void:
 	_max_tier_this_run = maxi(_max_tier_this_run, new_tier)
+	Analytics.merge_event(new_tier, _merge.combo_count)
+	if _mode == "daily" and not _daily_complete and new_tier >= _daily_target_tier:
+		_daily_complete = SaveSystem.complete_daily_challenge(_daily_date_key)
+		if _daily_complete:
+			var bonus: int = int(GameConfig.cfg.daily.target_bonus)
+			_merge.award_bonus(bonus, tr("game.daily_complete"))
+			Analytics.daily_completed(_daily_target_tier, bonus)
+			_update_daily_objective()
+
+
+func _setup_tactics() -> void:
+	_reroll_charges = int(GameConfig.cfg.tactics.reroll_starting_charges)
+	_reroll_max_charges = int(GameConfig.cfg.tactics.reroll_max_charges)
+	_reroll_combo_interval = int(GameConfig.cfg.tactics.reroll_combo_interval)
+	_update_tactics_ui()
+	_on_next_tier_changed(_spawner.peek_next_tier())
+
+
+func _on_next_tier_changed(tier: int) -> void:
+	_next_label.text = "%s: %d" % [tr("game.next"), tier]
+	_next_label.modulate = SkinsManager.color_for_tier(tier)
+
+
+func _on_reroll_pressed() -> void:
+	if _reroll_charges <= 0 or not _spawner.can_reroll_next_tier() or GameManager.state != GameManager.State.PLAYING:
+		return
+	if not _spawner.reroll_next_tier():
+		return
+	_reroll_charges -= 1
+	_update_tactics_ui()
+	AudioManager.play_sfx("button")
+	Haptics.light()
+	Analytics.reroll_used(_reroll_charges)
+
+
+func _update_tactics_ui() -> void:
+	_reroll_btn.text = "%s (%d)" % [tr("game.reroll"), _reroll_charges]
+	_reroll_btn.disabled = _reroll_charges <= 0 or not _spawner.can_reroll_next_tier()
+
+
+func _update_daily_objective() -> void:
+	_objective_label.show()
+	if _daily_complete:
+		_objective_label.text = tr("game.daily_done")
+	else:
+		_objective_label.text = tr("game.daily_goal") % _daily_target_tier
 
 
 func _physics_process(delta: float) -> void:
@@ -129,6 +216,7 @@ func _physics_process(delta: float) -> void:
 
 func _trigger_game_over() -> void:
 	_spawner.stop()
+	_merge.stop()
 	var score: int = _merge.score
 	GameManager.end_game(score, _merges_this_run, _max_tier_this_run)
 	# оценки достижений по итогам забега
@@ -138,12 +226,11 @@ func _trigger_game_over() -> void:
 		"max_tier": _max_tier_this_run,
 		"combo": _merge.combo_count,
 		"merges": _merges_this_run,
-		"revives": 0,
 		"score_swipe": score if control_is_swipe else 0
 	})
 	# показываем панель
-	_go_score.text = "Score: %d" % score
-	_go_best.text = "Best: %d" % SaveSystem.best_score(_mode)
+	_go_score.text = "%s: %d" % [tr("game.score"), score]
+	_go_best.text = "%s: %d" % [tr("game.best"), SaveSystem.best_score(_mode)]
 	_game_over_panel.visible = true
 	AudioManager.play_sfx("game_over")
 	Haptics.custom(150)
@@ -172,6 +259,18 @@ func _on_restart() -> void:
 func _on_to_menu() -> void:
 	get_tree().paused = false
 	get_tree().change_scene_to_file("res://scenes/MainMenu.tscn")
+
+
+func _apply_localized_text() -> void:
+	_score_label.text = "%s: 0" % tr("game.score")
+	_combo_label.text = "%s: x1.0" % tr("game.combo")
+	_paused_label.text = tr("game.paused")
+	_resume_hint.text = tr("game.resume_hint")
+	_go_title.text = tr("game.game_over")
+	_go_score.text = "%s: 0" % tr("game.score")
+	_go_best.text = "%s: 0" % tr("game.best")
+	_restart_btn.text = tr("game.restart")
+	_menu_btn.text = tr("game.menu")
 
 
 func _unhandled_input(event: InputEvent) -> void:

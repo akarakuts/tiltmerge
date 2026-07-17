@@ -6,7 +6,7 @@ extends Node2D
 ##   1. Сцена Game грузится и стартует (mode=classic)
 ##   2. Эмуляция ввода наклона → кубики двигаются
 ##   3. Слияния происходят (score растёт)
-##   4. Game over срабатывает при переполнении
+##   4. Game over срабатывает при пересечении порога переполнения
 ##   5. Рестарт работает
 
 const GAME_SCENE := "res://scenes/Game.tscn"
@@ -17,6 +17,9 @@ var phase: String = "init"
 var elapsed: float = 0.0
 var merge_seen: bool = false
 var score_at_check: int = 0
+var pause_cycle_ok: bool = false
+var tactics_ok: bool = false
+var daily_goal_ok: bool = false
 
 
 func _ready() -> void:
@@ -37,8 +40,22 @@ func _ready() -> void:
 	add_child(game_instance)
 	await get_tree().create_timer(0.3).timeout
 	_log("Game instance created, mode=classic, control=swipe")
+	game_instance._on_pause()
+	var resume_click := InputEventMouseButton.new()
+	resume_click.button_index = MOUSE_BUTTON_LEFT
+	resume_click.pressed = true
+	game_instance._on_pause_panel_input(resume_click)
+	pause_cycle_ok = GameManager.state == GameManager.State.PLAYING and not get_tree().paused
+	_log("%s pause overlay resumes from mouse input" % ("✓" if pause_cycle_ok else "✗ FAIL:"))
+	game_instance._spawner.set_score(50)
+	var starting_rerolls: int = game_instance._reroll_charges
+	var next_tier: int = game_instance._spawner.peek_next_tier()
+	game_instance._on_reroll_pressed()
+	game_instance._on_combo_changed(game_instance._reroll_combo_interval, 1.5)
+	tactics_ok = next_tier >= 1 and game_instance._spawner.peek_next_tier() != next_tier and game_instance._reroll_charges == starting_rerolls
+	_log("%s next preview and combo-earned reroll work" % ("✓" if tactics_ok else "✗ FAIL:"))
 
-	# фаза 1: подождать спавна и слияний (15 сек)
+	# фаза 1: подождать спавна и слияний.
 	phase = "playing"
 	_log("Phase 1: playing — waiting for spawns & merges (≤15s)...")
 	await get_tree().create_timer(15.0).timeout
@@ -56,18 +73,18 @@ func _ready() -> void:
 	else:
 		_log("⚠ No merges in 15s (may need more time or tilted input)")
 
-	# фаза 2: дождаться game over (ещё до 30 сек) или засчитать как успех (zen-like)
+	# фаза 2: не ждём случайного переполнения в headless-физике. Поднимаем порог
+	# над уже созданными кубиками, чтобы детерминированно проверить production-path
+	# обнаружения переполнения и сохранения результата.
 	phase = "wait_game_over"
-	var t2 := 0.0
-	while GameManager.state != GameManager.State.GAME_OVER and t2 < 30.0:
-		await get_tree().create_timer(1.0).timeout
-		t2 += 1.0
+	game_instance._game_over_line_y = 2000.0
+	await get_tree().create_timer(2.0).timeout
 
 	if GameManager.state == GameManager.State.GAME_OVER:
-		_log("✓ Game over triggered (after %ds total)" % int(15 + t2))
+		_log("✓ Game over triggered after controlled overflow")
 		_log("  final score=%d" % merge_logic.score)
 	else:
-		_log("⚠ No game over in 45s (cubes not overflowing in headless — expected without rendering)")
+		_log("✗ FAIL: game over did not trigger after controlled overflow")
 
 	# итоги
 	print("\n--- RESULTS ---")
@@ -77,6 +94,12 @@ func _ready() -> void:
 		ok = false
 	else:
 		_log("✓ PASS: game ran, mechanics functional")
+	if not pause_cycle_ok:
+		ok = false
+	if not tactics_ok:
+		ok = false
+	if GameManager.state != GameManager.State.GAME_OVER:
+		ok = false
 	# сохранение должно было инкрементировать total_games при game over
 	if GameManager.state == GameManager.State.GAME_OVER:
 		await get_tree().process_frame
@@ -84,11 +107,36 @@ func _ready() -> void:
 			_log("✓ PASS: total_games incremented on game over")
 		else:
 			_log("✗ FAIL: total_games not incremented")
+		var stable_score: bool = game_instance._merge.score == GameManager.last_score
+		_log("%s score stays immutable after game over" % ("✓" if stable_score else "✗ FAIL:"))
+		if not stable_score:
+			ok = false
+	daily_goal_ok = await _verify_daily_goal()
+	if not daily_goal_ok:
+		ok = false
 
 	print("\n========================================")
 	print("  GAMEPLAY TEST: %s" % ("PASS" if ok else "FAIL"))
 	print("========================================")
 	get_tree().quit(0 if ok else 1)
+
+
+func _verify_daily_goal() -> bool:
+	game_instance.queue_free()
+	await get_tree().process_frame
+	GameManager.start_game("daily")
+	var daily_game: Node = load(GAME_SCENE).instantiate()
+	add_child(daily_game)
+	await get_tree().create_timer(0.3).timeout
+	var target: int = daily_game._daily_target_tier
+	var bonus: int = int(GameConfig.cfg.daily.target_bonus)
+	daily_game._on_merge_completed(null, target - 1, target, Vector2.ZERO)
+	await get_tree().process_frame
+	var completed: bool = daily_game._daily_complete
+	var bonus_awarded: bool = daily_game._merge.score == bonus
+	daily_game.queue_free()
+	_log("%s daily goal persists and awards its bonus" % ("✓" if completed and bonus_awarded else "✗ FAIL:"))
+	return completed and bonus_awarded
 
 
 func _physics_process(delta: float) -> void:

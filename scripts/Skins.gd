@@ -10,6 +10,7 @@ func _ready() -> void:
 	if not GameConfig.is_ready:
 		await GameConfig.config_loaded
 	_build()
+	$Scroll/VBox/Title.text = tr("skins.title")
 	_back.text = tr("settings.back")
 	_back.pressed.connect(_on_back)
 
@@ -43,17 +44,17 @@ func _make_card(skin: Dictionary) -> Control:
 	col.add_child(name)
 	var status := Label.new()
 	if skin.selected:
-		status.text = "✓ selected"
+		status.text = tr("skins.selected")
 	elif skin.unlocked:
-		status.text = "tap to select"
+		status.text = tr("skins.choose")
 	else:
-		status.text = "locked: %s" % str(skin.unlock_condition)
+		status.text = tr("skins.locked")
 	status.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	status.add_theme_font_size_override("font_size", 20)
 	col.add_child(status)
 	if skin.unlocked and not skin.selected:
 		var btn := Button.new()
-		btn.text = "Select"
+		btn.text = tr("skins.select")
 		btn.pressed.connect(func():
 			SkinsManager.select(skin.id)
 			_build()

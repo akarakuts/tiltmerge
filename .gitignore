@@ -10,6 +10,7 @@ export_credentials.txt
 
 # Export output
 export_presets.cfg.bak
+build/
 
 # === Android ===
 *.apk
@@ -17,6 +18,7 @@ export_presets.cfg.bak
 *.keystore
 *.jks
 keystore.properties
+store-upload.dir
 android/
 build/android/
 

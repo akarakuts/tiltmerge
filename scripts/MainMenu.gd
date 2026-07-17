@@ -9,6 +9,7 @@ extends Control
 @onready var _zen: Button = $VBox/Modes/Zen
 @onready var _daily: Button = $VBox/Modes/Daily
 @onready var _settings: Button = $VBox/Settings
+@onready var _skins: Button = $VBox/Skins
 @onready var _leaderboard: Button = $VBox/Leaderboard
 @onready var _best_label: Label = $VBox/BestLabel
 @onready var _title: Label = $VBox/Title
@@ -25,13 +26,14 @@ func _ready() -> void:
 	_zen.pressed.connect(_start.bind("zen"))
 	_daily.pressed.connect(_start.bind("daily"))
 	_settings.pressed.connect(_on_settings)
+	_skins.pressed.connect(_on_skins)
 	_leaderboard.pressed.connect(_on_leaderboard)
 	# раскрываем режимы только после нажатия Play
 	_modes.hide()
 	GameManager.go(GameManager.State.MENU)
 	AudioManager.play_music("music_menu")
 	# первый запуск → онбординг
-	if SaveSystem.data.total_games == 0:
+	if not bool(SaveSystem.data.get("onboarding_completed", false)):
 		await get_tree().create_timer(0.3).timeout
 		get_tree().change_scene_to_file("res://scenes/Onboarding.tscn")
 
@@ -44,6 +46,7 @@ func _apply_language() -> void:
 	_zen.text = tr("menu.zen")
 	_daily.text = tr("menu.daily")
 	_settings.text = tr("menu.settings")
+	_skins.text = tr("menu.skins")
 	_leaderboard.text = tr("menu.leaderboard")
 
 
@@ -66,6 +69,11 @@ func _start(mode: String) -> void:
 func _on_settings() -> void:
 	AudioManager.play_sfx("button")
 	get_tree().change_scene_to_file("res://scenes/Settings.tscn")
+
+
+func _on_skins() -> void:
+	AudioManager.play_sfx("button")
+	get_tree().change_scene_to_file("res://scenes/Skins.tscn")
 
 
 func _on_leaderboard() -> void:

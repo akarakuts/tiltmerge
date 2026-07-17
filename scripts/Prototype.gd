@@ -40,7 +40,7 @@ func _on_score_changed(new_score: int, _delta: int) -> void:
 	_spawner.set_score(new_score)
 
 
-func _on_combo_changed(combo_count: int, mult: float) -> void:
+func _on_combo_changed(_combo_count: int, mult: float) -> void:
 	_combo_label.text = "Combo: x%.1f" % mult
 
 

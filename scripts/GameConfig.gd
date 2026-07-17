@@ -92,24 +92,37 @@ func spawn_interval(score: int) -> float:
 	return maxf(mn, base - float(score) / float(div))
 
 
-## Выбрать tier для спавна по текущему score (взвешенный рандом)
-func pick_spawn_tier(score: int) -> int:
-	# берём последнюю применимую группу по min_score
+## Группа спавна для текущего score (последняя с min_score <= score)
+func spawn_group_for_score(score: int) -> Dictionary:
 	var group: Dictionary = cfg.spawn.score_tiers[0]
 	for g in cfg.spawn.score_tiers:
 		if score >= int(g.min_score):
 			group = g
 		else:
 			break
+	return group
+
+
+## Выбрать tier для спавна по текущему score (взвешенный рандом).
+## Если передан rng — используется он (Daily Challenge); иначе глобальный randi.
+func pick_spawn_tier(score: int, rng: RandomNumberGenerator = null) -> int:
+	var group := spawn_group_for_score(score)
 	var tiers: Array = group.tiers
 	var weights: Array = group.weights
 	var total := 0
 	for w in weights:
 		total += int(w)
-	var roll := randi() % total
+	var roll: int = rng.randi() % total if rng != null else randi() % total
 	var acc := 0
 	for i in range(tiers.size()):
 		acc += int(weights[i])
 		if roll < acc:
 			return int(tiers[i])
 	return int(tiers[0])
+
+
+## Детерминированная ежедневная цель: один и тот же tier для всех игроков даты.
+func daily_target_tier(date_key: String) -> int:
+	var minimum: int = int(cfg.daily.target_min_tier)
+	var span: int = int(cfg.daily.target_tier_span)
+	return minimum + posmod(hash(date_key), span)

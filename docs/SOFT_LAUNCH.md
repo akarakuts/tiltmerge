@@ -8,15 +8,15 @@
 
 | Артефакт | Назначение |
 |---|---|
-| `scripts/Analytics.gd` | Обёртка над Firebase Analytics: события game_start/game_over/merge/ad/revive/daily/skin |
+| `scripts/Analytics.gd` | Опциональная обёртка аналитики: game_start/game_over/merge/daily/skin |
 | `scripts/ABTest.gd` | A/B-флаги с детерминированным распределением когорт |
-| `data/ab_config.json` | Флаги: spawn_speed (normal/fast), revive_offer (always/every_other/never), onboarding_style |
+| `data/ab_config.json` | Флаги: spawn_speed (normal/fast), onboarding_style |
 | `GameManager.gd` | Analytics-вызовы встроены в start_game/end_game (с duration) |
 | `project.godot` | Analytics + ABTest autoloads |
 
 ## 🔧 Что нужно сделать вручную
 
-### 1. Подключить Firebase (до сборки soft launch)
+### 1. Опционально подключить Firebase
 - [ ] Создать проект в [Firebase Console](https://console.firebase.google.com)
 - [ ] Добавить Android-приложение: `com.akarakuts.tiltmerge`
 - [ ] Скачать `google-services.json` → НЕ коммитить (в .gitignore)
@@ -41,7 +41,6 @@
 | Средняя сессия | ≥ 4–5 мин | Firebase → Engagement |
 | Crash-free | ≥ 99.5% | Crashlytics |
 | Время до game over | 30–60 сек | кастомное событие game_over.duration_sec |
-| Revive rate | ≥ 30% | ad_shown.watched / game_over |
 | Drop-off точка | — | funnels: menu→play→first_merge→game_over |
 
 ### 5. Решение по итогам
@@ -57,8 +56,6 @@
 game_start     {mode, control}
 game_over      {score, mode, merges, max_tier, duration_sec}
 merge          {new_tier, combo}
-ad_shown       {placement, watched}
-revive         {}
 daily_played   {streak}
 skin_selected  {skin}
 ```

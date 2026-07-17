@@ -9,14 +9,6 @@
         { "value": "fast",   "weight": 50 }
       ]
     },
-    "revive_offer": {
-      "salt": 2.0,
-      "variants": [
-        { "value": "always",     "weight": 33 },
-        { "value": "every_other", "weight": 34 },
-        { "value": "never",      "weight": 33 }
-      ]
-    },
     "onboarding_style": {
       "salt": 3.0,
       "variants": [

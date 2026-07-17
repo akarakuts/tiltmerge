@@ -1,6 +1,6 @@
 name: Build Android (Debug APK)
 
-# Автосборка debug-APK на каждый push/PR. Требует Godot 4.3 + Android export templates.
+# Автосборка debug-APK на каждый push/PR. Требует Godot 4.7 + Android export templates.
 # Ветка main → production; dev → experimental.
 
 on:
@@ -18,10 +18,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Godot 4.3
+      - name: Setup Godot 4.7
         uses: chickensoft-games/setup-godot@v1
         with:
-          version: 4.3.0
+          version: 4.7.1
           use-dotnet: false
           include-templates: true
 
@@ -34,16 +34,13 @@ jobs:
       - name: Lint GDScript
         run: |
           echo "=== gdlint ==="
-          find scripts -name '*.gd' -print0 | xargs -0 gdlint || true
+          find scripts tests -name '*.gd' -print0 | xargs -0 gdlint
 
-      - name: Run unit + smoke tests (scene-based)
-        run: godot --headless tests/TestRunner.tscn
+      - name: Validate release configuration
+        run: python3 scripts/validate_release.py
 
-      - name: Run onboarding interactive test
-        run: godot --headless tests/OnboardingTest.tscn
-
-      - name: Run gameplay test (full loop simulation)
-        run: godot --headless tests/GameplayTest.tscn
+      - name: Run test suite in isolated save slots
+        run: ./scripts/run_tests.sh
 
       - name: Verify translations (CSV well-formed, key parity)
         run: |
@@ -72,7 +69,7 @@ jobs:
       - name: Export Android Debug APK
         run: |
           mkdir -p build
-          godot --headless --export-release "Android Debug" build/tiltmerge-debug.apk
+          godot --headless --export-debug "Android Debug" build/tiltmerge-debug.apk
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
@@ -89,14 +86,51 @@ jobs:
     permissions:
       contents: write
     steps:
-      - name: Download APK
-        uses: actions/download-artifact@v4
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Godot 4.7
+        uses: chickensoft-games/setup-godot@v1
         with:
-          name: tiltmerge-debug-apk
-          path: build/
+          version: 4.7.1
+          use-dotnet: false
+          include-templates: true
+
+      - name: Build signed Android App Bundle
+        env:
+          ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+        run: |
+          test -n "$ANDROID_KEYSTORE_BASE64" || { echo "Missing ANDROID_KEYSTORE_BASE64"; exit 1; }
+          test -n "$ANDROID_KEYSTORE_PASSWORD" || { echo "Missing ANDROID_KEYSTORE_PASSWORD"; exit 1; }
+          test -n "$ANDROID_KEY_ALIAS" || { echo "Missing ANDROID_KEY_ALIAS"; exit 1; }
+          mkdir -p build
+          printf '%s' "$ANDROID_KEYSTORE_BASE64" | base64 --decode > "$RUNNER_TEMP/tiltmerge.keystore"
+          export KEYSTORE_PATH="$RUNNER_TEMP/tiltmerge.keystore"
+          python3 - <<'PY'
+          import os
+          from pathlib import Path
+
+          path = Path("export_presets.cfg")
+          text = path.read_text()
+          marker = "[preset.1.options]"
+          prefix, release_options = text.split(marker, 1)
+          replacements = {
+              'keystore/release=""': f'keystore/release="{os.environ["KEYSTORE_PATH"]}"',
+              'keystore/release_user=""': f'keystore/release_user="{os.environ["ANDROID_KEY_ALIAS"]}"',
+              'keystore/release_password=""': f'keystore/release_password="{os.environ["ANDROID_KEYSTORE_PASSWORD"]}"',
+          }
+          for old, new in replacements.items():
+              if old not in release_options:
+                  raise SystemExit(f"Expected empty setting not found: {old}")
+              release_options = release_options.replace(old, new, 1)
+          path.write_text(prefix + marker + release_options)
+          PY
+          godot --headless --export-release "Android Release" build/tiltmerge-release.aab
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          files: build/*.apk
+          files: build/*.aab
           generate_release_notes: true
