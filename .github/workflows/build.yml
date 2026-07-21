@@ -180,6 +180,8 @@ jobs:
           test -f build/tiltmerge-release.aab
 
           echo "==> Export APK"
+          # Godot leaves .import sidecars in android/build/res; Gradle rejects them on the next export.
+          find android/build -name '*.import' -delete
           patch_export_format 0
           godot --headless --export-release "Android Release" build/tiltmerge-release.apk
           test -f build/tiltmerge-release.apk
