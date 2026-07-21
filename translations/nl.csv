@@ -1,0 +1,51 @@
+key,nl
+app.title,TiltMerge
+menu.play,SPEEL
+menu.settings,Instellingen
+menu.skins,Skins
+menu.leaderboard,Scorebord
+menu.daily,Dagelijkse uitdaging
+menu.classic,Klassiek
+menu.blitz,Blitz
+menu.zen,Zen
+settings.title,Instellingen
+settings.control,Besturing
+settings.control.tilt,Kantelen
+settings.control.swipe,Vegen
+settings.haptics,Trillen
+settings.reduce_motion,Minder beweging
+settings.sound,Geluid
+settings.music,Muziek
+settings.language,Taal
+settings.language_auto,Auto
+settings.back,Terug
+onboarding.title,Hoe te spelen
+onboarding.step1,Kantel je telefoon om de blokken te laten rollen
+onboarding.step2,Twee dezelfde blokken smelten samen tot een grotere
+onboarding.step3,Laat ze de bovenkant niet bereiken
+onboarding.start,BEGREPEN
+ob.hint1,Kantel je telefoon (of veeg in de emulator) om het blok naar het doel te rollen
+ob.hint2,Duw twee blokken van hetzelfde niveau samen om ze te SAMENVOEGEN
+ob.hint3,Laat de blokken de bovenste lijn niet bereiken – anders is het voorbij
+ob.done,Netjes!
+ob.next,Volgende
+ob.lets_go,We gaan
+game.score,Score
+game.combo,Combo
+game.best,Beste
+game.paused,PAUZE
+game.resume_hint,Tik om door te gaan
+game.game_over,GAME OVER
+game.restart,Opnieuw
+game.menu,Hoofdmenu
+game.next,Volgende
+game.reroll,Opnieuw gooien
+game.daily_goal,Dagelijkse opdracht: voeg niveau %d samen
+game.daily_complete,OPDRACHT VOLTOOID
+game.daily_done,Dagelijkse opdracht voltooid
+skins.title,Skins
+skins.selected,Geselecteerd
+skins.choose,Tik om te kiezen
+skins.locked,Vergrendeld
+skins.select,Kiezen
+leaderboard.local_note,Lokale topscores

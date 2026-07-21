@@ -33,19 +33,50 @@ def main() -> None:
     tiers = config["cube"]["tiers"]
     if [tier["tier"] for tier in tiers] != list(range(1, config["merge"]["max_tier"] + 1)):
         fail("cube tiers must be continuous and end at merge.max_tier")
-    if any(sum(group["weights"]) != 100 for group in config["spawn"]["score_tiers"]):
-        fail("every spawn tier weight group must total 100")
+    previous_min_score = -1
+    for group in config["spawn"]["score_tiers"]:
+        tiers_in_group = group["tiers"]
+        weights = group["weights"]
+        if sum(weights) != 100:
+            fail("every spawn tier weight group must total 100")
+        if len(tiers_in_group) != len(weights):
+            fail("every spawn tier group must have one weight per tier")
+        if any(weight <= 0 for weight in weights):
+            fail("spawn tier weights must be positive")
+        if any(tier not in range(1, config["merge"]["max_tier"] + 1) for tier in tiers_in_group):
+            fail("spawn tier groups may only reference configured tiers")
+        min_score = group["min_score"]
+        if min_score < previous_min_score:
+            fail("spawn tier groups must be sorted by min_score")
+        previous_min_score = min_score
 
     en_keys = read_csv_keys(ROOT / "translations/en.csv")
-    ru_keys = read_csv_keys(ROOT / "translations/ru.csv")
-    if en_keys != ru_keys:
-        fail("translation key parity differs between en.csv and ru.csv")
+    # Паритет ключей: каждый translations/*.csv должен совпадать с en.csv.
+    for csv_path in sorted((ROOT / "translations").glob("*.csv")):
+        if csv_path == (ROOT / "translations/en.csv"):
+            continue
+        loc_keys = read_csv_keys(csv_path)
+        if loc_keys != en_keys:
+            fail(f"translation key parity differs between en.csv and {csv_path.name}")
 
     presets = (ROOT / "export_presets.cfg").read_text(encoding="utf-8")
     if presets.count("permissions/internet=true") != 2:
         fail("both Android presets must enable INTERNET for release services")
     if 'package/unique_name="com.akarakuts.tiltmerge"' not in presets:
         fail("Android package name is missing")
+
+    project = (ROOT / "project.godot").read_text(encoding="utf-8")
+    version_marker = 'config/version="'
+    version_start = project.find(version_marker)
+    if version_start == -1:
+        fail("project version is missing")
+    version_start += len(version_marker)
+    version_end = project.find('"', version_start)
+    version = project[version_start:version_end]
+    if f'version/name="{version}"' not in presets:
+        fail("Android version name must match project version")
+    if 'version/code=' not in presets:
+        fail("Android version code is missing")
 
     print("Release configuration validation passed")
 

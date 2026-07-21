@@ -119,6 +119,7 @@ TiltMerge — свободное ПО под **GNU GPLv3-or-later**. В игре
 - Тоггл haptics (Settings)
 - Тоггл «reduce motion» (меньше screen-shake)
 - Минимальный readable text size
+- Выбор языка: «Авто» (по локали Android) + 23 ручных варианта
 
 ---
 
@@ -149,7 +150,7 @@ TiltMerge — свободное ПО под **GNU GPLv3-or-later**. В игре
 - **Физика:** встроенный 2D-физический движок Godot
 - **Сохранения:** `user://save.json` (best score, скины, настройки)
 - **Data-driven:** баланс в `data/config.json`, скины в `data/skins.json`
-- **Локализация:** CSV string-таблицы `translations/en.csv`, `ru.csv`
+- **Локализация:** 23 языка. Исходники — CSV `translations/*.csv`, Godot компилирует их в `.translation` и подключает через `project.godot`. При старте `I18n.apply_saved_language("auto")` берёт локаль Android (`OS.get_locale()`, напр. `ru_RU`/`zh_CN`/`pt_BR`) и подбирает ближайшую загруженную локаль с fallback на `en`. Селектор языка в Settings строится динамически из загруженных локалей.
 - **CI:** GitHub Actions → APK debug на push
 - **Аналитика:** опциональная, отключена без подключённого плагина
 

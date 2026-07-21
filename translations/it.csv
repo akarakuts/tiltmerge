@@ -1,0 +1,51 @@
+key,it
+app.title,TiltMerge
+menu.play,GIOCA
+menu.settings,Impostazioni
+menu.skins,Skins
+menu.leaderboard,Classifica
+menu.daily,Sfida giornaliera
+menu.classic,Classica
+menu.blitz,Blitz
+menu.zen,Zen
+settings.title,Impostazioni
+settings.control,Controllo
+settings.control.tilt,Inclinazione
+settings.control.swipe,Scorri
+settings.haptics,Vibrazione
+settings.reduce_motion,Riduci movimento
+settings.sound,Suono
+settings.music,Musica
+settings.language,Lingua
+settings.language_auto,Auto
+settings.back,Indietro
+onboarding.title,Come si gioca
+onboarding.step1,Inclina il telefono per far rotolare i cubi
+onboarding.step2,Due cubi uguali si fondono in uno più grande
+onboarding.step3,Non farli arrivare in cima
+onboarding.start,HO CAPITO
+ob.hint1,Inclina il telefono (o trascina sull'emulatore) per portare il cubo al bersaglio
+ob.hint2,Spingi due cubi dello stesso livello per FONDERLI
+ob.hint3,Non far arrivare i cubi alla linea superiore – o finisce
+ob.done,Bene!
+ob.next,Avanti
+ob.lets_go,Andiamo
+game.score,Punti
+game.combo,Combo
+game.best,Record
+game.paused,PAUSA
+game.resume_hint,Tocca per continuare
+game.game_over,PARTITA FINITA
+game.restart,Ricomincia
+game.menu,Menu principale
+game.next,Avanti
+game.reroll,Rilancia
+game.daily_goal,Sfida: fondi livello %d
+game.daily_complete,SFIDA COMPLETATA
+game.daily_done,Sfida giornaliera completata
+skins.title,Skins
+skins.selected,Selezionato
+skins.choose,Tocca per scegliere
+skins.locked,Bloccato
+skins.select,Scegli
+leaderboard.local_note,Migliori punteggi locali

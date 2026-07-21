@@ -12,7 +12,7 @@ Russian / Русский: [README.ru.md](README.ru.md)
 - **Tilt controls** — accelerometer as the primary input; swipe/touch fallback for desktop and emulator; keyboard A/D or ←/→ for debug.
 - **Tactics** — next-cube preview, combo-earned **reroll** charges, combo multiplier window (~2 s).
 - **Modes** — Classic, Blitz (60 s), Zen (no game over), Daily (seeded sequence + target tier).
-- **Meta** — local best scores, achievements, unlockable skins, onboarding (interactive or slide A/B), EN/RU localisation.
+- **Meta** — local best scores, achievements, unlockable skins, onboarding (interactive or slide A/B), 23-language localisation with Android-locale auto-detect.
 - **Juice** — haptics, camera shake, squash/stretch, glow shader, floating score text, SFX/music (optional assets).
 - **Data-driven balance** — tiers, spawn curve, tilt, combo, and modes live in `data/config.json` (see `docs/BALANCE.md`).
 
@@ -25,7 +25,7 @@ Russian / Русский: [README.ru.md](README.ru.md)
 | Physics | Godot 2D (`RigidBody2D` cubes) |
 | Architecture | Autoloads: `GameConfig`, `SaveSystem`, `GameManager`, `AudioManager`, `Haptics`, … |
 | Saves | `user://save.json` |
-| Locales | `translations/en.csv`, `translations/ru.csv` |
+| Locales | `translations/*.csv` (23 languages; compiled to `.translation` by Godot) |
 | Export | Android Debug / Release presets in `export_presets.cfg` |
 
 ## Requirements
@@ -108,6 +108,7 @@ Configure repository secrets (Settings → Secrets and variables → Actions):
 The release job in [build.yml](.github/workflows/build.yml) attaches signed artifacts to the GitHub Release when these secrets are present.
 
 External Play Console / Firebase steps: [docs/RELEASE_CHECKLIST.md](docs/RELEASE_CHECKLIST.md), [docs/SOFT_LAUNCH.md](docs/SOFT_LAUNCH.md).
+The final physical-release gate is documented in [Android device QA](docs/DEVICE_QA.md).
 
 ## Project layout
 
@@ -127,6 +128,13 @@ External Play Console / Firebase steps: [docs/RELEASE_CHECKLIST.md](docs/RELEASE
 ## Testing
 
 ```bash
+python3 -m pip install -r requirements-dev.txt
+./scripts/check_quality.sh
+```
+
+The quality gate runs GDScript linting, release and translation validation, then the complete headless suite. The CI workflow runs the same command.
+
+```bash
 ./scripts/run_tests.sh
 ```
 
@@ -135,16 +143,17 @@ External Play Console / Firebase steps: [docs/RELEASE_CHECKLIST.md](docs/RELEASE
 | Unit / runner | `tests/TestRunner.gd` | Config, save, i18n helpers |
 | Onboarding | `tests/OnboardingTest.gd` | Interactive + slide flows |
 | Gameplay | `tests/GameplayTest.gd` | Spawn/merge, pause, reroll, game over, daily bonus |
-| Strings | `scripts/check_strings_parity.sh` | EN/RU CSV key parity |
+| Strings | `scripts/check_strings_parity.sh` | CSV key parity across all locales |
 | Release config | `scripts/validate_release.py` | Store/export sanity |
 
 ## Scripts
 
 | Script | Purpose |
 |--------|---------|
+| `scripts/check_quality.sh` | Full local/CI quality gate |
 | `scripts/run_tests.sh` | Headless Godot test suite |
 | `scripts/validate_release.py` | Release-critical config checks |
-| `scripts/check_strings_parity.sh` | EN/RU translation key parity |
+| `scripts/check_strings_parity.sh` | Translation key parity (all locales vs en) |
 | `scripts/build_release.sh` | Export APK into path from `store-upload.dir` |
 | `scripts/generate_sounds.py` | Procedural WAV SFX/music stubs |
 | `scripts/generate_assets.py` | Icon / store graphic helpers |

@@ -1,0 +1,51 @@
+key,ar
+app.title,TiltMerge
+menu.play,العب
+menu.settings,الإعدادات
+menu.skins,السكنات
+menu.leaderboard,لوحة الصدارة
+menu.daily,تحدي يومي
+menu.classic,كلاسيكي
+menu.blitz,بليتز
+menu.zen,زن
+settings.title,الإعدادات
+settings.control,التحكم
+settings.control.tilt,إمالة
+settings.control.swipe,تمرير
+settings.haptics,اهتزاز
+settings.reduce_motion,تقليل الحركة
+settings.sound,الصوت
+settings.music,الموسيقى
+settings.language,اللغة
+settings.language_auto,تلقائي
+settings.back,رجوع
+onboarding.title,كيفية اللعب
+onboarding.step1,أمل هاتفك لتدحرج المكعبات
+onboarding.step2,مكعبان متطابقان يندمجان في مكعب أكبر
+onboarding.step3,لا تدعها تصل إلى القمة
+onboarding.start,فهمت
+ob.hint1,أمل هاتفك (أو اسحب على المحاكي) لتدحرج المكعب إلى الهدف
+ob.hint2,ادفع مكعبين من نفس المستوى معًا لدمجهما
+ob.hint3,لا تدع المكعبات تصل إلى الخط العلوي – وإلا تنتهي اللعبة
+ob.done,أحسنت!
+ob.next,التالي
+ob.lets_go,هيا بنا
+game.score,النقاط
+game.combo,كومبو
+game.best,الأفضل
+game.paused,متوقف
+game.resume_hint,انقر للمتابعة
+game.game_over,انتهت اللعبة
+game.restart,إعادة
+game.menu,القائمة الرئيسية
+game.next,التالي
+game.reroll,إعادة
+game.daily_goal,تحدي: ادمج المستوى %d
+game.daily_complete,اكتمل التحدي
+game.daily_done,اكتمل التحدي اليومي
+skins.title,السكنات
+skins.selected,محدد
+skins.choose,انقر للاختيار
+skins.locked,مقفل
+skins.select,اختر
+leaderboard.local_note,أفضل النتائج المحلية

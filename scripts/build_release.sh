@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Сборка подписанного релизного APK/AAB в локальный каталог.
+# Сборка подписанного релизного Android App Bundle в локальный каталог.
 # Путь назначения берётся из файла store-upload.dir (см. store-upload.dir.example).
 # Запуск: ./scripts/build_release.sh
 set -euo pipefail
@@ -31,12 +31,11 @@ TAG="v${VERSION:-0.0.0}"
 echo "==> Импорт проекта..."
 "$GODOT" --headless --import
 
-echo "==> Сборка debug APK ($TAG)..."
-"$GODOT" --headless --export-release "Android Debug" "build/tiltmerge-${TAG}.apk"
+echo "==> Сборка подписанного Android App Bundle ($TAG)..."
+"$GODOT" --headless --export-release "Android Release" "build/tiltmerge-${TAG}.aab"
 
 echo "==> Копирование в $DEST_DIR..."
-cp "build/tiltmerge-${TAG}.apk" "$DEST_DIR/"
-ls -la "$DEST_DIR"/tiltmerge-*.apk
+cp "build/tiltmerge-${TAG}.aab" "$DEST_DIR/"
+ls -la "$DEST_DIR"/tiltmerge-*.aab
 
-echo "✓ Готово: $DEST_DIR/tiltmerge-${TAG}.apk"
-echo "  Для подписанного release нужен keystore (см. README, раздел Release signing)."
+echo "✓ Готово: $DEST_DIR/tiltmerge-${TAG}.aab"

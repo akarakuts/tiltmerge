@@ -12,7 +12,7 @@ config/description="Быстрая головоломка: наклоняй те
 run/main_scene="res://scenes/MainMenu.tscn"
 config/features=PackedStringArray("4.3", "Forward Plus")
 config/icon="res://assets/graphics/icon.png"
-config/version="1.0.1"
+config/version="1.0.2"
 
 [autoload]
 
@@ -60,7 +60,7 @@ sensors/enabled=true
 
 [internationalization]
 
-locale/translations=PackedStringArray("res://translations/en.en.translation", "res://translations/ru.ru.translation")
+locale/translations=PackedStringArray("res://translations/ar.ar.translation", "res://translations/cs.cs.translation", "res://translations/de.de.translation", "res://translations/en.en.translation", "res://translations/es.es.translation", "res://translations/fr.fr.translation", "res://translations/hi.hi.translation", "res://translations/id.id.translation", "res://translations/it.it.translation", "res://translations/ja.ja.translation", "res://translations/ko.ko.translation", "res://translations/nl.nl.translation", "res://translations/pl.pl.translation", "res://translations/pt.pt.translation", "res://translations/pt_BR.pt_BR.translation", "res://translations/ru.ru.translation", "res://translations/sv.sv.translation", "res://translations/th.th.translation", "res://translations/tr.tr.translation", "res://translations/uk.uk.translation", "res://translations/vi.vi.translation", "res://translations/zh_CN.zh_CN.translation", "res://translations/zh_TW.zh_TW.translation")
 locale/translation_remaps={}
 locale/fallback="en"
 

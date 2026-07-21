@@ -44,10 +44,10 @@ var _daily_date_key: String = ""
 var _daily_target_tier: int = 0
 var _daily_complete: bool = false
 
-const SPAWN_POS := Vector2(360, 120)
-
-
 func _ready() -> void:
+	# Игра должна получать ui_pause и во время глобальной паузы, иначе Esc
+	# не сможет закрыть пауз-экран (хотя это обещано в интерфейсе).
+	process_mode = Node.PROCESS_MODE_ALWAYS
 	if not GameConfig.is_ready:
 		await GameConfig.config_loaded
 	_mode = GameManager.current_mode
@@ -60,7 +60,10 @@ func _ready() -> void:
 	var spawn_mult: float = float(_mode_cfg.get("spawn_interval_mult", 1.0))
 	if ABTest.is_variant("spawn_speed", "fast"):
 		spawn_mult *= 0.85
-	_spawner.setup(_cubes, SPAWN_POS, spawn_mult, seeded)
+	var spawn_pos := Vector2(
+		float(GameConfig.cfg.game.spawn_pos.x),
+		float(GameConfig.cfg.game.spawn_pos.y))
+	_spawner.setup(_cubes, spawn_pos, spawn_mult, seeded)
 
 	_merge.score_changed.connect(_on_score_changed)
 	_merge.combo_changed.connect(_on_combo_changed)
@@ -103,7 +106,8 @@ func _ready() -> void:
 		_objective_label.hide()
 	# тап по пауз-панели возобновляет игру
 	_pause_panel.gui_input.connect(_on_pause_panel_input)
-	print("[Game] started mode=%s" % _mode)
+	if OS.is_debug_build():
+		print("[Game] started mode=%s" % _mode)
 
 
 func _on_pause_panel_input(event: InputEvent) -> void:
@@ -235,7 +239,8 @@ func _trigger_game_over() -> void:
 	AudioManager.play_sfx("game_over")
 	Haptics.custom(150)
 	_camera_shake.shake(0.7, 0.6)
-	print("[Game] game over score=%d max_tier=%d" % [score, _max_tier_this_run])
+	if OS.is_debug_build():
+		print("[Game] game over score=%d max_tier=%d" % [score, _max_tier_this_run])
 
 
 func _on_pause() -> void:

@@ -2,6 +2,14 @@ extends Node
 ## Achievements (autoload singleton)
 ## Проверяет условия достижений по событиям игры и разблокирует через SaveSystem.
 ## Условия описаны в config.json -> achievements. Здесь — обработчики триггеров.
+##
+## Грамматика condition (намеренно узкая, чтобы держать парсер тривиальным):
+##   condition := term (" AND " term)*
+##   term     := key OP number
+##   OP       := ">=" | "<=" | ">" | "<" | "=="
+## Поддерживается только AND (без OR и скобок). key — поле из ctx в evaluate_run
+## (score, max_tier, combo, merges, games, score_swipe, daily_streak).
+## Нужны более сложные правила — завести полноценный Expression, не расширять этот парсер.
 
 signal unlocked(id: String, name: String)
 

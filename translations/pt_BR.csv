@@ -1,0 +1,51 @@
+key,pt_BR
+app.title,TiltMerge
+menu.play,JOGAR
+menu.settings,Ajustes
+menu.skins,Skins
+menu.leaderboard,Placar
+menu.daily,Desafio diário
+menu.classic,Clássico
+menu.blitz,Blitz
+menu.zen,Zen
+settings.title,Ajustes
+settings.control,Controle
+settings.control.tilt,Inclinar
+settings.control.swipe,Deslizar
+settings.haptics,Vibração
+settings.reduce_motion,Reduzir movimento
+settings.sound,Som
+settings.music,Música
+settings.language,Idioma
+settings.language_auto,Automático
+settings.back,Voltar
+onboarding.title,Como jogar
+onboarding.step1,Incline o celular para rolar os cubos
+onboarding.step2,Dois cubos iguais se fundem num maior
+onboarding.step3,Não deixe que cheguem ao topo
+onboarding.start,ENTENDI
+ob.hint1,Incline o celular (ou arraste no emulador) para levar o cubo ao alvo
+ob.hint2,Empurre dois cubos do mesmo nível para FUNDI-LOS
+ob.hint3,Não deixe os cubos chegarem à linha de cima – senão acaba
+ob.done,Mandou bem!
+ob.next,Próximo
+ob.lets_go,Bora
+game.score,Pontos
+game.combo,Combo
+game.best,Recorde
+game.paused,PAUSA
+game.resume_hint,Toque para continuar
+game.game_over,FIM DE JOGO
+game.restart,Reiniciar
+game.menu,Menu principal
+game.next,Próximo
+game.reroll,Rerolar
+game.daily_goal,Desafio: fundir nível %d
+game.daily_complete,DESAFIO COMPLETO
+game.daily_done,Desafio diário completo
+skins.title,Skins
+skins.selected,Selecionado
+skins.choose,Toque para escolher
+skins.locked,Bloqueado
+skins.select,Escolher
+leaderboard.local_note,Melhores pontuações locais

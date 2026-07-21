@@ -1,0 +1,51 @@
+key,id
+app.title,TiltMerge
+menu.play,MAIN
+menu.settings,Pengaturan
+menu.skins,Skins
+menu.leaderboard,Papan peringkat
+menu.daily,Tantangan harian
+menu.classic,Klasik
+menu.blitz,Blitz
+menu.zen,Zen
+settings.title,Pengaturan
+settings.control,Kontrol
+settings.control.tilt,Kemiringan
+settings.control.swipe,Usap
+settings.haptics,Getaran
+settings.reduce_motion,Kurangi gerakan
+settings.sound,Suara
+settings.music,Musik
+settings.language,Bahasa
+settings.language_auto,Otomatis
+settings.back,Kembali
+onboarding.title,Cara bermain
+onboarding.step1,Miringkan ponsel untuk menggelindingkan kubus
+onboarding.step2,Dua kubus yang sama bergabung jadi lebih besar
+onboarding.step3,Jangan biarkan mencapai puncak
+onboarding.start,MENGERTI
+ob.hint1,Miringkan ponsel (atau seret di emulator) untuk menggelindingkan kubus ke target
+ob.hint2,Dorong dua kubus tingkat yang sama untuk MENGGABUNGKAN
+ob.hint3,Jangan biarkan kubus mencapai garis atas – atau permainan berakhir
+ob.done,Mantap!
+ob.next,Lanjut
+ob.lets_go,Mulai
+game.score,Skor
+game.combo,Combo
+game.best,Terbaik
+game.paused,JEDA
+game.resume_hint,Ketuk untuk lanjut
+game.game_over,GAME OVER
+game.restart,Mulai ulang
+game.menu,Menu utama
+game.next,Berikutnya
+game.reroll,Lempar ulang
+game.daily_goal,Misi: gabung level %d
+game.daily_complete,MISI SELESAI
+game.daily_done,Tantangan harian selesai
+skins.title,Skins
+skins.selected,Terpilih
+skins.choose,Ketuk untuk memilih
+skins.locked,Terkunci
+skins.select,Pilih
+leaderboard.local_note,Skor terbaik lokal

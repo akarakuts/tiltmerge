@@ -1,0 +1,51 @@
+key,uk
+app.title,TiltMerge
+menu.play,ГРАТИ
+menu.settings,Налаштування
+menu.skins,Скіни
+menu.leaderboard,Таблиця лідерів
+menu.daily,Щоденний виклик
+menu.classic,Класика
+menu.blitz,Бліц
+menu.zen,Дзен
+settings.title,Налаштування
+settings.control,Керування
+settings.control.tilt,Нахил
+settings.control.swipe,Свайп
+settings.haptics,Вібрація
+settings.reduce_motion,Менше руху
+settings.sound,Звук
+settings.music,Музика
+settings.language,Мова
+settings.language_auto,Авто
+settings.back,Назад
+onboarding.title,Як грати
+onboarding.step1,"Нахиляй телефон, щоб котити кубики"
+onboarding.step2,Два однакові кубики зливаються у більший
+onboarding.step3,Не дай їм досягти верху
+onboarding.start,ЗРОЗУМІЛО
+ob.hint1,"Нахиляй телефон (або веди пальцем в емуляторі), щоб докотити кубик до цілі"
+ob.hint2,"Зіштовхни два кубики одного рівня, щоб їх ОБ'ЄДНАТИ"
+ob.hint3,Не дай кубикам досягти верхньої лінії — інакше гра закінчиться
+ob.done,Чудово!
+ob.next,Далі
+ob.lets_go,Поїхали
+game.score,Очки
+game.combo,Комбо
+game.best,Рекорд
+game.paused,ПАУЗА
+game.resume_hint,"Натисни, щоб продовжити"
+game.game_over,ГРУ ЗАВЕРШЕНО
+game.restart,Заново
+game.menu,Головне меню
+game.next,Наступний
+game.reroll,Перекинути
+game.daily_goal,Завдання дня: злити рівень %d
+game.daily_complete,ЗАВДАННЯ ВИКОНАНО
+game.daily_done,Завдання дня виконано
+skins.title,Скіни
+skins.selected,Обрано
+skins.choose,"Натисни, щоб обрати"
+skins.locked,Заблоковано
+skins.select,Обрати
+leaderboard.local_note,Локальні рекорди

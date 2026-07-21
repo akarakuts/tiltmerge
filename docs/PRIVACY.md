@@ -1,6 +1,8 @@
 # Privacy Policy — TiltMerge
 
-**Last updated:** 2026-07-16
+Русская версия: [PRIVACY.ru.md](PRIVACY.ru.md)
+
+**Last updated:** 2026-07-20
 
 This Privacy Policy describes how **TiltMerge** ("the App", "we") handles your data. By using the App, you agree to this policy.
 

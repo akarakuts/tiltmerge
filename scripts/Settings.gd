@@ -10,6 +10,16 @@ extends Control
 @onready var _lang: OptionButton = $Scroll/VBox/Language
 @onready var _back: Button = $Back
 
+# Слайдеры громкости стреляют value_changed десятки раз в секунду при перетаскивании.
+# Чтобы не делать десятки save() в секунду, откладываем запись на 0.3с после
+# последнего движения; громкость применяем мгновенно.
+var _pending_sound: float = -1.0
+var _pending_music: float = -1.0
+var _save_timer: float = 0.0
+const _SAVE_DEBOUNCE_SEC := 0.3
+# Список опций Language: "auto" + все загруженные локали. Строится в _ready.
+var _locales: Array = ["auto"]
+
 
 func _ready() -> void:
 	if not GameConfig.is_ready:
@@ -20,7 +30,7 @@ func _ready() -> void:
 	_reduce_motion.button_pressed = bool(s.reduce_motion)
 	_sound.value = float(s.sound_volume)
 	_music.value = float(s.music_volume)
-	_lang.selected = 0 if s.language == "auto" else (1 if s.language == "en" else 2)
+	_build_language_options(str(s.language))
 
 	_control.item_selected.connect(_on_control)
 	_haptics.toggled.connect(_on_haptics)
@@ -58,26 +68,70 @@ func _on_reduce_motion(v: bool) -> void:
 
 
 func _on_sound(v: float) -> void:
-	SaveSystem.set_setting("sound_volume", v)
+	_pending_sound = v
 	AudioManager.set_sound_volume(v)
+	_schedule_save()
 
 
 func _on_music(v: float) -> void:
-	SaveSystem.set_setting("music_volume", v)
+	_pending_music = v
 	AudioManager.set_music_volume(v)
+	_schedule_save()
+
+
+func _schedule_save() -> void:
+	_save_timer = _SAVE_DEBOUNCE_SEC
+
+
+func _process(_delta: float) -> void:
+	if _save_timer > 0.0:
+		_save_timer -= _delta
+		if _save_timer <= 0.0:
+			_flush_pending_settings()
+
+
+func _flush_pending_settings() -> void:
+	_save_timer = 0.0
+	if _pending_sound >= 0.0:
+		SaveSystem.set_setting("sound_volume", _pending_sound)
+		_pending_sound = -1.0
+	if _pending_music >= 0.0:
+		SaveSystem.set_setting("music_volume", _pending_music)
+		_pending_music = -1.0
 
 
 func _on_lang(idx: int) -> void:
-	var langs: Array = ["auto", "en", "ru"]
-	var lang: String = langs[idx]
+	var lang: String = _locales[mini(idx, _locales.size() - 1)]
 	SaveSystem.set_setting("language", lang)
 	_apply_language_setting(lang)
+	# перерисовать подписи настроек на новом языке немедленно
+	_apply_language()
 
 
 func _apply_language_setting(lang: String) -> void:
 	I18n.apply_saved_language(lang)
 
 
+## Заполняет OptionButton языка: «Авто» + все доступные переводы.
+## Отображаемое имя — нативное имя локали из TranslationServer
+## (например "Deutsch", "中文 (简体)"), чтобы игрок видел названия на родном языке.
+func _build_language_options(current: String) -> void:
+	_lang.clear()
+	_lang.add_item(tr("settings.language_auto"))
+	var loaded := TranslationServer.get_loaded_locales()
+	loaded.sort()
+	_locales = ["auto"]
+	var selected := 0
+	for i in range(loaded.size()):
+		var loc: String = str(loaded[i])
+		_lang.add_item("%s — %s" % [TranslationServer.get_locale_name(loc), loc])
+		_locales.append(loc)
+		if loc == current:
+			selected = i + 1
+	_lang.selected = selected
+
+
 func _on_back() -> void:
+	_flush_pending_settings()
 	AudioManager.play_sfx("button")
 	get_tree().change_scene_to_file("res://scenes/MainMenu.tscn")

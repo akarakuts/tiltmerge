@@ -70,8 +70,13 @@ func try_unlock(skin_id: String) -> bool:
 
 
 func select(skin_id: String) -> bool:
-	if not SaveSystem.data.unlocked_skins.has(skin_id):
+	var skin: Dictionary = GameConfig.skins.get(skin_id, {})
+	if skin.is_empty() or not _is_unlocked(skin_id, skin):
 		return false
+	# Скины за счёт/достижение становятся доступны автоматически. Перед
+	# выбором сохраняем факт разблокировки, иначе интерфейс показывает
+	# «Выбрать», но SaveSystem отклоняет нажатие.
+	SaveSystem.unlock_skin(skin_id)
 	SaveSystem.select_skin(skin_id)
 	_apply_selected()
 	Analytics.skin_selected(skin_id)

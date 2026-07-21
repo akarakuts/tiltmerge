@@ -18,7 +18,8 @@ func _ready() -> void:
 	_load_skins()
 	is_ready = true
 	config_loaded.emit()
-	print("[GameConfig] loaded: %d tiers, %d skins" % [cfg.cube.tiers.size(), skins.size()])
+	if OS.is_debug_build():
+		print("[GameConfig] loaded: %d tiers, %d skins" % [cfg.cube.tiers.size(), skins.size()])
 
 
 func _load_config() -> void:

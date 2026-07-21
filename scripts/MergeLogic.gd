@@ -15,7 +15,7 @@ var score: int = 0
 var combo_count: int = 0
 var _combo_timer: float = 0.0
 var _combo_window: float = 2.0
-var _combo_multipliers: Array = [1.0, 1.0, 1.5, 2.0, 3.0, 5.0]
+var _combo_multipliers: Array = []  # заполняется из config.json -> combo.multipliers в setup()
 var _active: bool = true
 
 signal score_changed(new_score: int, delta: int, is_merge: bool)
@@ -131,7 +131,7 @@ func _spawn_cube(tier: int, pos: Vector2) -> Node:
 
 
 func _multiplier_for(count: int) -> float:
-	if count <= 0:
+	if count <= 0 or _combo_multipliers.is_empty():
 		return 1.0
 	var idx: int = min(count, _combo_multipliers.size() - 1)
 	return float(_combo_multipliers[idx])

@@ -1,0 +1,51 @@
+key,ko
+app.title,TiltMerge
+menu.play,플레이
+menu.settings,설정
+menu.skins,스킨
+menu.leaderboard,리더보드
+menu.daily,일일 도전
+menu.classic,클래식
+menu.blitz,블리츠
+menu.zen,젠
+settings.title,설정
+settings.control,조작
+settings.control.tilt,기울이기
+settings.control.swipe,스와이프
+settings.haptics,진동
+settings.reduce_motion,모션 줄이기
+settings.sound,사운드
+settings.music,음악
+settings.language,언어
+settings.language_auto,자동
+settings.back,뒤로
+onboarding.title,하는 법
+onboarding.step1,폰을 기울여 큐브를 굴리세요
+onboarding.step2,같은 큐브 두 개가 합쳐져 더 커집니다
+onboarding.step3,꼭대기에 닿지 않게 하세요
+onboarding.start,확인
+ob.hint1,폰을 기울이거나(에뮬레이터에서 드래그) 큐브를 목표로 굴리세요
+ob.hint2,같은 레벨의 큐브 두 개를 밀어 합치세요
+ob.hint3,큐브가 위쪽 선에 닿으면 게임 오버
+ob.done,잘했어요!
+ob.next,다음
+ob.lets_go,시작
+game.score,점수
+game.combo,콤보
+game.best,최고
+game.paused,일시정지
+game.resume_hint,탭하여 계속
+game.game_over,게임 오버
+game.restart,다시 시작
+game.menu,메인 메뉴
+game.next,다음
+game.reroll,다시 굴리기
+game.daily_goal,도전: 레벨 %d 합치기
+game.daily_complete,도전 완료
+game.daily_done,일일 도전 완료
+skins.title,스킨
+skins.selected,선택됨
+skins.choose,탭하여 선택
+skins.locked,잠김
+skins.select,선택
+leaderboard.local_note,로컬 최고 기록

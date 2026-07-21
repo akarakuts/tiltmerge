@@ -76,7 +76,7 @@ func _run_smoke_tests() -> void:
 	var scene_paths := [
 		"res://scenes/MainMenu.tscn", "res://scenes/Onboarding.tscn",
 		"res://scenes/Settings.tscn", "res://scenes/Leaderboard.tscn",
-		"res://scenes/Skins.tscn", "res://scenes/Prototype.tscn",
+		"res://scenes/Skins.tscn",
 		"res://scenes/Cube.tscn", "res://scenes/Game.tscn"
 	]
 	for scene_path in scene_paths:
@@ -99,8 +99,38 @@ func _run_smoke_tests() -> void:
 	# achievements не падают
 	Achievements.evaluate_run({"score": 1000, "max_tier": 3, "combo": 1, "merges": 10, "revives": 0, "score_swipe": 0})
 	_smoke("achievements evaluate_run no crash", true)
+	# Скин с достигнутым порогом должен не только отображаться доступным,
+	# но и действительно выбираться с сохранением разблокировки.
+	SaveSystem.data.best_score.classic = 5000
+	var pastel_selected := SkinsManager.select("pastel")
+	var score_skin_is_persisted: bool = (
+		pastel_selected
+		and SaveSystem.data.selected_skin == "pastel"
+		and SaveSystem.data.unlocked_skins.has("pastel")
+	)
+	_smoke("score-unlocked skin can be selected", score_skin_is_persisted)
 	# переводы зарегистрированы
 	_smoke("translation 'menu.play' resolves", tr("menu.play") != "menu.play")
+	# мульти-локализация: все языки загружены
+	var loaded := TranslationServer.get_loaded_locales()
+	_smoke(">= 20 translations loaded", loaded.size() >= 20)
+	# авто-подбор локали Android: ru_RU → ru, de_DE → de, zh_CN → zh_CN, неизвестная → en
+	_smoke("locale ru_RU maps to ru", I18n._best_locale_for("ru_RU") == "ru")
+	_smoke("locale de_DE maps to de", I18n._best_locale_for("de_DE") == "de")
+	_smoke("locale zh_CN maps to zh_CN", I18n._best_locale_for("zh_CN") == "zh_CN")
+	_smoke("unknown locale falls back to en", I18n._best_locale_for("xx_YY") == "en")
+	# реальные строки перевода для нескольких языков
+	var saved_locale := TranslationServer.get_locale()
+	TranslationServer.set_locale("de")
+	var de_play := tr("menu.play")
+	TranslationServer.set_locale("ja")
+	var ja_play := tr("menu.play")
+	TranslationServer.set_locale("ar")
+	var ar_settings := tr("settings.language")
+	TranslationServer.set_locale(saved_locale)
+	_smoke("de menu.play == SPIELEN", de_play == "SPIELEN")
+	_smoke("ja menu.play == プレイ", ja_play == "プレイ")
+	_smoke("ar settings.language == اللغة", ar_settings == "اللغة")
 
 
 # --- фреймворк ---

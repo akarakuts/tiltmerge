@@ -16,10 +16,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
       - name: Setup Godot 4.7
-        uses: chickensoft-games/setup-godot@v1
+        uses: chickensoft-games/setup-godot@9f83926bad13754bbfb79045b87a61d0dadad8ae # v1.3.0
         with:
           version: 4.7.1
           use-dotnet: false
@@ -28,43 +28,11 @@ jobs:
       - name: Verify project imports (headless)
         run: godot --headless --import
 
-      - name: Install gdtoolkit (lint)
-        run: pip install gdtoolkit
+      - name: Install pinned development tools
+        run: python3 -m pip install -r requirements-dev.txt
 
-      - name: Lint GDScript
-        run: |
-          echo "=== gdlint ==="
-          find scripts tests -name '*.gd' -print0 | xargs -0 gdlint
-
-      - name: Validate release configuration
-        run: python3 scripts/validate_release.py
-
-      - name: Run test suite in isolated save slots
-        run: ./scripts/run_tests.sh
-
-      - name: Verify translations (CSV well-formed, key parity)
-        run: |
-          python3 - <<'PY'
-          import csv, sys
-          files = ["translations/en.csv", "translations/ru.csv"]
-          keys = {}
-          for f in files:
-            with open(f) as fh:
-              rows = list(csv.reader(fh))
-            if not rows or rows[0][0] != "key":
-              print(f"❌ {f}: first cell must be 'key'"); sys.exit(1)
-              continue
-            ks = [r[0] for r in rows[1:]]
-            keys[f] = set(ks)
-            print(f"✓ {f}: {len(ks)} keys")
-          if keys[files[0]] != keys[files[1]]:
-            only_en = keys[files[0]] - keys[files[1]]
-            only_ru = keys[files[1]] - keys[files[0]]
-            if only_en: print(f"❌ Missing in ru: {only_en}")
-            if only_ru: print(f"❌ Missing in en: {only_ru}")
-            sys.exit(1)
-          print("✓ Translation key parity OK")
-          PY
+      - name: Run the quality gate
+        run: ./scripts/check_quality.sh
 
       - name: Export Android Debug APK
         run: |
@@ -72,7 +40,7 @@ jobs:
           godot --headless --export-debug "Android Debug" build/tiltmerge-debug.apk
 
       - name: Upload APK artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: tiltmerge-debug-apk
           path: build/*.apk
@@ -87,10 +55,10 @@ jobs:
       contents: write
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
       - name: Setup Godot 4.7
-        uses: chickensoft-games/setup-godot@v1
+        uses: chickensoft-games/setup-godot@9f83926bad13754bbfb79045b87a61d0dadad8ae # v1.3.0
         with:
           version: 4.7.1
           use-dotnet: false
@@ -130,7 +98,7 @@ jobs:
           godot --headless --export-release "Android Release" build/tiltmerge-release.aab
 
       - name: Create GitHub Release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@6cbd405e2c4e67a21c47fa9e383d020e4e28b836 # v2.3.3
         with:
           files: build/*.aab
           generate_release_notes: true

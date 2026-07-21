@@ -1,0 +1,51 @@
+key,pl
+app.title,TiltMerge
+menu.play,GRAJ
+menu.settings,Ustawienia
+menu.skins,Skiny
+menu.leaderboard,Ranking
+menu.daily,Codzienne wyzwanie
+menu.classic,Klasyczny
+menu.blitz,Blitz
+menu.zen,Zen
+settings.title,Ustawienia
+settings.control,Sterowanie
+settings.control.tilt,Pochylenie
+settings.control.swipe,Przeciągnięcie
+settings.haptics,Wibracje
+settings.reduce_motion,Mniej ruchu
+settings.sound,Dźwięk
+settings.music,Muzyka
+settings.language,Język
+settings.language_auto,Auto
+settings.back,Wstecz
+onboarding.title,Jak grać
+onboarding.step1,"Pochyl telefon, aby toczyć kostki"
+onboarding.step2,Dwie takie same kostki łączą się w większą
+onboarding.step3,Nie pozwól im dotrzeć na górę
+onboarding.start,ZROZUMIAŁEM
+ob.hint1,"Pochyl telefon (lub przeciągnij na emulatorze), aby wtoczyć kostkę do celu"
+ob.hint2,"Popchnij dwie kostki tego samego poziomu, aby je POŁĄCZYĆ"
+ob.hint3,Nie pozwól kostkom dotrzeć do górnej linii – inaczej koniec
+ob.done,Świetnie!
+ob.next,Dalej
+ob.lets_go,Zaczynamy
+game.score,Wynik
+game.combo,Combo
+game.best,Rekord
+game.paused,PAUZA
+game.resume_hint,"Stuknij, aby wznowić"
+game.game_over,KONIEC GRY
+game.restart,Od nowa
+game.menu,Menu główne
+game.next,Następny
+game.reroll,Przerzuć
+game.daily_goal,Wyzwanie: połącz poziom %d
+game.daily_complete,WYZWANIE UKOŃCZONE
+game.daily_done,Codzienne wyzwanie ukończone
+skins.title,Skiny
+skins.selected,Wybrany
+skins.choose,"Stuknij, aby wybrać"
+skins.locked,Zablokowany
+skins.select,Wybierz
+leaderboard.local_note,Lokalne najlepsze wyniki

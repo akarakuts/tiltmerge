@@ -1,0 +1,51 @@
+key,tr
+app.title,TiltMerge
+menu.play,OYNA
+menu.settings,Ayarlar
+menu.skins,Skins
+menu.leaderboard,Lider Tablosu
+menu.daily,Günlük meydan okuma
+menu.classic,Klasik
+menu.blitz,Blitz
+menu.zen,Zen
+settings.title,Ayarlar
+settings.control,Kontrol
+settings.control.tilt,Eğim
+settings.control.swipe,Kaydır
+settings.haptics,Titreşim
+settings.reduce_motion,Hareketi azalt
+settings.sound,Ses
+settings.music,Müzik
+settings.language,Dil
+settings.language_auto,Otomatik
+settings.back,Geri
+onboarding.title,Nasıl oynanır
+onboarding.step1,Küpleri yuvarlamak için telefonu eğ
+onboarding.step2,Aynı iki küp daha büyük bir küpte birleşir
+onboarding.step3,Tepeye ulaşmalarına izin verme
+onboarding.start,ANLADIM
+ob.hint1,Küpü hedefe yuvarlamak için telefonu eğ (veya emülatörde sürükle)
+ob.hint2,BİRLEŞTİRMEK için aynı seviyedeki iki kübü birbirine it
+ob.hint3,Küplerin üst çizgiye ulaşmasına izin verme – yoksa biter
+ob.done,Harika!
+ob.next,İleri
+ob.lets_go,Hadi başlayalım
+game.score,Puan
+game.combo,Combo
+game.best,Rekor
+game.paused,DURAKLATILDI
+game.resume_hint,Devam etmek için dokun
+game.game_over,OYUN BİTTİ
+game.restart,Yeniden başlat
+game.menu,Ana menü
+game.next,İleri
+game.reroll,Yeniden at
+game.daily_goal,Görev: seviye %d küpünü birleştir
+game.daily_complete,GÖREV TAMAMLANDI
+game.daily_done,Günlük görev tamamlandı
+skins.title,Skins
+skins.selected,Seçili
+skins.choose,Seçmek için dokun
+skins.locked,Kilitli
+skins.select,Seç
+leaderboard.local_note,Yerel en iyi skorlar

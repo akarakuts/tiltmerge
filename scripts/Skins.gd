@@ -55,13 +55,17 @@ func _make_card(skin: Dictionary) -> Control:
 	if skin.unlocked and not skin.selected:
 		var btn := Button.new()
 		btn.text = tr("skins.select")
-		btn.pressed.connect(func():
-			SkinsManager.select(skin.id)
-			_build()
-		)
+		# bind вместо замыкания над loop-переменной: явно фиксируем skin_id на
+		# момент создания кнопки, без зависимости от capture-семантики GDScript.
+		btn.pressed.connect(_on_select_skin.bind(skin.id))
 		col.add_child(btn)
 	panel.add_child(col)
 	return panel
+
+
+func _on_select_skin(skin_id: String) -> void:
+	SkinsManager.select(skin_id)
+	_build()
 
 
 func _on_back() -> void:

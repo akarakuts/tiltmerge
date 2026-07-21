@@ -1,0 +1,51 @@
+key,fr
+app.title,TiltMerge
+menu.play,JOUER
+menu.settings,Paramètres
+menu.skins,Skins
+menu.leaderboard,Classement
+menu.daily,Défi quotidien
+menu.classic,Classique
+menu.blitz,Blitz
+menu.zen,Zen
+settings.title,Paramètres
+settings.control,Contrôle
+settings.control.tilt,Inclinaison
+settings.control.swipe,Glisser
+settings.haptics,Vibrations
+settings.reduce_motion,Réduire les animations
+settings.sound,Son
+settings.music,Musique
+settings.language,Langue
+settings.language_auto,Auto
+settings.back,Retour
+onboarding.title,Comment jouer
+onboarding.step1,Incline ton téléphone pour rouler les cubes
+onboarding.step2,Deux cubes identiques fusionnent en un plus gros
+onboarding.step3,Ne les laisse pas atteindre le haut
+onboarding.start,COMPRIS
+ob.hint1,Incline ton téléphone (ou glisse sur l'émulateur) pour rouler le cube vers la cible
+ob.hint2,Pousse deux cubes de même niveau pour les FUSIONNER
+ob.hint3,Ne laisse pas les cubes atteindre la ligne du haut – sinon partie finie
+ob.done,Bravo
+ob.next,Suivant
+ob.lets_go,C'est parti
+game.score,Score
+game.combo,Combo
+game.best,Record
+game.paused,PAUSE
+game.resume_hint,Touche pour reprendre
+game.game_over,PARTIE TERMINÉE
+game.restart,Recommencer
+game.menu,Menu principal
+game.next,Suivant
+game.reroll,Relancer
+game.daily_goal,Défi : fusionner niveau %d
+game.daily_complete,DÉFI RÉUSSI
+game.daily_done,Défi quotidien réussi
+skins.title,Skins
+skins.selected,Sélectionné
+skins.choose,Touche pour choisir
+skins.locked,Verrouillé
+skins.select,Choisir
+leaderboard.local_note,Meilleurs scores locaux

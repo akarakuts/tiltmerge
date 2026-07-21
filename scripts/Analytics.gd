@@ -14,7 +14,8 @@ func _ready() -> void:
 	# включаем аналитику только если зарегистрирован singleton плагина
 	_enabled = Engine.has_singleton("FirebaseAnalytics")
 	_session_id = str(Time.get_unix_time_from_system())
-	print("[Analytics] enabled=%s session=%s" % [_enabled, _session_id])
+	if OS.is_debug_build():
+		print("[Analytics] enabled=%s session=%s" % [_enabled, _session_id])
 
 
 func event(name: String, params: Dictionary = {}) -> void:

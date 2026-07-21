@@ -1,0 +1,2 @@
+# Reproducible static-analysis toolchain for local development and CI.
+gdtoolkit==4.5.0

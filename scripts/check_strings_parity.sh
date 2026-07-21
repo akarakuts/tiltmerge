@@ -4,17 +4,15 @@
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
-EN="translations/en.csv"
-RU="translations/ru.csv"
-
-if [[ ! -f "$EN" || ! -f "$RU" ]]; then
-  echo "❌ Не найдены файлы переводов ($EN / $RU)" >&2
+DIR="translations"
+if [[ ! -d "$DIR" ]]; then
+  echo "❌ Каталог переводов не найден ($DIR)" >&2
   exit 1
 fi
 
-python3 - "$EN" "$RU" <<'PY'
-import csv, sys
-en, ru = sys.argv[1], sys.argv[2]
+python3 - "$DIR" <<'PY'
+import csv, sys, pathlib
+tdir = pathlib.Path(sys.argv[1])
 
 def keys(path):
     with open(path, newline="", encoding="utf-8") as fh:
@@ -23,12 +21,23 @@ def keys(path):
         print(f"❌ {path}: первая ячейка должна быть 'key'"); sys.exit(1)
     return {r[0] for r in rows[1:] if r}
 
-en_keys, ru_keys = keys(en), keys(ru)
-only_en = en_keys - ru_keys
-only_ru = ru_keys - en_keys
-if only_en:
-    print(f"❌ Есть в en, нет в ru: {sorted(only_en)}"); sys.exit(1)
-if only_ru:
-    print(f"❌ Есть в ru, нет в en: {sorted(only_ru)}"); sys.exit(1)
-print(f"✓ Паритет ключей: {len(en_keys)} совпадают (en/ru)")
+csvs = sorted(tdir.glob("*.csv"))
+if not csvs:
+    print("❌ Нет CSV-файлов переводов"); sys.exit(1)
+en = tdir / "en.csv"
+if not en.exists():
+    print("❌ Нет en.csv — базовый перевод"); sys.exit(1)
+en_keys = keys(en)
+bad = 0
+for p in csvs:
+    if p == en:
+        continue
+    k = keys(p)
+    only_en = en_keys - k
+    only_loc = k - en_keys
+    if only_en or only_loc:
+        print(f"❌ {p.name}: только в en={sorted(only_en)} только в {p.stem}={sorted(only_loc)}"); bad += 1
+if bad:
+    sys.exit(1)
+print(f"✓ Паритет ключей: {len(en_keys)} ключей совпадают во всех {len(csvs)} переводах")
 PY

@@ -1,0 +1,51 @@
+key,cs
+app.title,TiltMerge
+menu.play,HRÁT
+menu.settings,Nastavení
+menu.skins,Skiny
+menu.leaderboard,Žebříček
+menu.daily,Denní výzva
+menu.classic,Klasika
+menu.blitz,Blitz
+menu.zen,Zen
+settings.title,Nastavení
+settings.control,Ovládání
+settings.control.tilt,Naklonění
+settings.control.swipe,Táhnutí
+settings.haptics,Vibrace
+settings.reduce_motion,Méně pohybu
+settings.sound,Zvuk
+settings.music,Hudba
+settings.language,Jazyk
+settings.language_auto,Auto
+settings.back,Zpět
+onboarding.title,Jak hrát
+onboarding.step1,Nakloň telefon a kutálej kostky
+onboarding.step2,Dvě stejné kostky se spojí ve větší
+onboarding.step3,Nedovol jim dosáhnout horní hrany
+onboarding.start,ROZUMÍM
+ob.hint1,"Nakloň telefon (nebo táhni v emulátoru), abys dostal kostku do cíle"
+ob.hint2,"Strč do dvou kostek stejné úrovně, aby se SPOJILY"
+ob.hint3,Nedovol kostkám dosáhnout horní čáry – jinak konec
+ob.done,Skvělé!
+ob.next,Dál
+ob.lets_go,Jdeme na to
+game.score,Skóre
+game.combo,Combo
+game.best,Rekord
+game.paused,PAUZA
+game.resume_hint,Klepnutím pokračuj
+game.game_over,KONEC HRY
+game.restart,Hrát znovu
+game.menu,Hlavní menu
+game.next,Další
+game.reroll,Přehodit
+game.daily_goal,Výzva: spoj úroveň %d
+game.daily_complete,VÝZVA SPLNĚNA
+game.daily_done,Denní výzva splněna
+skins.title,Skiny
+skins.selected,Vybráno
+skins.choose,Klepni pro výběr
+skins.locked,Zamčeno
+skins.select,Vybrat
+leaderboard.local_note,Místní nejlepší skóre

@@ -1,0 +1,51 @@
+key,vi
+app.title,TiltMerge
+menu.play,CHƠI
+menu.settings,Cài đặt
+menu.skins,Skins
+menu.leaderboard,Bảng xếp hạng
+menu.daily,Thử thách hàng ngày
+menu.classic,Cổ điển
+menu.blitz,Chớp
+menu.zen,Thiền
+settings.title,Cài đặt
+settings.control,Điều khiển
+settings.control.tilt,Nghiêng
+settings.control.swipe,Vuốt
+settings.haptics,Rung
+settings.reduce_motion,Giảm chuyển động
+settings.sound,Âm thanh
+settings.music,Nhạc
+settings.language,Ngôn ngữ
+settings.language_auto,Tự động
+settings.back,Quay lại
+onboarding.title,Cách chơi
+onboarding.step1,Nghiêng điện thoại để lăn các khối
+onboarding.step2,Hai khối giống nhau hợp nhất thành khối lớn hơn
+onboarding.step3,Đừng để chúng chạm tới đỉnh
+onboarding.start,ĐÃ HIỂU
+ob.hint1,Nghiêng điện thoại (hoặc vuốt trên giả lập) để lăn khối tới mục tiêu
+ob.hint2,Đẩy hai khối cùng cấp vào nhau để HỢP NHẤT
+ob.hint3,Đừng để khối chạm đường trên cùng – nếu không sẽ thua
+ob.done,Tuyệt!
+ob.next,Tiếp
+ob.lets_go,Bắt đầu
+game.score,Điểm
+game.combo,Combo
+game.best,Kỷ lục
+game.paused,TẠM DỪNG
+game.resume_hint,Chạm để tiếp tục
+game.game_over,HẾT GAME
+game.restart,Chơi lại
+game.menu,Menu chính
+game.next,Tiếp
+game.reroll,Quay lại
+game.daily_goal,Thử thách: ghép cấp %d
+game.daily_complete,HOÀN THÀNH THỬ THÁCH
+game.daily_done,Thử thách hàng ngày hoàn thành
+skins.title,Skins
+skins.selected,Đã chọn
+skins.choose,Chạm để chọn
+skins.locked,Khóa
+skins.select,Chọn
+leaderboard.local_note,Điểm cao nhất cục bộ

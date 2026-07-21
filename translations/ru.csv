@@ -17,15 +17,16 @@ settings.reduce_motion,Меньше движения
 settings.sound,Звук
 settings.music,Музыка
 settings.language,Язык
+settings.language_auto,Авто
 settings.back,Назад
 onboarding.title,Как играть
 onboarding.step1,"Наклоняй телефон, чтобы катить кубики"
-onboarding.step2,"Два одинаковых кубика слипаются в больший"
-onboarding.step3,"Не дай им достичь верха"
+onboarding.step2,Два одинаковых кубика слипаются в больший
+onboarding.step3,Не дай им достичь верха
 onboarding.start,ПОНЯТНО
 ob.hint1,"Наклоняй телефон или веди пальцем, чтобы докатить кубик до мишени"
-ob.hint2,"Столкни два одинаковых кубика — они сливаются в один побольше"
-ob.hint3,"Не дай кубикам достичь верхней линии — иначе игра окончена"
+ob.hint2,Столкни два одинаковых кубика — они сливаются в один побольше
+ob.hint3,Не дай кубикам достичь верхней линии — иначе игра окончена
 ob.done,Отлично
 ob.next,Дальше
 ob.lets_go,Поехали
@@ -39,7 +40,7 @@ game.restart,Заново
 game.menu,В меню
 game.next,Следующий
 game.reroll,Смена
-game.daily_goal,"Задание дня: создать tier %d"
+game.daily_goal,Задание дня: создать tier %d
 game.daily_complete,ЗАДАНИЕ ВЫПОЛНЕНО
 game.daily_done,Задание дня выполнено
 skins.title,Скины

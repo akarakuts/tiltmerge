@@ -20,6 +20,8 @@ var score_at_check: int = 0
 var pause_cycle_ok: bool = false
 var tactics_ok: bool = false
 var daily_goal_ok: bool = false
+var corner_recovery_ok: bool = false
+var mode_rules_ok: bool = false
 
 
 func _ready() -> void:
@@ -41,12 +43,16 @@ func _ready() -> void:
 	await get_tree().create_timer(0.3).timeout
 	_log("Game instance created, mode=classic, control=swipe")
 	game_instance._on_pause()
-	var resume_click := InputEventMouseButton.new()
-	resume_click.button_index = MOUSE_BUTTON_LEFT
-	resume_click.pressed = true
-	game_instance._on_pause_panel_input(resume_click)
-	pause_cycle_ok = GameManager.state == GameManager.State.PLAYING and not get_tree().paused
-	_log("%s pause overlay resumes from mouse input" % ("✓" if pause_cycle_ok else "✗ FAIL:"))
+	var resume_action := InputEventAction.new()
+	resume_action.action = "ui_pause"
+	resume_action.pressed = true
+	game_instance._unhandled_input(resume_action)
+	pause_cycle_ok = (
+		game_instance.process_mode == Node.PROCESS_MODE_ALWAYS
+		and GameManager.state == GameManager.State.PLAYING
+		and not get_tree().paused
+	)
+	_log("%s pause overlay resumes from the pause hotkey" % ("✓" if pause_cycle_ok else "✗ FAIL:"))
 	game_instance._spawner.set_score(50)
 	var starting_rerolls: int = game_instance._reroll_charges
 	var next_tier: int = game_instance._spawner.peek_next_tier()
@@ -54,6 +60,8 @@ func _ready() -> void:
 	game_instance._on_combo_changed(game_instance._reroll_combo_interval, 1.5)
 	tactics_ok = next_tier >= 1 and game_instance._spawner.peek_next_tier() != next_tier and game_instance._reroll_charges == starting_rerolls
 	_log("%s next preview and combo-earned reroll work" % ("✓" if tactics_ok else "✗ FAIL:"))
+	corner_recovery_ok = _verify_corner_cube_recovers()
+	_log("%s a sleeping cube can be moved away from a corner" % ("✓" if corner_recovery_ok else "✗ FAIL:"))
 
 	# фаза 1: подождать спавна и слияний.
 	phase = "playing"
@@ -98,8 +106,15 @@ func _ready() -> void:
 		ok = false
 	if not tactics_ok:
 		ok = false
+	if not corner_recovery_ok:
+		ok = false
 	if GameManager.state != GameManager.State.GAME_OVER:
 		ok = false
+	# Дальнейшие проверки режимов не должны зависеть от циклического ввода
+	# основной симуляции.
+	phase = "post_game"
+	Input.action_release("tilt_left")
+	Input.action_release("tilt_right")
 	# сохранение должно было инкрементировать total_games при game over
 	if GameManager.state == GameManager.State.GAME_OVER:
 		await get_tree().process_frame
@@ -113,6 +128,9 @@ func _ready() -> void:
 			ok = false
 	daily_goal_ok = await _verify_daily_goal()
 	if not daily_goal_ok:
+		ok = false
+	mode_rules_ok = await _verify_mode_rules()
+	if not mode_rules_ok:
 		ok = false
 
 	print("\n========================================")
@@ -137,6 +155,48 @@ func _verify_daily_goal() -> bool:
 	daily_game.queue_free()
 	_log("%s daily goal persists and awards its bonus" % ("✓" if completed and bonus_awarded else "✗ FAIL:"))
 	return completed and bonus_awarded
+
+
+# Проверяем различия режимов без зависимости от случайного спавна: Zen не
+# завершается от переполнения, а Blitz всегда завершает забег по таймеру.
+func _verify_mode_rules() -> bool:
+	await get_tree().process_frame
+	GameManager.start_game("zen")
+	var zen_game: Node = load(GAME_SCENE).instantiate()
+	add_child(zen_game)
+	await get_tree().create_timer(0.3).timeout
+	zen_game._game_over_line_y = 2000.0
+	await get_tree().create_timer(0.2).timeout
+	var zen_ignores_overflow := GameManager.state == GameManager.State.PLAYING
+	zen_game.queue_free()
+
+	await get_tree().process_frame
+	GameManager.start_game("blitz")
+	var blitz_game: Node = load(GAME_SCENE).instantiate()
+	add_child(blitz_game)
+	await get_tree().create_timer(0.3).timeout
+	blitz_game._blitz_time_left = 0.01
+	await get_tree().create_timer(0.2).timeout
+	var blitz_stops_on_timer := GameManager.state == GameManager.State.GAME_OVER
+	blitz_game.queue_free()
+	var result := zen_ignores_overflow and blitz_stops_on_timer
+	_log("%s Zen and Blitz follow their mode rules" % ("✓" if result else "✗ FAIL:"))
+	return result
+
+
+# Регрессия RuStore: после остановки в углу RigidBody2D может уснуть.
+# Следующий наклон обязан разбудить его, иначе у игрока нет способа
+# продолжить партию.
+func _verify_corner_cube_recovers() -> bool:
+	var cube: Cube = load("res://scenes/Cube.tscn").instantiate()
+	game_instance._cubes.add_child(cube)
+	cube.global_position = Vector2(48, 1192) # внутренний нижний левый угол поля
+	cube.setup(1)
+	cube.sleeping = true
+	game_instance._tilt._apply_horizontal_force(1500.0)
+	var recovered: bool = not cube.sleeping
+	cube.queue_free()
+	return recovered
 
 
 func _physics_process(delta: float) -> void:

@@ -62,6 +62,11 @@ func _apply_horizontal_force(force: float) -> void:
 		return
 	for cube in _cubes_root.get_children():
 		if cube is RigidBody2D and not cube.is_queued_for_deletion():
+			# Godot переводит неподвижный RigidBody2D в сон. В нижнем углу это
+			# особенно заметно: без явного пробуждения следующий наклон может
+			# не начать физическую симуляцию, и кубик становится недоступным.
+			if absf(force) > 0.001 and cube.sleeping:
+				cube.sleeping = false
 			# постоянная сила пропорциональна массе, чтобы ускорение было равным
 			cube.apply_force(Vector2(force * cube.mass, 0.0), Vector2.ZERO)
 

@@ -1,0 +1,51 @@
+key,sv
+app.title,TiltMerge
+menu.play,SPELA
+menu.settings,Inställningar
+menu.skins,Skins
+menu.leaderboard,Topplista
+menu.daily,Daglig utmaning
+menu.classic,Klassisk
+menu.blitz,Blitz
+menu.zen,Zen
+settings.title,Inställningar
+settings.control,Kontroll
+settings.control.tilt,Luta
+settings.control.swipe,Svep
+settings.haptics,Vibration
+settings.reduce_motion,Mindre rörelse
+settings.sound,Ljud
+settings.music,Musik
+settings.language,Språk
+settings.language_auto,Auto
+settings.back,Tillbaka
+onboarding.title,Hur man spelar
+onboarding.step1,Luta telefonen för att rulla kuberna
+onboarding.step2,Två likadana kuber smälter samman till en större
+onboarding.step3,Låt dem inte nå toppen
+onboarding.start,FÖRSTÅTT
+ob.hint1,Luta telefonen (eller svep i emulatorn) för att rulla kuben till målet
+ob.hint2,Tryck ihop två kuber av samma nivå för att SLA SAMMAN dem
+ob.hint3,Låt inte kuberna nå den övre linjen – då är det slut
+ob.done,Snyggt!
+ob.next,Nästa
+ob.lets_go,Kör vi
+game.score,Poäng
+game.combo,Combo
+game.best,Bästa
+game.paused,PAUS
+game.resume_hint,Tryck för att fortsätta
+game.game_over,SPELET SLUT
+game.restart,Starta om
+game.menu,Huvudmeny
+game.next,Nästa
+game.reroll,Slå om
+game.daily_goal,Uppdrag: slå samman nivå %d
+game.daily_complete,UPPDRAG KLART
+game.daily_done,Dagligt uppdrag klart
+skins.title,Skins
+skins.selected,Vald
+skins.choose,Tryck för att välja
+skins.locked,Låst
+skins.select,Välj
+leaderboard.local_note,Lokala topplistor

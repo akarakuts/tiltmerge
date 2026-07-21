@@ -1,0 +1,51 @@
+key,hi
+app.title,TiltMerge
+menu.play,खेलें
+menu.settings,सेटिंग्स
+menu.skins,स्किन
+menu.leaderboard,लीडरबोर्ड
+menu.daily,दैनिक चुनौती
+menu.classic,क्लासिक
+menu.blitz,ब्लिट्ज़
+menu.zen,ज़ेन
+settings.title,सेटिंग्स
+settings.control,नियंत्रण
+settings.control.tilt,झुकाएँ
+settings.control.swipe,स्वाइप
+settings.haptics,कंपन
+settings.reduce_motion,गति कम करें
+settings.sound,ध्वनि
+settings.music,संगीत
+settings.language,भाषा
+settings.language_auto,स्वतः
+settings.back,वापस
+onboarding.title,खेलने का तरीका
+onboarding.step1,घनों को लुढ़काने के लिए फ़ोन झुकाएँ
+onboarding.step2,दो समान घन मिलकर बड़ा घन बनते हैं
+onboarding.step3,उन्हें शीर्ष तक न पहुँचने दें
+onboarding.start,समझ गया
+ob.hint1,फ़ोन झुकाएँ (या एमुलेटर पर खींचें) घन को लक्ष्य तक लुढ़काने के लिए
+ob.hint2,दो समान स्तर के घनों को एक साथ धकेलें ताकि वे मिल जाएँ
+ob.hint3,घनों को ऊपरी रेखा तक न पहुँचने दें – वरना गेम खत्म
+ob.done,शानदार!
+ob.next,आगे
+ob.lets_go,चलो शुरू करें
+game.score,अंक
+game.combo,कॉम्बो
+game.best,सर्वश्रेष्ठ
+game.paused,रुका
+game.resume_hint,जारी रखने के लिए टैप करें
+game.game_over,गेम खत्म
+game.restart,पुनः आरंभ
+game.menu,मुख्य मेन्यू
+game.next,अगला
+game.reroll,फिर से
+game.daily_goal,चुनौती: स्तर %d मिलाएँ
+game.daily_complete,चुनौती पूरी
+game.daily_done,दैनिक चुनौती पूरी
+skins.title,स्किन
+skins.selected,चुना गया
+skins.choose,चुनने के लिए टैप करें
+skins.locked,बंद
+skins.select,चुनें
+leaderboard.local_note,स्थानीय सर्वोत्तम अंक

@@ -1,0 +1,51 @@
+key,de
+app.title,TiltMerge
+menu.play,SPIELEN
+menu.settings,Einstellungen
+menu.skins,Skins
+menu.leaderboard,Bestenliste
+menu.daily,Tageschallenge
+menu.classic,Klassisch
+menu.blitz,Blitz
+menu.zen,Zen
+settings.title,Einstellungen
+settings.control,Steuerung
+settings.control.tilt,Neigen
+settings.control.swipe,Wischen
+settings.haptics,Vibration
+settings.reduce_motion,Bewegung reduzieren
+settings.sound,Ton
+settings.music,Musik
+settings.language,Sprache
+settings.language_auto,Automatisch
+settings.back,Zurück
+onboarding.title,So spielt man
+onboarding.step1,"Neige dein Handy, um die Würfel zu rollen"
+onboarding.step2,Zwei gleiche Würfel verschmelzen zu einem Größeren
+onboarding.step3,Lass sie nicht die Oberkante erreichen
+onboarding.start,VERSTANDEN
+ob.hint1,"Neige dein Handy (oder ziehe auf dem Emulator), um den Würfel ins Ziel zu rollen"
+ob.hint2,"Stoße zwei gleichrangige Würfel zusammen, um sie zu VERBINDEN"
+ob.hint3,Lass die Würfel nicht die obere Linie erreichen – sonst ist Schluss
+ob.done,Super
+ob.next,Weiter
+ob.lets_go,Los geht's
+game.score,Punkte
+game.combo,Combo
+game.best,Bestwert
+game.paused,PAUSE
+game.resume_hint,Tippen zum Fortsetzen
+game.game_over,SPIELENDE
+game.restart,Neu starten
+game.menu,Hauptmenü
+game.next,Weiter
+game.reroll,Neu würfeln
+game.daily_goal,Tagesaufgabe: Würfel Stufe %d
+game.daily_complete,TAGESAUFGABE GESCHAFFT
+game.daily_done,Tagesaufgabe erledigt
+skins.title,Skins
+skins.selected,Ausgewählt
+skins.choose,Tippen zum Auswählen
+skins.locked,Gesperrt
+skins.select,Auswählen
+leaderboard.local_note,Lokale Bestwerte
