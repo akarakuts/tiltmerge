@@ -79,6 +79,7 @@ func _on_select_skin(skin_id: String) -> void:
 
 func _on_back() -> void:
 	AudioManager.play_sfx("button")
+	BackHandler.block_quit_briefly()
 	get_tree().change_scene_to_file("res://scenes/MainMenu.tscn")
 
 

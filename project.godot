@@ -12,7 +12,7 @@ config/description="Быстрая головоломка: наклоняй те
 run/main_scene="res://scenes/Boot.tscn"
 config/features=PackedStringArray("4.3", "Forward Plus")
 config/icon="res://assets/graphics/icon.png"
-config/version="1.0.5"
+config/version="1.0.6"
 # Без этого Android Back / свайп-назад сразу закрывает приложение,
 # и наш BackHandler не успевает перевести на предыдущий экран.
 config/quit_on_go_back=false

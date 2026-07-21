@@ -95,9 +95,13 @@ func _on_leaderboard() -> void:
 
 
 func handle_android_back() -> void:
-	# Сначала свернуть выбор режима, иначе выход из приложения.
+	# Сначала свернуть выбор режима.
 	if _modes.visible:
 		_modes.hide()
 		_play.show()
+		return
+	# Двойной Back для выхода — и защита от «двойного» системного GO_BACK
+	# сразу после возврата с Settings/Skins/Rules.
+	if not BackHandler.can_quit_app():
 		return
 	get_tree().quit()

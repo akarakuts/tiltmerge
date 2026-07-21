@@ -141,6 +141,7 @@ func _flush_pending_settings() -> void:
 func _on_back() -> void:
 	_flush_pending_settings()
 	AudioManager.play_sfx("button")
+	BackHandler.block_quit_briefly()
 	get_tree().change_scene_to_file("res://scenes/MainMenu.tscn")
 
 

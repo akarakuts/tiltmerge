@@ -132,6 +132,36 @@ jobs:
               fi
             fi
             echo "4.7.1.stable" > android/.build_version
+            # Не даём Android 13+ predictive-back закрыть Activity мимо Godot.
+            MANIFEST="android/build/src/main/AndroidManifest.xml"
+            if [[ -f "$MANIFEST" ]]; then
+              python3 - <<'PY'
+          from pathlib import Path
+          path = Path("android/build/src/main/AndroidManifest.xml")
+          text = path.read_text()
+          flag = 'android:enableOnBackInvokedCallback="false"'
+          if flag in text:
+              pass
+          elif "<application" in text:
+              # вставить атрибут в первый тег <application ...>
+              import re
+              def inject(m):
+                  tag = m.group(0)
+                  if "enableOnBackInvokedCallback" in tag:
+                      return re.sub(r'android:enableOnBackInvokedCallback="[^"]*"', flag, tag)
+                  if tag.endswith("/>"):
+                      return tag[:-2] + " " + flag + " />"
+                  return tag[:-1] + " " + flag + ">"
+              text2, n = re.subn(r"<application\b[^>]*>", inject, text, count=1)
+              if n:
+                  path.write_text(text2)
+                  print("patched AndroidManifest enableOnBackInvokedCallback=false")
+              else:
+                  print("WARN: could not patch application tag")
+          else:
+              print("WARN: no <application> in manifest")
+          PY
+            fi
             # Gradle mergeResources rejects Godot .import sidecars under res/
             if [[ -f android/build/build.gradle ]]; then
               python3 - <<'PY'

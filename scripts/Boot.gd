@@ -2,6 +2,7 @@ extends Node
 ## Boot — точка входа: без вспышки меню сразу ведёт на онбординг или MainMenu.
 
 func _ready() -> void:
+	get_tree().set_quit_on_go_back(false)
 	if not GameConfig.is_ready:
 		await GameConfig.config_loaded
 	if not bool(SaveSystem.data.get("onboarding_completed", false)):

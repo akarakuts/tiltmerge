@@ -190,6 +190,7 @@ func _on_next() -> void:
 
 func _finish_onboarding() -> void:
 	SaveSystem.complete_onboarding()
+	BackHandler.block_quit_briefly()
 	get_tree().change_scene_to_file("res://scenes/MainMenu.tscn")
 
 

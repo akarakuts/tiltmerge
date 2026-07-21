@@ -268,6 +268,7 @@ func _on_restart() -> void:
 
 func _on_to_menu() -> void:
 	get_tree().paused = false
+	BackHandler.block_quit_briefly()
 	get_tree().change_scene_to_file("res://scenes/MainMenu.tscn")
 
 

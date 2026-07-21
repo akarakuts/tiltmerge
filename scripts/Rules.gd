@@ -57,6 +57,7 @@ func _make_card(heading: String, body: String) -> PanelContainer:
 
 func _on_back() -> void:
 	AudioManager.play_sfx("button")
+	BackHandler.block_quit_briefly()
 	get_tree().change_scene_to_file("res://scenes/MainMenu.tscn")
 
 
