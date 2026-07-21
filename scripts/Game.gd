@@ -57,6 +57,9 @@ func _ready() -> void:
 	_tilt.set_control_mode(str(SaveSystem.data.settings.control_mode))
 	_merge.setup(_cubes)
 	_merge.reset()
+	var decor := get_node_or_null("ArenaDecor")
+	if decor != null and decor.has_method("setup"):
+		decor.setup(get_node_or_null("DangerLine") as Line2D)
 	var seeded: bool = bool(_mode_cfg.get("seeded", false))
 	var spawn_mult: float = float(_mode_cfg.get("spawn_interval_mult", 1.0))
 	if ABTest.is_variant("spawn_speed", "fast"):

@@ -1,10 +1,12 @@
-[gd_scene load_steps=8 format=3 uid="uid://game01tiltmerge"]
+[gd_scene load_steps=10 format=3 uid="uid://game01tiltmerge"]
 
 [ext_resource type="Script" path="res://scripts/Game.gd" id="1_game"]
 [ext_resource type="Script" path="res://scripts/CameraShake.gd" id="2_cam"]
 [ext_resource type="Script" path="res://scripts/TiltController.gd" id="3_tilt"]
 [ext_resource type="Script" path="res://scripts/Spawner.gd" id="4_spawn"]
 [ext_resource type="Script" path="res://scripts/MergeLogic.gd" id="5_merge"]
+[ext_resource type="Script" path="res://scripts/ArenaDecor.gd" id="6_decor"]
+[ext_resource type="Script" path="res://scripts/MergeFX.gd" id="7_fx"]
 
 [sub_resource type="RectangleShape2D" id="RectWall"]
 size = Vector2(40, 1200)
@@ -18,6 +20,9 @@ script = ExtResource("1_game")
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(360, 640)
 script = ExtResource("2_cam")
+
+[node name="ArenaDecor" type="Node2D" parent="."]
+script = ExtResource("6_decor")
 
 [node name="Walls" type="Node2D" parent="."]
 
@@ -41,10 +46,13 @@ shape = SubResource("RectBottom")
 
 [node name="Cubes" type="Node2D" parent="."]
 
+[node name="MergeFX" type="Node2D" parent="."]
+script = ExtResource("7_fx")
+
 [node name="DangerLine" type="Line2D" parent="."]
 points = PackedVector2Array(40, 80, 680, 80)
-width = 3.0
-default_color = Color(0.95, 0.38, 0.42, 0.55)
+width = 4.0
+default_color = Color(1, 0.35, 0.42, 0.55)
 z_index = 5
 
 [node name="TiltController" type="Node" parent="."]

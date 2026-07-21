@@ -2,19 +2,19 @@ extends Node
 ## UiTheme — единый визуальный стиль TiltMerge (тёмный фон + бирюзовый акцент).
 ## Подключать theme к корню Control/CanvasLayer HUD.
 
-const COL_BG := Color(0.055, 0.07, 0.11, 1.0)
-const COL_BG_TOP := Color(0.09, 0.13, 0.20, 1.0)
-const COL_PANEL := Color(0.12, 0.16, 0.24, 0.94)
-const COL_PANEL_SOFT := Color(0.10, 0.13, 0.20, 0.78)
-const COL_ACCENT := Color(0.35, 0.86, 0.76, 1.0)
-const COL_ACCENT_DOWN := Color(0.22, 0.62, 0.55, 1.0)
-const COL_ACCENT_HOVER := Color(0.45, 0.92, 0.82, 1.0)
-const COL_SECONDARY := Color(0.18, 0.23, 0.32, 1.0)
-const COL_SECONDARY_HOVER := Color(0.24, 0.30, 0.42, 1.0)
-const COL_TEXT := Color(0.93, 0.96, 0.99, 1.0)
-const COL_MUTED := Color(0.62, 0.70, 0.80, 1.0)
-const COL_DANGER := Color(0.95, 0.38, 0.42, 1.0)
-const COL_OUTLINE := Color(0.28, 0.36, 0.48, 1.0)
+const COL_BG := Color(0.07, 0.11, 0.18, 1.0)
+const COL_BG_TOP := Color(0.14, 0.28, 0.38, 1.0)
+const COL_PANEL := Color(0.12, 0.18, 0.26, 0.94)
+const COL_PANEL_SOFT := Color(0.11, 0.16, 0.24, 0.78)
+const COL_ACCENT := Color(0.30, 0.90, 0.78, 1.0)
+const COL_ACCENT_DOWN := Color(0.18, 0.65, 0.56, 1.0)
+const COL_ACCENT_HOVER := Color(0.45, 0.96, 0.85, 1.0)
+const COL_SECONDARY := Color(0.16, 0.24, 0.34, 1.0)
+const COL_SECONDARY_HOVER := Color(0.22, 0.32, 0.44, 1.0)
+const COL_TEXT := Color(0.96, 0.98, 1.0, 1.0)
+const COL_MUTED := Color(0.68, 0.78, 0.88, 1.0)
+const COL_DANGER := Color(1.0, 0.38, 0.45, 1.0)
+const COL_OUTLINE := Color(0.32, 0.48, 0.55, 1.0)
 
 var theme: Theme
 

@@ -22,6 +22,7 @@ signal score_changed(new_score: int, delta: int, is_merge: bool)
 signal combo_changed(combo_count: int, multiplier: float)
 
 var _scene_root: Node2D = null  # куда добавлять новые кубики
+var _fx: Node = null
 
 
 func setup(scene_root: Node2D) -> void:
@@ -29,6 +30,7 @@ func setup(scene_root: Node2D) -> void:
 	_combo_window = float(GameConfig.cfg.combo.window_sec)
 	_combo_multipliers = GameConfig.cfg.combo.multipliers.duplicate()
 	MergeBus.merge_requested.connect(_on_merge_requested)
+	_fx = _scene_root.get_node_or_null("MergeFX")
 
 
 func reset() -> void:
@@ -80,7 +82,9 @@ func _do_merge(a: Node, b: Node) -> void:
 		# супер-эффект: лопается, большой бонус, новый кубик не создаётся
 		var super_mult: float = float(GameConfig.cfg.merge.super_bonus_multiplier)
 		delta_score = int(GameConfig.tier_data(old_tier).score) * int(super_mult)
-		_spawn_floating_text(pos, "+%d SUPER!" % delta_score, Color.GOLD)
+		_spawn_floating_text(pos, "+%d SUPER!" % delta_score, Color(1.0, 0.85, 0.2))
+		if _fx != null and _fx.has_method("super_burst"):
+			_fx.super_burst(pos)
 	else:
 		# спавним новый кубик
 		var new_cube = _spawn_cube(new_tier, pos)
@@ -89,7 +93,10 @@ func _do_merge(a: Node, b: Node) -> void:
 		MergeBus.merge_completed.emit(new_cube, old_tier, new_tier, pos)
 		delta_score = int(GameConfig.tier_data(new_tier).score) * int(mult)
 		var txt: String = "+%d" % delta_score if mult <= 1.0 else "+%d x%.1f" % [delta_score, mult]
-		_spawn_floating_text(pos, txt, GameConfig.color_for_tier(new_tier) if mult <= 1.0 else Color.GOLD)
+		var fx_color: Color = GameConfig.color_for_tier(new_tier) if mult <= 1.0 else Color(1.0, 0.85, 0.2)
+		_spawn_floating_text(pos, txt, fx_color)
+		if _fx != null and _fx.has_method("burst"):
+			_fx.burst(pos, fx_color, 8 + mini(combo_count, 8))
 
 	score += delta_score
 	score_changed.emit(score, delta_score, true)

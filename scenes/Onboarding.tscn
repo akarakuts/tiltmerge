@@ -22,7 +22,7 @@ script = ExtResource("1_ob")
 [node name="Bg" type="ColorRect" parent="."]
 offset_right = 720.0
 offset_bottom = 1280.0
-color = Color(0.07, 0.08, 0.12, 1)
+color = Color(0.07, 0.11, 0.18, 1)
 mouse_filter = 2
 
 [node name="Camera2D" type="Camera2D" parent="."]
@@ -66,14 +66,14 @@ position = Vector2(560, 1160)
 
 [node name="GoalRing" type="Polygon2D" parent="Arena/Goal"]
 polygon = PackedVector2Array(-90, 0, -63.6, -63.6, 0, -90, 63.6, -63.6, 90, 0, 63.6, 63.6, 0, 90, -63.6, 63.6)
-color = Color(1, 0.84, 0, 0.4)
+color = Color(1, 0.84, 0.2, 0.55)
 
 [node name="Arrow" type="Sprite2D" parent="Arena"]
 position = Vector2(560, 1080)
 
 [node name="ArrowRect" type="Polygon2D" parent="Arena/Arrow"]
 polygon = PackedVector2Array(-20, 30, 20, 30, 20, 0, 40, 0, 0, -30, -40, 0, -20, 0)
-color = Color(1, 1, 1, 0.9)
+color = Color(0.35, 0.9, 0.8, 0.95)
 
 [node name="TiltController" type="Node" parent="."]
 script = ExtResource("2_tilt")

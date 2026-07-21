@@ -2,7 +2,7 @@ class_name Cube
 extends RigidBody2D
 ## Cube — физический кубик с tier.
 ## Сталкивается с другими Cube; при совпадении tier-ов они сливаются (через MergeLogic).
-## Фаза 5: добавлены squash-and-stretch при появлении и glow-shader на Visual.
+## Фаза 5: squash-and-stretch, glow, блик и номер tier.
 
 signal merged(self_node: Node)
 
@@ -10,9 +10,11 @@ signal merged(self_node: Node)
 
 var _radius: float = 28.0
 var _color: Color = Color.WHITE
-var _merge_pending: bool = false  # защита от двойного слияния
-var _lifetime: float = 0.0  # для приземления (защита от мгновенного слияния в воздухе)
+var _merge_pending: bool = false
+var _lifetime: float = 0.0
 var _visual: Polygon2D = null
+var _shine: Polygon2D = null
+var _tier_label: Label = null
 
 
 func setup(p_tier: int) -> void:
@@ -26,36 +28,71 @@ func setup(p_tier: int) -> void:
 func _refresh_visual() -> void:
 	$CollisionShape2D.shape.radius = _radius
 	_visual = $Visual
-	# рисуем скруглённый квадрат (многоугольник с округлёнными углами)
 	var s: float = _radius
 	_visual.polygon = _rounded_square_points(s, s * 0.28)
 	_visual.color = _color
-	# glow shader (если reduce_motion — пропускаем для производительности)
+
+	# Блик (веселее и «игрушечнее»)
+	if _shine == null:
+		_shine = Polygon2D.new()
+		_shine.name = "Shine"
+		_shine.z_index = 1
+		add_child(_shine)
+	var hs := s * 0.42
+	_shine.polygon = PackedVector2Array([
+		Vector2(-hs, -s * 0.55), Vector2(hs * 0.35, -s * 0.72),
+		Vector2(hs * 0.15, -s * 0.15), Vector2(-hs * 0.55, -s * 0.05)
+	])
+	_shine.color = Color(1, 1, 1, 0.38)
+
+	# Номер tier
+	if _tier_label == null:
+		_tier_label = Label.new()
+		_tier_label.name = "TierLabel"
+		_tier_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		_tier_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		_tier_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		_tier_label.z_index = 2
+		add_child(_tier_label)
+	_tier_label.text = str(tier)
+	var font_size := clampi(int(_radius * 0.9), 14, 36)
+	_tier_label.add_theme_font_size_override("font_size", font_size)
+	_tier_label.add_theme_color_override("font_color", Color(1, 1, 1, 0.92))
+	_tier_label.add_theme_color_override("font_outline_color", Color(0, 0, 0, 0.55))
+	_tier_label.add_theme_constant_override("outline_size", 4)
+	_tier_label.size = Vector2(_radius * 2.2, _radius * 2.2)
+	_tier_label.position = -_tier_label.size * 0.5
+
 	if not SaveSystem.data.settings.reduce_motion:
 		var glow := ShaderMaterial.new()
 		glow.shader = preload("res://shaders/Glow.gdshader")
-		glow.set_shader_parameter("glow_color", _color)
-		glow.set_shader_parameter("glow_intensity", 0.6)
+		glow.set_shader_parameter("glow_color", _color.lightened(0.25))
+		glow.set_shader_parameter("glow_intensity", 0.85)
 		_visual.material = glow
-	# pop-in анимация (squash-and-stretch)
+	else:
+		_visual.material = null
+
 	if not SaveSystem.data.settings.reduce_motion:
 		_visual.scale = Vector2(0.3, 0.3)
+		if _shine:
+			_shine.scale = Vector2(0.3, 0.3)
 		var tw := create_tween().set_parallel(true)
 		tw.tween_property(_visual, "scale", Vector2(1.15, 0.85), 0.08).set_trans(Tween.TRANS_SINE)
+		tw.tween_property(_shine, "scale", Vector2(1.15, 0.85), 0.08).set_trans(Tween.TRANS_SINE)
 		tw.chain().tween_property(_visual, "scale", Vector2(1.0, 1.0), 0.12).set_trans(Tween.TRANS_ELASTIC)
+		tw.parallel().tween_property(_shine, "scale", Vector2(1.0, 1.0), 0.12).set_trans(Tween.TRANS_ELASTIC)
 
 
-# Генерирует вершины скруглённого квадрата (для красивого вида кубика).
 func _rounded_square_points(half: float, radius: float) -> PackedVector2Array:
 	var pts := PackedVector2Array()
 	var steps_per_corner := 5
 	var corners := [
-		Vector2(half - radius, half - radius),   # нижний-правый
-		Vector2(-half + radius, half - radius),  # нижний-левый
-		Vector2(-half + radius, -half + radius), # верхний-левый
-		Vector2(half - radius, -half + radius),  # верхний-правый
+		Vector2(half - radius, half - radius),
+		Vector2(-half + radius, half - radius),
+		Vector2(-half + radius, -half + radius),
+		Vector2(half - radius, -half + radius),
 	]
-	var angles := [-PI / 2.0, PI, PI / 2.0, 0.0]  # стартовый угол для каждого угла
+	var angles := [-PI / 2.0, PI, PI / 2.0, 0.0]
 	for i in range(4):
 		var center: Vector2 = corners[i]
 		var start: float = angles[i]
@@ -66,17 +103,19 @@ func _rounded_square_points(half: float, radius: float) -> PackedVector2Array:
 
 
 func spawn_merge_burst() -> void:
-	# вспышка при появлении нового кубика (вызывается MergeLogic)
 	if SaveSystem.data.settings.reduce_motion or _visual == null:
 		return
 	var tw := create_tween().set_parallel(true)
-	tw.tween_property(_visual, "scale", Vector2(1.3, 1.3), 0.1).set_trans(Tween.TRANS_SINE)
+	tw.tween_property(_visual, "scale", Vector2(1.35, 1.35), 0.1).set_trans(Tween.TRANS_SINE)
+	if _shine:
+		tw.tween_property(_shine, "scale", Vector2(1.35, 1.35), 0.1).set_trans(Tween.TRANS_SINE)
 	tw.chain().tween_property(_visual, "scale", Vector2(1.0, 1.0), 0.18).set_trans(Tween.TRANS_ELASTIC)
+	if _shine:
+		tw.parallel().tween_property(_shine, "scale", Vector2(1.0, 1.0), 0.18).set_trans(Tween.TRANS_ELASTIC)
 
 
 func _refresh_physics() -> void:
 	var p: Dictionary = GameConfig.cfg.cube.physics
-	# PhysicsMaterial применяется к RigidBody2D напрямую (physics_material_override)
 	var mat := PhysicsMaterial.new()
 	mat.bounce = float(p.bounce)
 	mat.friction = float(p.friction)
@@ -100,15 +139,12 @@ func _on_body_entered(other: Node) -> void:
 		return
 	if other_cube._merge_pending:
 		return
-	# защита: не сливать в первые 0.05с жизни (избежать слияния при спавне)
 	if _lifetime < 0.05 or other_cube._lifetime < 0.05:
 		return
-	# сливаемся: один из двух берёт на себя роль «инициатора»
 	if is_instance_valid(other_cube) and get_instance_id() < other_cube.get_instance_id():
 		_merge_pending = true
 		other_cube._merge_pending = true
 		merged.emit(self)
-		# MergeLogic подписан на merge_requested через шину и выполнит работу
 		MergeBus.request_merge(self, other_cube)
 
 
