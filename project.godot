@@ -12,7 +12,10 @@ config/description="Быстрая головоломка: наклоняй те
 run/main_scene="res://scenes/Boot.tscn"
 config/features=PackedStringArray("4.3", "Forward Plus")
 config/icon="res://assets/graphics/icon.png"
-config/version="1.0.3"
+config/version="1.0.4"
+# Без этого Android Back / свайп-назад сразу закрывает приложение,
+# и наш BackHandler не успевает перевести на предыдущий экран.
+config/quit_on_go_back=false
 
 [autoload]
 
@@ -27,6 +30,7 @@ Achievements="*res://scripts/Achievements.gd"
 SkinsManager="*res://scripts/SkinsManager.gd"
 Analytics="*res://scripts/Analytics.gd"
 ABTest="*res://scripts/ABTest.gd"
+BackHandler="*res://scripts/BackHandler.gd"
 
 [display]
 

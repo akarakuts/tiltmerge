@@ -11,7 +11,7 @@ size = Vector2(40, 1300)
 size = Vector2(720, 40)
 
 [sub_resource type="CircleShape2D" id="GoalShape"]
-radius = 70.0
+radius = 90.0
 
 [sub_resource type="RectangleShape2D" id="ArrowShape"]
 size = Vector2(40, 60)
@@ -53,20 +53,23 @@ shape = SubResource("RectBottom")
 [node name="Cubes" type="Node2D" parent="Arena"]
 
 [node name="GoalArea" type="Area2D" parent="Arena"]
-position = Vector2(560, 1050)
+position = Vector2(560, 1160)
+collision_mask = 1
+monitoring = true
+monitorable = false
 
 [node name="Col" type="CollisionShape2D" parent="Arena/GoalArea"]
 shape = SubResource("GoalShape")
 
 [node name="Goal" type="Node2D" parent="Arena"]
-position = Vector2(560, 1050)
+position = Vector2(560, 1160)
 
 [node name="GoalRing" type="Polygon2D" parent="Arena/Goal"]
-polygon = PackedVector2Array(-70, 0, -49.5, -49.5, 0, -70, 49.5, -49.5, 70, 0, 49.5, 49.5, 0, 70, -49.5, 49.5)
+polygon = PackedVector2Array(-90, 0, -63.6, -63.6, 0, -90, 63.6, -63.6, 90, 0, 63.6, 63.6, 0, 90, -63.6, 63.6)
 color = Color(1, 0.84, 0, 0.4)
 
 [node name="Arrow" type="Sprite2D" parent="Arena"]
-position = Vector2(560, 980)
+position = Vector2(560, 1080)
 
 [node name="ArrowRect" type="Polygon2D" parent="Arena/Arrow"]
 polygon = PackedVector2Array(-20, 30, 20, 30, 20, 0, 40, 0, 0, -30, -40, 0, -20, 0)
@@ -88,21 +91,21 @@ mouse_filter = 2
 
 [node name="Title" type="Label" parent="UI"]
 offset_left = 20.0
-offset_top = 30.0
+offset_top = 28.0
 offset_right = 700.0
-offset_bottom = 90.0
+offset_bottom = 95.0
 mouse_filter = 2
-theme_override_font_sizes/font_size = 44
+theme_override_font_sizes/font_size = 48
 text = "How to play"
 horizontal_alignment = 1
 
 [node name="Hint" type="Label" parent="UI"]
-offset_left = 30.0
-offset_top = 95.0
-offset_right = 690.0
-offset_bottom = 180.0
+offset_left = 28.0
+offset_top = 100.0
+offset_right = 692.0
+offset_bottom = 210.0
 mouse_filter = 2
-theme_override_font_sizes/font_size = 26
+theme_override_font_sizes/font_size = 32
 text = ""
 horizontal_alignment = 1
 vertical_alignment = 0
@@ -110,11 +113,11 @@ autowrap_mode = 3
 
 [node name="Progress" type="Label" parent="UI"]
 offset_left = 20.0
-offset_top = 1180.0
+offset_top = 215.0
 offset_right = 700.0
-offset_bottom = 1240.0
+offset_bottom = 275.0
 mouse_filter = 2
-theme_override_font_sizes/font_size = 32
+theme_override_font_sizes/font_size = 36
 text = "● ○ ○"
 horizontal_alignment = 1
 
@@ -124,9 +127,9 @@ anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -150.0
-offset_top = -180.0
-offset_right = 150.0
-offset_bottom = -90.0
-theme_override_font_sizes/font_size = 34
+offset_left = -180.0
+offset_top = -330.0
+offset_right = 180.0
+offset_bottom = -210.0
+theme_override_font_sizes/font_size = 38
 text = "Next"

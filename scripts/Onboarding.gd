@@ -97,9 +97,12 @@ func _start_slide(idx: int) -> void:
 func _step_one_tilt() -> void:
 	_title.text = tr("onboarding.title")
 	_hint.text = tr("ob.hint1")  # "Наклони телефон / веди пальцем, чтобы катить кубик к мишени"
+	# Цель у пола: раньше была на y=1050, а кубики лежат ~1190 — до мишени было не достать.
+	var goal_pos := Vector2(560, 1160)
 	_goal.show()
-	_goal.position = Vector2(560, 1050)
-	_step_cube = _spawn_cube(1, Vector2(160, 600))
+	_goal.position = goal_pos
+	_goal_area.position = goal_pos
+	_step_cube = _spawn_cube(1, Vector2(160, 1100))
 	_show_arrow_hint()
 
 
@@ -138,6 +141,11 @@ func _physics_process(_delta: float) -> void:
 		return
 	match _step:
 		0:
+			# Запасной детект: body_entered иногда пропускает короткий контакт
+			# (сон RigidBody / overlap без сигнала).
+			if not _goal_reached and is_instance_valid(_step_cube) \
+					and _goal_area.overlaps_body(_step_cube):
+				_goal_reached = true
 			if _goal_reached:
 				_complete_step()
 		1:
@@ -174,6 +182,11 @@ func _finish_onboarding() -> void:
 	get_tree().change_scene_to_file("res://scenes/MainMenu.tscn")
 
 
+func handle_android_back() -> void:
+	# Во время обучения Back не закрывает приложение.
+	pass
+
+
 # --- События арены -----------------------------------------------------------
 
 func _on_goal_body_entered(body: Node) -> void:
@@ -181,9 +194,9 @@ func _on_goal_body_entered(body: Node) -> void:
 		_goal_reached = true
 
 
-func _on_goal_body_exited(body: Node) -> void:
-	if body is Cube:
-		_goal_reached = false
+func _on_goal_body_exited(_body: Node) -> void:
+	# Не сбрасываем: краткий контакт тоже засчитывает шаг.
+	pass
 
 
 func _on_merge_completed(_new_cube: Node, _old_tier: int, _new_tier: int, _pos: Vector2) -> void:
@@ -202,7 +215,7 @@ func _update_progress() -> void:
 func _show_arrow_hint() -> void:
 	# стрелка-указатель к цели (пульсирующая)
 	_arrow.show()
-	_arrow.position = Vector2(560, 980)
+	_arrow.position = Vector2(560, 1080)
 	var tw := create_tween().set_loops()
-	tw.tween_property(_arrow, "position:y", 1000.0, 0.5).set_trans(Tween.TRANS_SINE)
-	tw.tween_property(_arrow, "position:y", 980.0, 0.5).set_trans(Tween.TRANS_SINE)
+	tw.tween_property(_arrow, "position:y", 1100.0, 0.5).set_trans(Tween.TRANS_SINE)
+	tw.tween_property(_arrow, "position:y", 1080.0, 0.5).set_trans(Tween.TRANS_SINE)

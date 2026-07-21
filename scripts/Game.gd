@@ -285,3 +285,14 @@ func _unhandled_input(event: InputEvent) -> void:
 		elif GameManager.state == GameManager.State.PAUSED:
 			_on_resume()
 		get_viewport().set_input_as_handled()
+
+
+func handle_android_back() -> void:
+	if _game_over_panel.visible:
+		_on_to_menu()
+		return
+	if GameManager.state == GameManager.State.PAUSED or _pause_panel.visible:
+		_on_resume()
+		return
+	if GameManager.state == GameManager.State.PLAYING:
+		_on_pause()

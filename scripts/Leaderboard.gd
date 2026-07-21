@@ -21,32 +21,40 @@ func _build() -> void:
 		child.queue_free()
 	var title := Label.new()
 	title.text = tr("menu.leaderboard")
-	title.add_theme_font_size_override("font_size", 48)
+	title.add_theme_font_size_override("font_size", 52)
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_vbox.add_child(title)
 	for m in MODES:
 		var row := HBoxContainer.new()
+		row.custom_minimum_size = Vector2(0, 80)
 		var name := Label.new()
 		name.text = tr("menu." + m)
-		name.add_theme_font_size_override("font_size", 30)
-		name.custom_minimum_size = Vector2(300, 60)
+		name.add_theme_font_size_override("font_size", 36)
+		name.custom_minimum_size = Vector2(300, 80)
+		name.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 		name.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		var val := Label.new()
 		val.text = str(SaveSystem.best_score(m))
-		val.add_theme_font_size_override("font_size", 30)
+		val.add_theme_font_size_override("font_size", 36)
 		val.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-		val.custom_minimum_size = Vector2(200, 60)
+		val.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		val.custom_minimum_size = Vector2(200, 80)
 		row.add_child(name)
 		row.add_child(val)
 		_vbox.add_child(row)
 	# Явно обозначаем локальный источник данных, пока онлайн-сервис не подключён.
 	var note := Label.new()
 	note.text = tr("leaderboard.local_note")
-	note.add_theme_font_size_override("font_size", 20)
+	note.add_theme_font_size_override("font_size", 26)
 	note.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_vbox.add_child(note)
 
 
 func _on_back() -> void:
 	AudioManager.play_sfx("button")
 	get_tree().change_scene_to_file("res://scenes/MainMenu.tscn")
+
+
+func handle_android_back() -> void:
+	_on_back()

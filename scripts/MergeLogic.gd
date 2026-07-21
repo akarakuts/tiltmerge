@@ -108,10 +108,10 @@ func _spawn_floating_text(pos: Vector2, text: String, color: Color) -> void:
 		return
 	var lbl := Label.new()
 	lbl.text = text
-	lbl.add_theme_font_size_override("font_size", 28 + min(20, text.length()))
+	lbl.add_theme_font_size_override("font_size", 36 + mini(16, text.length()))
 	lbl.add_theme_color_override("font_color", color)
 	lbl.add_theme_color_override("font_outline_color", Color.BLACK)
-	lbl.add_theme_constant_override("outline_size", 6)
+	lbl.add_theme_constant_override("outline_size", 8)
 	lbl.position = pos
 	lbl.z_index = 50
 	_scene_root.add_child(lbl)

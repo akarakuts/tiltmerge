@@ -81,3 +81,12 @@ func _on_skins() -> void:
 func _on_leaderboard() -> void:
 	AudioManager.play_sfx("button")
 	get_tree().change_scene_to_file("res://scenes/Leaderboard.tscn")
+
+
+func handle_android_back() -> void:
+	# Сначала свернуть выбор режима, иначе выход из приложения.
+	if _modes.visible:
+		_modes.hide()
+		_play.show()
+		return
+	get_tree().quit()

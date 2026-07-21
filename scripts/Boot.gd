@@ -8,3 +8,7 @@ func _ready() -> void:
 		get_tree().change_scene_to_file("res://scenes/Onboarding.tscn")
 	else:
 		get_tree().change_scene_to_file("res://scenes/MainMenu.tscn")
+
+
+func handle_android_back() -> void:
+	get_tree().quit()

@@ -43,6 +43,7 @@ func _ready() -> void:
 
 
 func _apply_language() -> void:
+	$Title.text = tr("settings.title")
 	$Scroll/VBox/ControlLbl.text = tr("settings.control")
 	$Scroll/VBox/Haptics.text = tr("settings.haptics")
 	$Scroll/VBox/ReduceMotion.text = tr("settings.reduce_motion")
@@ -50,6 +51,14 @@ func _apply_language() -> void:
 	$Scroll/VBox/MusicLbl.text = tr("settings.music")
 	$Scroll/VBox/LangLbl.text = tr("settings.language")
 	_back.text = tr("settings.back")
+	# Подписи режимов управления тоже локализуем.
+	var sel := _control.selected
+	_control.clear()
+	_control.add_item(tr("settings.control.tilt"))
+	_control.add_item(tr("settings.control.swipe"))
+	_control.selected = clampi(sel, 0, 1)
+	if _lang.item_count > 0:
+		_lang.set_item_text(0, tr("settings.language_auto"))
 
 
 func _on_control(idx: int) -> void:
@@ -135,3 +144,7 @@ func _on_back() -> void:
 	_flush_pending_settings()
 	AudioManager.play_sfx("button")
 	get_tree().change_scene_to_file("res://scenes/MainMenu.tscn")
+
+
+func handle_android_back() -> void:
+	_on_back()
