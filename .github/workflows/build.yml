@@ -134,23 +134,31 @@ jobs:
             echo "4.7.1.stable" > android/.build_version
             # Gradle mergeResources rejects Godot .import sidecars under res/
             if [[ -f android/build/build.gradle ]]; then
-              cat >> android/build/build.gradle <<'GRADLE'
-
-tasks.configureEach { task ->
-    if (task.name.toLowerCase().contains("mergeresources")) {
-        task.doFirst {
-            def resDir = file("res")
-            if (resDir.exists()) {
-                resDir.eachFileRecurse { f ->
-                    if (f.name.endsWith(".import")) {
-                        f.delete()
-                    }
-                }
-            }
-        }
-    }
-}
-GRADLE
+              python3 - <<'PY'
+          from pathlib import Path
+          path = Path("android/build/build.gradle")
+          snippet = "\n".join([
+              "",
+              "tasks.configureEach { task ->",
+              "    if (task.name.toLowerCase().contains(\"mergeresources\")) {",
+              "        task.doFirst {",
+              "            def resDir = file(\"res\")",
+              "            if (resDir.exists()) {",
+              "                resDir.eachFileRecurse { f ->",
+              "                    if (f.name.endsWith(\".import\")) {",
+              "                        f.delete()",
+              "                    }",
+              "                }",
+              "            }",
+              "        }",
+              "    }",
+              "}",
+              "",
+          ])
+          text = path.read_text()
+          if "endsWith(\".import\")" not in text:
+              path.write_text(text + snippet)
+          PY
             fi
           }
 
