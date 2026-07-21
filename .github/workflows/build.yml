@@ -114,23 +114,47 @@ jobs:
           PY
           export KEYSTORE_PATH="$RUNNER_TEMP/tiltmerge.keystore"
 
-          # Android custom build template (required for AAB / gradle)
           TEMPLATE_DIR="${HOME}/.local/share/godot/export_templates/4.7.1.stable"
           SOURCE_ZIP="${TEMPLATE_DIR}/android_source.zip"
           test -f "$SOURCE_ZIP"
-          rm -rf android/build
-          mkdir -p android/build
-          unzip -q -o "$SOURCE_ZIP" -d android/build
-          if [[ ! -f android/build/build.gradle && ! -f android/build/build.gradle.kts ]]; then
-            nested="$(find android/build -maxdepth 2 -name 'build.gradle*' | head -1 || true)"
-            if [[ -n "$nested" ]]; then
-              nested_dir="$(dirname "$nested")"
-              shopt -s dotglob
-              mv "$nested_dir"/* android/build/ 2>/dev/null || true
-              shopt -u dotglob
+
+          install_android_template() {
+            rm -rf android/build
+            mkdir -p android/build
+            unzip -q -o "$SOURCE_ZIP" -d android/build
+            if [[ ! -f android/build/build.gradle && ! -f android/build/build.gradle.kts ]]; then
+              nested="$(find android/build -maxdepth 2 -name 'build.gradle*' | head -1 || true)"
+              if [[ -n "$nested" ]]; then
+                nested_dir="$(dirname "$nested")"
+                shopt -s dotglob
+                mv "$nested_dir"/* android/build/ 2>/dev/null || true
+                shopt -u dotglob
+              fi
             fi
-          fi
-          echo "4.7.1.stable" > android/.build_version
+            echo "4.7.1.stable" > android/.build_version
+            # Gradle mergeResources rejects Godot .import sidecars under res/
+            if [[ -f android/build/build.gradle ]]; then
+              cat >> android/build/build.gradle <<'GRADLE'
+
+tasks.configureEach { task ->
+    if (task.name.toLowerCase().contains("mergeresources")) {
+        task.doFirst {
+            def resDir = file("res")
+            if (resDir.exists()) {
+                resDir.eachFileRecurse { f ->
+                    if (f.name.endsWith(".import")) {
+                        f.delete()
+                    }
+                }
+            }
+        }
+    }
+}
+GRADLE
+            fi
+          }
+
+          install_android_template
 
           patch_export_format() {
             local format="$1"
@@ -180,8 +204,8 @@ jobs:
           test -f build/tiltmerge-release.aab
 
           echo "==> Export APK"
-          # Godot leaves .import sidecars in android/build/res; Gradle rejects them on the next export.
-          find android/build -name '*.import' -delete
+          # Fresh template avoids leftover Godot sidecars from the AAB pass.
+          install_android_template
           patch_export_format 0
           godot --headless --export-release "Android Release" build/tiltmerge-release.apk
           test -f build/tiltmerge-release.apk
