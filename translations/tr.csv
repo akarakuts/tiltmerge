@@ -4,6 +4,7 @@ menu.play,OYNA
 menu.settings,Ayarlar
 menu.skins,Skins
 menu.leaderboard,Lider Tablosu
+menu.rules,Kurallar
 menu.daily,Günlük meydan okuma
 menu.classic,Klasik
 menu.blitz,Blitz
@@ -38,6 +39,7 @@ game.resume_hint,Devam etmek için dokun
 game.game_over,OYUN BİTTİ
 game.restart,Yeniden başlat
 game.menu,Ana menü
+game.resume,Devam
 game.next,İleri
 game.reroll,Yeniden at
 game.daily_goal,Görev: seviye %d küpünü birleştir
@@ -49,3 +51,14 @@ skins.choose,Seçmek için dokun
 skins.locked,Kilitli
 skins.select,Seç
 leaderboard.local_note,Yerel en iyi skorlar
+rules.title,Nasıl oynanır
+rules.s1_title,Tilt or swipe
+rules.s1_body,Tilt your phone or drag your finger to roll cubes left and right.
+rules.s2_title,Merge equals
+rules.s2_body,"When two cubes of the same tier collide, they merge into one bigger cube and you score points."
+rules.s3_title,Watch the red line
+rules.s3_body,"If cubes stay above the danger line too long, the game ends. Keep merging to free space."
+rules.s4_title,Game modes
+rules.s4_body,Classic — endless. Blitz — race the clock. Zen — no game over. Daily — a unique challenge each day.
+rules.s5_title,Tips
+rules.s5_body,Build combos for bonus points. Use reroll when available. Unlock skins as you progress.

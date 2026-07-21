@@ -4,6 +4,7 @@ menu.play,CHƠI
 menu.settings,Cài đặt
 menu.skins,Skins
 menu.leaderboard,Bảng xếp hạng
+menu.rules,Luật chơi
 menu.daily,Thử thách hàng ngày
 menu.classic,Cổ điển
 menu.blitz,Chớp
@@ -38,6 +39,7 @@ game.resume_hint,Chạm để tiếp tục
 game.game_over,HẾT GAME
 game.restart,Chơi lại
 game.menu,Menu chính
+game.resume,Tiếp tục
 game.next,Tiếp
 game.reroll,Quay lại
 game.daily_goal,Thử thách: ghép cấp %d
@@ -49,3 +51,14 @@ skins.choose,Chạm để chọn
 skins.locked,Khóa
 skins.select,Chọn
 leaderboard.local_note,Điểm cao nhất cục bộ
+rules.title,Cách chơi
+rules.s1_title,Tilt or swipe
+rules.s1_body,Tilt your phone or drag your finger to roll cubes left and right.
+rules.s2_title,Merge equals
+rules.s2_body,"When two cubes of the same tier collide, they merge into one bigger cube and you score points."
+rules.s3_title,Watch the red line
+rules.s3_body,"If cubes stay above the danger line too long, the game ends. Keep merging to free space."
+rules.s4_title,Game modes
+rules.s4_body,Classic — endless. Blitz — race the clock. Zen — no game over. Daily — a unique challenge each day.
+rules.s5_title,Tips
+rules.s5_body,Build combos for bonus points. Use reroll when available. Unlock skins as you progress.

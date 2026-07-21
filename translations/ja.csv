@@ -4,6 +4,7 @@ menu.play,プレイ
 menu.settings,設定
 menu.skins,スキン
 menu.leaderboard,ランキング
+menu.rules,ルール
 menu.daily,デイリーチャレンジ
 menu.classic,クラシック
 menu.blitz,ブリッツ
@@ -38,6 +39,7 @@ game.resume_hint,タップで再開
 game.game_over,ゲームオーバー
 game.restart,やり直す
 game.menu,メインメニュー
+game.resume,再開
 game.next,次へ
 game.reroll,リロール
 game.daily_goal,デイリー: レベル%dを合体
@@ -49,3 +51,14 @@ skins.choose,タップして選択
 skins.locked,ロック
 skins.select,選択
 leaderboard.local_note,ローカルベストスコア
+rules.title,遊び方
+rules.s1_title,Tilt or swipe
+rules.s1_body,Tilt your phone or drag your finger to roll cubes left and right.
+rules.s2_title,Merge equals
+rules.s2_body,"When two cubes of the same tier collide, they merge into one bigger cube and you score points."
+rules.s3_title,Watch the red line
+rules.s3_body,"If cubes stay above the danger line too long, the game ends. Keep merging to free space."
+rules.s4_title,Game modes
+rules.s4_body,Classic — endless. Blitz — race the clock. Zen — no game over. Daily — a unique challenge each day.
+rules.s5_title,Tips
+rules.s5_body,Build combos for bonus points. Use reroll when available. Unlock skins as you progress.

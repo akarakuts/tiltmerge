@@ -11,22 +11,23 @@ extends Node2D
 
 @onready var _hud: CanvasLayer = $HUD
 
-@onready var _score_label: Label = $HUD/ScoreLabel
-@onready var _combo_label: Label = $HUD/ComboLabel
-@onready var _next_label: Label = $HUD/NextLabel
-@onready var _reroll_btn: Button = $HUD/RerollButton
-@onready var _objective_label: Label = $HUD/ObjectiveLabel
-@onready var _timer_label: Label = $HUD/TimerLabel
-@onready var _pause_btn: Button = $HUD/PauseButton
+@onready var _score_label: Label = $HUD/TopBar/TopVBox/Row1/ScoreLabel
+@onready var _combo_label: Label = $HUD/TopBar/TopVBox/ComboLabel
+@onready var _next_label: Label = $HUD/TopBar/TopVBox/Row2/NextLabel
+@onready var _reroll_btn: Button = $HUD/TopBar/TopVBox/Row2/RerollButton
+@onready var _objective_label: Label = $HUD/TopBar/TopVBox/ObjectiveLabel
+@onready var _timer_label: Label = $HUD/TopBar/TopVBox/Row1/TimerLabel
+@onready var _pause_btn: Button = $HUD/TopBar/TopVBox/Row1/PauseButton
 @onready var _game_over_panel: Control = $HUD/GameOverPanel
-@onready var _go_score: Label = $HUD/GameOverPanel/VBox/GoScore
-@onready var _go_best: Label = $HUD/GameOverPanel/VBox/GoBest
-@onready var _restart_btn: Button = $HUD/GameOverPanel/VBox/RestartButton
-@onready var _menu_btn: Button = $HUD/GameOverPanel/VBox/MenuButton
+@onready var _go_score: Label = $HUD/GameOverPanel/Card/VBox/GoScore
+@onready var _go_best: Label = $HUD/GameOverPanel/Card/VBox/GoBest
+@onready var _restart_btn: Button = $HUD/GameOverPanel/Card/VBox/RestartButton
+@onready var _menu_btn: Button = $HUD/GameOverPanel/Card/VBox/MenuButton
 @onready var _pause_panel: Control = $HUD/PausePanel
-@onready var _paused_label: Label = $HUD/PausePanel/PausedLabel
-@onready var _resume_hint: Label = $HUD/PausePanel/ResumeHint
-@onready var _go_title: Label = $HUD/GameOverPanel/VBox/Title
+@onready var _paused_label: Label = $HUD/PausePanel/Card/VBox/PausedLabel
+@onready var _resume_hint: Label = $HUD/PausePanel/Card/VBox/ResumeHint
+@onready var _resume_btn: Button = $HUD/PausePanel/Card/VBox/ResumeButton
+@onready var _go_title: Label = $HUD/GameOverPanel/Card/VBox/Title
 
 var _game_over_line_y: float = 80.0
 var _game_over_grace: float = 1.5
@@ -83,10 +84,14 @@ func _ready() -> void:
 	_pause_btn.pressed.connect(_on_pause)
 	_restart_btn.pressed.connect(_on_restart)
 	_menu_btn.pressed.connect(_on_to_menu)
+	_resume_btn.pressed.connect(_on_resume)
 	_game_over_panel.visible = false
 	_pause_panel.visible = false
 	# HUD must keep receiving touch and mouse events while the game tree is paused.
 	_hud.process_mode = Node.PROCESS_MODE_ALWAYS
+	UiTheme.apply($HUD/TopBar)
+	UiTheme.apply($HUD/PausePanel/Card)
+	UiTheme.apply($HUD/GameOverPanel/Card)
 	_apply_localized_text()
 	_setup_tactics()
 	_reroll_btn.pressed.connect(_on_reroll_pressed)
@@ -271,11 +276,21 @@ func _apply_localized_text() -> void:
 	_combo_label.text = "%s: x1.0" % tr("game.combo")
 	_paused_label.text = tr("game.paused")
 	_resume_hint.text = tr("game.resume_hint")
+	_resume_btn.text = tr("game.resume")
 	_go_title.text = tr("game.game_over")
 	_go_score.text = "%s: 0" % tr("game.score")
 	_go_best.text = "%s: 0" % tr("game.best")
 	_restart_btn.text = tr("game.restart")
 	_menu_btn.text = tr("game.menu")
+	_go_title.add_theme_color_override("font_color", UiTheme.COL_DANGER)
+	_go_best.add_theme_color_override("font_color", UiTheme.COL_ACCENT)
+	_combo_label.add_theme_color_override("font_color", UiTheme.COL_MUTED)
+	var danger := get_node_or_null("DangerLine") as Line2D
+	if danger:
+		danger.clear_points()
+		danger.add_point(Vector2(40, _game_over_line_y))
+		danger.add_point(Vector2(680, _game_over_line_y))
+		danger.default_color = Color(UiTheme.COL_DANGER.r, UiTheme.COL_DANGER.g, UiTheme.COL_DANGER.b, 0.55)
 
 
 func _unhandled_input(event: InputEvent) -> void:

@@ -38,6 +38,17 @@ const STEP_COUNT := 3
 func _ready() -> void:
 	if not GameConfig.is_ready:
 		await GameConfig.config_loaded
+	UiTheme.apply($UI/NextButton)
+	_next_btn.theme_type_variation = &"PrimaryButton"
+	$UI/Title.add_theme_color_override("font_color", UiTheme.COL_TEXT)
+	$UI/Hint.add_theme_color_override("font_color", UiTheme.COL_MUTED)
+	$UI/Progress.add_theme_color_override("font_color", UiTheme.COL_ACCENT)
+	var shade := get_node_or_null("UI/TopShade") as ColorRect
+	if shade:
+		shade.color = Color(UiTheme.COL_BG.r, UiTheme.COL_BG.g, UiTheme.COL_BG.b, 0.88)
+	var bg := get_node_or_null("Bg") as ColorRect
+	if bg:
+		bg.color = UiTheme.COL_BG
 	_tilt.setup(_cubes)
 	# Онбординг: tilt + свайп одновременно — иначе на части устройств «мертвый» ввод
 	_tilt.set_control_mode("tilt")

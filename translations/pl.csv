@@ -4,6 +4,7 @@ menu.play,GRAJ
 menu.settings,Ustawienia
 menu.skins,Skiny
 menu.leaderboard,Ranking
+menu.rules,Zasady
 menu.daily,Codzienne wyzwanie
 menu.classic,Klasyczny
 menu.blitz,Blitz
@@ -38,6 +39,7 @@ game.resume_hint,"Stuknij, aby wznowić"
 game.game_over,KONIEC GRY
 game.restart,Od nowa
 game.menu,Menu główne
+game.resume,Wznów
 game.next,Następny
 game.reroll,Przerzuć
 game.daily_goal,Wyzwanie: połącz poziom %d
@@ -49,3 +51,14 @@ skins.choose,"Stuknij, aby wybrać"
 skins.locked,Zablokowany
 skins.select,Wybierz
 leaderboard.local_note,Lokalne najlepsze wyniki
+rules.title,Jak grać
+rules.s1_title,Tilt or swipe
+rules.s1_body,Tilt your phone or drag your finger to roll cubes left and right.
+rules.s2_title,Merge equals
+rules.s2_body,"When two cubes of the same tier collide, they merge into one bigger cube and you score points."
+rules.s3_title,Watch the red line
+rules.s3_body,"If cubes stay above the danger line too long, the game ends. Keep merging to free space."
+rules.s4_title,Game modes
+rules.s4_body,Classic — endless. Blitz — race the clock. Zen — no game over. Daily — a unique challenge each day.
+rules.s5_title,Tips
+rules.s5_body,Build combos for bonus points. Use reroll when available. Unlock skins as you progress.

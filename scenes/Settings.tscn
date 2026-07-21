@@ -1,6 +1,9 @@
-[gd_scene load_steps=2 format=3 uid="uid://set01tiltmerge"]
+[gd_scene load_steps=3 format=3 uid="uid://set01tiltmerge"]
 
 [ext_resource type="Script" path="res://scripts/Settings.gd" id="1_set"]
+
+[sub_resource type="ButtonGroup" id="ControlGroup"]
+resource_local_to_scene = true
 
 [node name="Settings" type="Control"]
 anchors_preset = 15
@@ -9,108 +12,104 @@ anchor_bottom = 1.0
 mouse_filter = 0
 script = ExtResource("1_set")
 
-[node name="Bg" type="ColorRect" parent="."]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-mouse_filter = 2
-color = Color(0.07, 0.08, 0.12, 1)
-
 [node name="Title" type="Label" parent="."]
 anchors_preset = 10
 anchor_right = 1.0
 offset_left = 32.0
-offset_top = 36.0
+offset_top = 40.0
 offset_right = -32.0
-offset_bottom = 110.0
+offset_bottom = 120.0
 theme_override_font_sizes/font_size = 52
 text = "Settings"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Scroll" type="ScrollContainer" parent="."]
+[node name="Body" type="VBoxContainer" parent="."]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 28.0
-offset_top = 120.0
-offset_right = -28.0
+offset_left = 36.0
+offset_top = 140.0
+offset_right = -36.0
 offset_bottom = -180.0
-horizontal_scroll_mode = 0
-
-[node name="VBox" type="VBoxContainer" parent="Scroll"]
-custom_minimum_size = Vector2(640, 0)
-size_flags_horizontal = 3
 theme_override_constants/separation = 22
 
-[node name="ControlLbl" type="Label" parent="Scroll/VBox"]
-theme_override_colors/font_color = Color(0.75, 0.8, 0.9, 1)
+[node name="ControlLbl" type="Label" parent="Body"]
 theme_override_font_sizes/font_size = 28
 text = "Control"
 
-[node name="ControlMode" type="OptionButton" parent="Scroll/VBox"]
-custom_minimum_size = Vector2(0, 96)
-theme_override_font_sizes/font_size = 34
-item_count = 2
-popup/item_0/text = "Tilt"
-popup/item_1/text = "Swipe"
+[node name="ControlRow" type="HBoxContainer" parent="Body"]
+custom_minimum_size = Vector2(0, 108)
+theme_override_constants/separation = 16
 
-[node name="Haptics" type="CheckButton" parent="Scroll/VBox"]
-custom_minimum_size = Vector2(0, 96)
+[node name="TiltBtn" type="Button" parent="Body/ControlRow"]
+custom_minimum_size = Vector2(0, 108)
+size_flags_horizontal = 3
+toggle_mode = true
+button_pressed = true
+button_group = SubResource("ControlGroup")
+theme_type_variation = &"PrimaryButton"
+theme_override_font_sizes/font_size = 34
+text = "Tilt"
+
+[node name="SwipeBtn" type="Button" parent="Body/ControlRow"]
+custom_minimum_size = Vector2(0, 108)
+size_flags_horizontal = 3
+toggle_mode = true
+button_group = SubResource("ControlGroup")
+theme_type_variation = &"GhostButton"
+theme_override_font_sizes/font_size = 34
+text = "Swipe"
+
+[node name="Haptics" type="CheckButton" parent="Body"]
+custom_minimum_size = Vector2(0, 100)
 theme_override_font_sizes/font_size = 34
 text = "Haptics"
 
-[node name="ReduceMotion" type="CheckButton" parent="Scroll/VBox"]
-custom_minimum_size = Vector2(0, 96)
+[node name="ReduceMotion" type="CheckButton" parent="Body"]
+custom_minimum_size = Vector2(0, 100)
 theme_override_font_sizes/font_size = 34
 text = "Reduce Motion"
 
-[node name="SoundSpacer" type="Control" parent="Scroll/VBox"]
-custom_minimum_size = Vector2(0, 12)
+[node name="SoundHeader" type="HBoxContainer" parent="Body"]
+custom_minimum_size = Vector2(0, 40)
 
-[node name="SoundLbl" type="Label" parent="Scroll/VBox"]
-theme_override_colors/font_color = Color(0.75, 0.8, 0.9, 1)
+[node name="SoundLbl" type="Label" parent="Body/SoundHeader"]
+size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 28
 text = "Sound"
 
-[node name="Sound" type="HSlider" parent="Scroll/VBox"]
-custom_minimum_size = Vector2(0, 72)
+[node name="SoundValue" type="Label" parent="Body/SoundHeader"]
+theme_override_font_sizes/font_size = 28
+text = "100%"
+horizontal_alignment = 2
+
+[node name="Sound" type="HSlider" parent="Body"]
+custom_minimum_size = Vector2(0, 80)
 size_flags_horizontal = 3
 max_value = 1.0
 step = 0.05
 value = 1.0
 
-[node name="MusicLbl" type="Label" parent="Scroll/VBox"]
-theme_override_colors/font_color = Color(0.75, 0.8, 0.9, 1)
+[node name="MusicHeader" type="HBoxContainer" parent="Body"]
+custom_minimum_size = Vector2(0, 40)
+
+[node name="MusicLbl" type="Label" parent="Body/MusicHeader"]
+size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 28
 text = "Music"
 
-[node name="Music" type="HSlider" parent="Scroll/VBox"]
-custom_minimum_size = Vector2(0, 72)
+[node name="MusicValue" type="Label" parent="Body/MusicHeader"]
+theme_override_font_sizes/font_size = 28
+text = "70%"
+horizontal_alignment = 2
+
+[node name="Music" type="HSlider" parent="Body"]
+custom_minimum_size = Vector2(0, 80)
 size_flags_horizontal = 3
 max_value = 1.0
 step = 0.05
 value = 0.7
-
-[node name="LangSpacer" type="Control" parent="Scroll/VBox"]
-custom_minimum_size = Vector2(0, 12)
-
-[node name="LangLbl" type="Label" parent="Scroll/VBox"]
-theme_override_colors/font_color = Color(0.75, 0.8, 0.9, 1)
-theme_override_font_sizes/font_size = 28
-text = "Language"
-
-[node name="Language" type="OptionButton" parent="Scroll/VBox"]
-custom_minimum_size = Vector2(0, 96)
-theme_override_font_sizes/font_size = 32
-fit_to_longest_item = false
-item_count = 3
-popup/item_0/text = "Auto"
-popup/item_1/text = "English"
-popup/item_2/text = "Русский"
-
-[node name="BottomPad" type="Control" parent="Scroll/VBox"]
-custom_minimum_size = Vector2(0, 24)
 
 [node name="Back" type="Button" parent="."]
 anchors_preset = 7
@@ -122,7 +121,5 @@ offset_left = -200.0
 offset_top = -160.0
 offset_right = 200.0
 offset_bottom = -48.0
-grow_horizontal = 2
-grow_vertical = 0
 theme_override_font_sizes/font_size = 36
 text = "Back"

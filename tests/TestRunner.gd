@@ -76,7 +76,7 @@ func _run_smoke_tests() -> void:
 	var scene_paths := [
 		"res://scenes/Boot.tscn", "res://scenes/MainMenu.tscn", "res://scenes/Onboarding.tscn",
 		"res://scenes/Settings.tscn", "res://scenes/Leaderboard.tscn",
-		"res://scenes/Skins.tscn",
+		"res://scenes/Skins.tscn", "res://scenes/Rules.tscn",
 		"res://scenes/Cube.tscn", "res://scenes/Game.tscn"
 	]
 	for scene_path in scene_paths:

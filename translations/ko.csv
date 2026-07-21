@@ -4,6 +4,7 @@ menu.play,플레이
 menu.settings,설정
 menu.skins,스킨
 menu.leaderboard,리더보드
+menu.rules,규칙
 menu.daily,일일 도전
 menu.classic,클래식
 menu.blitz,블리츠
@@ -38,6 +39,7 @@ game.resume_hint,탭하여 계속
 game.game_over,게임 오버
 game.restart,다시 시작
 game.menu,메인 메뉴
+game.resume,계속
 game.next,다음
 game.reroll,다시 굴리기
 game.daily_goal,도전: 레벨 %d 합치기
@@ -49,3 +51,14 @@ skins.choose,탭하여 선택
 skins.locked,잠김
 skins.select,선택
 leaderboard.local_note,로컬 최고 기록
+rules.title,게임 방법
+rules.s1_title,Tilt or swipe
+rules.s1_body,Tilt your phone or drag your finger to roll cubes left and right.
+rules.s2_title,Merge equals
+rules.s2_body,"When two cubes of the same tier collide, they merge into one bigger cube and you score points."
+rules.s3_title,Watch the red line
+rules.s3_body,"If cubes stay above the danger line too long, the game ends. Keep merging to free space."
+rules.s4_title,Game modes
+rules.s4_body,Classic — endless. Blitz — race the clock. Zen — no game over. Daily — a unique challenge each day.
+rules.s5_title,Tips
+rules.s5_body,Build combos for bonus points. Use reroll when available. Unlock skins as you progress.

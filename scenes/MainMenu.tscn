@@ -9,42 +9,41 @@ anchor_bottom = 1.0
 mouse_filter = 0
 script = ExtResource("1_menu")
 
-[node name="Bg" type="ColorRect" parent="."]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-mouse_filter = 2
-color = Color(0.07, 0.08, 0.12, 1)
-
 [node name="VBox" type="VBoxContainer" parent="."]
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -280.0
-offset_top = -560.0
-offset_right = 280.0
-offset_bottom = 560.0
-theme_override_constants/separation = 18
+offset_left = -300.0
+offset_top = -580.0
+offset_right = 300.0
+offset_bottom = 580.0
+theme_override_constants/separation = 16
 
 [node name="Title" type="Label" parent="VBox"]
-theme_override_font_sizes/font_size = 72
+theme_override_font_sizes/font_size = 76
 text = "TiltMerge"
 horizontal_alignment = 1
 
+[node name="AccentLine" type="ColorRect" parent="VBox"]
+custom_minimum_size = Vector2(160, 4)
+size_flags_horizontal = 4
+color = Color(0.35, 0.86, 0.76, 1)
+
 [node name="BestLabel" type="Label" parent="VBox"]
-theme_override_font_sizes/font_size = 30
+theme_override_font_sizes/font_size = 28
 text = "Best: 0"
 horizontal_alignment = 1
 
 [node name="Play" type="Button" parent="VBox"]
-custom_minimum_size = Vector2(0, 110)
-theme_override_font_sizes/font_size = 44
+custom_minimum_size = Vector2(0, 118)
+theme_type_variation = &"PrimaryButton"
+theme_override_font_sizes/font_size = 46
 text = "PLAY"
 
 [node name="Modes" type="VBoxContainer" parent="VBox"]
-theme_override_constants/separation = 14
+theme_override_constants/separation = 12
 
 [node name="Classic" type="Button" parent="VBox/Modes"]
 custom_minimum_size = Vector2(0, 92)
@@ -66,17 +65,38 @@ custom_minimum_size = Vector2(0, 92)
 theme_override_font_sizes/font_size = 34
 text = "Daily Challenge"
 
-[node name="Settings" type="Button" parent="VBox"]
-custom_minimum_size = Vector2(0, 88)
-theme_override_font_sizes/font_size = 32
-text = "Settings"
+[node name="NavSpacer" type="Control" parent="VBox"]
+custom_minimum_size = Vector2(0, 8)
 
-[node name="Skins" type="Button" parent="VBox"]
+[node name="NavGrid" type="GridContainer" parent="VBox"]
+columns = 2
+theme_override_constants/h_separation = 14
+theme_override_constants/v_separation = 14
+
+[node name="Rules" type="Button" parent="VBox/NavGrid"]
 custom_minimum_size = Vector2(0, 88)
-theme_override_font_sizes/font_size = 32
+size_flags_horizontal = 3
+theme_type_variation = &"GhostButton"
+theme_override_font_sizes/font_size = 30
+text = "Rules"
+
+[node name="Skins" type="Button" parent="VBox/NavGrid"]
+custom_minimum_size = Vector2(0, 88)
+size_flags_horizontal = 3
+theme_type_variation = &"GhostButton"
+theme_override_font_sizes/font_size = 30
 text = "Skins"
 
-[node name="Leaderboard" type="Button" parent="VBox"]
+[node name="Settings" type="Button" parent="VBox/NavGrid"]
 custom_minimum_size = Vector2(0, 88)
-theme_override_font_sizes/font_size = 32
+size_flags_horizontal = 3
+theme_type_variation = &"GhostButton"
+theme_override_font_sizes/font_size = 30
+text = "Settings"
+
+[node name="Leaderboard" type="Button" parent="VBox/NavGrid"]
+custom_minimum_size = Vector2(0, 88)
+size_flags_horizontal = 3
+theme_type_variation = &"GhostButton"
+theme_override_font_sizes/font_size = 30
 text = "Leaderboard"
