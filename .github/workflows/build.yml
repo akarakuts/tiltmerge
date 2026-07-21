@@ -101,7 +101,17 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p build
-          printf '%s' "$ANDROID_KEYSTORE_BASE64" | base64 --decode > "$RUNNER_TEMP/tiltmerge.keystore"
+          printf '%s' "$ANDROID_KEYSTORE_BASE64" | tr -d '\n\r ' | openssl base64 -A -d -out "$RUNNER_TEMP/tiltmerge.keystore"
+          test -s "$RUNNER_TEMP/tiltmerge.keystore"
+          # sanity: JKS/PKCS12 magic / non-empty binary
+          python3 - <<'PY'
+          from pathlib import Path
+          p = Path(__import__("os").environ["RUNNER_TEMP"]) / "tiltmerge.keystore"
+          data = p.read_bytes()
+          if len(data) < 64:
+              raise SystemExit(f"keystore too small: {len(data)} bytes")
+          print(f"keystore ok ({len(data)} bytes)")
+          PY
           export KEYSTORE_PATH="$RUNNER_TEMP/tiltmerge.keystore"
 
           # Android custom build template (required for AAB / gradle)
