@@ -74,7 +74,7 @@ func _run_smoke_tests() -> void:
 		_smoke("autoload %s exists" % name_, node != null)
 	# все сцены грузятся
 	var scene_paths := [
-		"res://scenes/MainMenu.tscn", "res://scenes/Onboarding.tscn",
+		"res://scenes/Boot.tscn", "res://scenes/MainMenu.tscn", "res://scenes/Onboarding.tscn",
 		"res://scenes/Settings.tscn", "res://scenes/Leaderboard.tscn",
 		"res://scenes/Skins.tscn",
 		"res://scenes/Cube.tscn", "res://scenes/Game.tscn"

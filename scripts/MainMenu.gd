@@ -18,6 +18,11 @@ extends Control
 func _ready() -> void:
 	if not GameConfig.is_ready:
 		await GameConfig.config_loaded
+	# Страховка: если попали сюда без онбординга — сразу уходим, без показа меню
+	if not bool(SaveSystem.data.get("onboarding_completed", false)):
+		hide()
+		get_tree().change_scene_to_file("res://scenes/Onboarding.tscn")
+		return
 	_apply_language()
 	_refresh_best()
 	_play.pressed.connect(_on_play)
@@ -32,10 +37,6 @@ func _ready() -> void:
 	_modes.hide()
 	GameManager.go(GameManager.State.MENU)
 	AudioManager.play_music("music_menu")
-	# первый запуск → онбординг
-	if not bool(SaveSystem.data.get("onboarding_completed", false)):
-		await get_tree().create_timer(0.3).timeout
-		get_tree().change_scene_to_file("res://scenes/Onboarding.tscn")
 
 
 func _apply_language() -> void:

@@ -9,10 +9,10 @@ config_version=5
 
 config/name="TiltMerge"
 config/description="Быстрая головоломка: наклоняй телефон, чтобы одинаковые кубики слипались."
-run/main_scene="res://scenes/MainMenu.tscn"
+run/main_scene="res://scenes/Boot.tscn"
 config/features=PackedStringArray("4.3", "Forward Plus")
 config/icon="res://assets/graphics/icon.png"
-config/version="1.0.2"
+config/version="1.0.3"
 
 [autoload]
 
@@ -56,6 +56,8 @@ ui_pause={
 
 [input_devices]
 
+sensors/enable_accelerometer=true
+sensors/enable_gravity=true
 sensors/enabled=true
 
 [internationalization]

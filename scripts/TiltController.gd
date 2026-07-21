@@ -7,8 +7,8 @@ extends Node
 ## Это физически правдоподобнее, чем «наклонять весь мир», и не сбивает вертикаль.
 ##
 ## Источники ввода (по выбранному control_mode из настроек):
-##   - "tilt":  акселерометр (Input.get_accelerometer) — основной для телефона
-##   - "swipe": свайп/касание/мышь — для десктопа, тача и fallback
+##   - "tilt":  акселерометр/гравитация + свайп как запасной канал (важно для онбординга)
+##   - "swipe": только свайп/касание/мышь
 ## Клавиши A/D, ←/→ работают всегда (дебаг/desktop).
 
 signal tilt_changed(value: float)  # нормализованный наклон [-1, 1] для UI-индикатора
@@ -23,6 +23,7 @@ var _world_space: RID = RID()
 var _base_gravity_y: float = 980.0
 var _smoothed: float = 0.0  # сглаженный наклон для плавности
 var _smooth_speed: float = 12.0
+var _allow_swipe_in_tilt: bool = true  # tilt + палец одновременно
 
 
 func setup(cubes_root: Node2D = null) -> void:
@@ -37,6 +38,10 @@ func setup(cubes_root: Node2D = null) -> void:
 
 func set_control_mode(mode: String) -> void:
 	_control_mode = mode
+
+
+func set_allow_swipe_in_tilt(enabled: bool) -> void:
+	_allow_swipe_in_tilt = enabled
 
 
 func set_cubes_root(root: Node2D) -> void:
@@ -72,36 +77,47 @@ func _apply_horizontal_force(force: float) -> void:
 
 
 func _read_input() -> float:
+	var result := 0.0
 	# 1. Клавиатура (всегда — для desktop-теста)
 	if Input.is_action_pressed("tilt_left"):
-		return -1.0
-	if Input.is_action_pressed("tilt_right"):
-		return 1.0
+		result = -1.0
+	elif Input.is_action_pressed("tilt_right"):
+		result = 1.0
+	elif _control_mode == "swipe":
+		result = _read_swipe()
+	elif _control_mode == "tilt":
+		# Свайп имеет приоритет, пока палец на экране — иначе сенсор.
+		if _allow_swipe_in_tilt:
+			var swipe := _read_swipe()
+			if _touch_active or absf(swipe) > _deadzone:
+				result = swipe
+			else:
+				var sensor := _read_sensor_tilt()
+				result = sensor if absf(sensor) > _deadzone else swipe
+		else:
+			result = _read_sensor_tilt()
+	return result
 
-	# 2. Свайп-режим (touch + mouse)
-	if _control_mode == "swipe":
-		return _read_swipe()
 
-	# 3. Акселерометр-режим
-	if _control_mode == "tilt":
-		var accel := Input.get_accelerometer()
-		if accel != Vector3.ZERO:
-			var raw: float = clampf(accel.x / 10.0, -1.0, 1.0)
-			if absf(raw) > _deadzone:
-				return raw
-		# если акселерометр не отдаёт (десктоп) — fallback на свайп
-		return _read_swipe()
-
+func _read_sensor_tilt() -> float:
+	# get_gravity стабильнее для «наклона», accelerometer — запасной канал.
+	var g := Input.get_gravity()
+	if g != Vector3.ZERO:
+		# У телефона перед собой: X — влево/вправо. Делим на ~g.
+		return clampf(g.x / 9.8, -1.0, 1.0)
+	var accel := Input.get_accelerometer()
+	if accel != Vector3.ZERO:
+		return clampf(accel.x / 9.8, -1.0, 1.0)
 	return 0.0
 
 
 # Свайп/касание: точка касания/мыши задаёт целевой наклон.
 # Левая половина экрана = полный наклон влево, центр = 0, правая = вправо.
 func _read_swipe() -> float:
-	# touch (запоминается из _unhandled_input)
+	# touch (запоминается из _input)
 	if _touch_active:
 		return _last_touch_tilt
-	# mouse (desktop)
+	# mouse (desktop / emulate_mouse_from_touch)
 	if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
 		var vp := get_viewport().get_visible_rect().size
 		if vp.x > 0:
@@ -114,9 +130,13 @@ var _last_touch_tilt: float = 0.0
 var _touch_active: bool = false
 
 
-func _unhandled_input(event: InputEvent) -> void:
-	if _control_mode != "swipe" and not (_control_mode == "tilt" and Input.get_accelerometer() == Vector3.ZERO):
-		return  # в tilt-режиме на телефоне свайп не нужен
+func _input(event: InputEvent) -> void:
+	# Берём touch до UI, иначе подписи/плашки могут съесть unhandled.
+	if _control_mode == "swipe" or (_control_mode == "tilt" and _allow_swipe_in_tilt):
+		_handle_touch_event(event)
+
+
+func _handle_touch_event(event: InputEvent) -> void:
 	if event is InputEventScreenTouch:
 		if event.pressed:
 			_touch_active = true
@@ -126,7 +146,6 @@ func _unhandled_input(event: InputEvent) -> void:
 			_last_touch_tilt = 0.0
 	elif event is InputEventScreenDrag and _touch_active:
 		_last_touch_tilt = _x_to_tilt(event.position.x)
-	get_viewport().set_input_as_handled()
 
 
 func _x_to_tilt(x: float) -> float:

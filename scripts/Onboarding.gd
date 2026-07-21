@@ -39,8 +39,9 @@ func _ready() -> void:
 	if not GameConfig.is_ready:
 		await GameConfig.config_loaded
 	_tilt.setup(_cubes)
-	# USP: tilt из настроек; без акселерометра TiltController сам падает на свайп
-	_tilt.set_control_mode(str(SaveSystem.data.settings.control_mode))
+	# Онбординг: tilt + свайп одновременно — иначе на части устройств «мертвый» ввод
+	_tilt.set_control_mode("tilt")
+	_tilt.set_allow_swipe_in_tilt(true)
 	_merge.setup(_cubes)
 	_merge.reset()
 	MergeBus.merge_completed.connect(_on_merge_completed)
