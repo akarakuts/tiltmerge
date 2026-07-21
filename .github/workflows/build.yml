@@ -92,7 +92,7 @@ jobs:
         if: steps.signing.outputs.available == 'true'
         uses: android-actions/setup-android@9fc6c4e9069bf8d3d10b2204b1fb8f6ef7065407 # v3.2.2
 
-      - name: Build signed Android App Bundle
+      - name: Build signed Android AAB and APK
         if: steps.signing.outputs.available == 'true'
         env:
           ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
@@ -132,46 +132,65 @@ jobs:
           fi
           echo "4.7.1.stable" > android/.build_version
 
-          python3 - <<'PY'
+          patch_export_format() {
+            local format="$1"
+            EXPORT_FORMAT="$format" python3 - <<'PY'
           import os
           import re
           from pathlib import Path
 
+          fmt = os.environ["EXPORT_FORMAT"]
           path = Path("export_presets.cfg")
           text = path.read_text()
           marker = "[preset.1.options]"
           prefix, release_options = text.split(marker, 1)
-          replacements = {
-              'keystore/release=""': f'keystore/release="{os.environ["KEYSTORE_PATH"]}"',
-              'keystore/release_user=""': f'keystore/release_user="{os.environ["ANDROID_KEY_ALIAS"]}"',
-              'keystore/release_password=""': f'keystore/release_password="{os.environ["ANDROID_KEYSTORE_PASSWORD"]}"',
-          }
-          for old, new in replacements.items():
-              if old not in release_options:
-                  raise SystemExit(f"Expected empty setting not found: {old}")
-              release_options = release_options.replace(old, new, 1)
+          ks = os.environ["KEYSTORE_PATH"]
+          alias = os.environ["ANDROID_KEY_ALIAS"]
+          pw = os.environ["ANDROID_KEYSTORE_PASSWORD"]
+          for old, new in {
+              'keystore/release=""': f'keystore/release="{ks}"',
+              'keystore/release_user=""': f'keystore/release_user="{alias}"',
+              'keystore/release_password=""': f'keystore/release_password="{pw}"',
+          }.items():
+              if old in release_options:
+                  release_options = release_options.replace(old, new, 1)
+          if f'keystore/release="{ks}"' not in release_options:
+              raise SystemExit("release keystore path missing after patch")
           release_options = re.sub(
               r"gradle_build/export_format=\d+",
-              "gradle_build/export_format=1",
+              f"gradle_build/export_format={fmt}",
               release_options,
               count=1,
           )
-          release_options = release_options.replace(
-              'gradle_build/gradle_build_path=""',
-              'gradle_build/gradle_build_path="res://android/build"',
-              1,
-          )
+          if 'gradle_build/gradle_build_path=""' in release_options:
+              release_options = release_options.replace(
+                  'gradle_build/gradle_build_path=""',
+                  'gradle_build/gradle_build_path="res://android/build"',
+                  1,
+              )
           path.write_text(prefix + marker + release_options)
           PY
+          }
 
           godot --headless --import
+
+          echo "==> Export AAB"
+          patch_export_format 1
           godot --headless --export-release "Android Release" build/tiltmerge-release.aab
           test -f build/tiltmerge-release.aab
-          ls -lh build/tiltmerge-release.aab
+
+          echo "==> Export APK"
+          patch_export_format 0
+          godot --headless --export-release "Android Release" build/tiltmerge-release.apk
+          test -f build/tiltmerge-release.apk
+
+          ls -lh build/tiltmerge-release.aab build/tiltmerge-release.apk
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@6cbd405e2c4e67a21c47fa9e383d020e4e28b836 # v2.3.3
         with:
-          files: build/*.aab
+          files: |
+            build/*.aab
+            build/*.apk
           fail_on_unmatched_files: false
           generate_release_notes: true
