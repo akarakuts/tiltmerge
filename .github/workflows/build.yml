@@ -19,11 +19,12 @@ jobs:
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
       - name: Setup Godot 4.7
-        uses: chickensoft-games/setup-godot@9f83926bad13754bbfb79045b87a61d0dadad8ae # v1.3.0
+        uses: chickensoft-games/setup-godot@f166999204a4f2722c6fe042fbaa3b3ea0d9c789 # v2.4.1
         with:
           version: 4.7.1
           use-dotnet: false
           include-templates: true
+          cache: true
 
       - name: Verify project imports (headless)
         run: godot --headless --import
@@ -58,11 +59,12 @@ jobs:
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
       - name: Setup Godot 4.7
-        uses: chickensoft-games/setup-godot@9f83926bad13754bbfb79045b87a61d0dadad8ae # v1.3.0
+        uses: chickensoft-games/setup-godot@f166999204a4f2722c6fe042fbaa3b3ea0d9c789 # v2.4.1
         with:
           version: 4.7.1
           use-dotnet: false
           include-templates: true
+          cache: true
 
       - name: Build signed Android App Bundle
         env:
